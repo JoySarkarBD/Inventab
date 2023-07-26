@@ -1,3 +1,4 @@
+import { LiaChartBarSolid } from "react-icons/lia";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
@@ -11,68 +12,29 @@ const Sidebar = () => {
                 className='has-arrow ai-icon'
                 href='javascript:void()'
                 aria-expanded='false'>
-                <i className='flaticon-025-dashboard' />
-                <span className='nav-text'>Sales</span>
+                <LiaChartBarSolid className='fs-2' />
+                <span className='nav-text fs-4'>Sales</span>
               </a>
               <ul aria-expanded='false'>
                 <li>
-                  <NavLink to='sales-leads'>Leads</NavLink>
+                  <NavLink to='sales-leads' className='fs-4'>
+                    Leads
+                  </NavLink>
                 </li>
                 <li>
-                  <NavLink to='sales-orders'>Orders</NavLink>
+                  <NavLink to='sales-orders' className='fs-4'>
+                    Orders
+                  </NavLink>
                 </li>
                 <li>
-                  <NavLink to='sales-invoices'>Invoices</NavLink>
+                  <NavLink to='sales-invoices' className='fs-4'>
+                    Invoices
+                  </NavLink>
                 </li>
                 <li>
-                  <NavLink to='ar'>AR</NavLink>
-                </li>
-                <li>
-                  <a href='index-5.html'>
-                    Dashboard 5
-                    <span className='badge badge-xs badge-danger ms-3'>
-                      New
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href='index-6.html'>
-                    Dashboard 6
-                    <span className='badge badge-xs badge-danger ms-3'>
-                      New
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href='index-7.html'>
-                    Dashboard 7
-                    <span className='badge badge-xs badge-danger ms-3'>
-                      New
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href='index-8.html'>
-                    Dashboard 8
-                    <span className='badge badge-xs badge-danger ms-3'>
-                      New
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a href='my-wallet.html'>My Wallet</a>
-                </li>
-                <li>
-                  <a href='page-invoices.html'>Invoices</a>
-                </li>
-                <li>
-                  <a href='cards-center.html'>Cards Center</a>
-                </li>
-                <li>
-                  <a href='page-transaction.html'>Transaction</a>
-                </li>
-                <li>
-                  <a href='transaction-details.html'>Transaction Details</a>
+                  <NavLink to='ar' className='fs-4'>
+                    AR
+                  </NavLink>
                 </li>
               </ul>
             </li>
