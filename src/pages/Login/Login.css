@@ -47,6 +47,15 @@
   font-size: 1rem;
   font-weight: 500;
 }
+.login-form .error {
+  margin-top: -13px;
+  color: red;
+  font-weight: 500;
+  background-color: #fbf2e6;
+  max-width: 70%;
+  padding: 5px 15px;
+  border-radius: 50px;
+}
 
 /* Responsive css start*/
 @media only screen and (max-width: 991px) {
