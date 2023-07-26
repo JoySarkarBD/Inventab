@@ -5,6 +5,7 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 // import { BsSun, BsMoon } from "react-icons/bs";
+import { BsArrowRight } from "react-icons/bs";
 import avatar1 from "../../../assets/images/avatar/3.jpg";
 import profile1 from "../../../assets/images/profile/pic1.jpg";
 
@@ -135,9 +136,9 @@ const Header = () => {
                       </ul>
                     </div>
                     <a
-                      className='all-notification text-primary'
+                      className='all-notification fs-4 text-primary'
                       href='javascript:void(0);'>
-                      See all notifications <i className='ti-arrow-right' />
+                      See all notifications <BsArrowRight className='fs-4' />
                     </a>
                   </div>
                 </li>
