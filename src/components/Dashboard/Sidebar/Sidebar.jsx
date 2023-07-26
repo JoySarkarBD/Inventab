@@ -16,13 +16,13 @@ const Sidebar = () => {
               </a>
               <ul aria-expanded='false'>
                 <li>
-                  <NavLink to='/sales-leads'>Leads</NavLink>
+                  <NavLink to='sales-leads'>Leads</NavLink>
                 </li>
                 <li>
-                  <NavLink to='/sales-orders'>Orders</NavLink>
+                  <NavLink to='sales-orders'>Orders</NavLink>
                 </li>
                 <li>
-                  <NavLink to='/sales-invoices'>Invoices</NavLink>
+                  <NavLink to='sales-invoices'>Invoices</NavLink>
                 </li>
                 <li>
                   <NavLink to='ar'>AR</NavLink>
