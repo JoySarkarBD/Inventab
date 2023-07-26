@@ -1,14 +1,27 @@
 import { createBrowserRouter } from "react-router-dom";
 import DashboardLayout from "../../Layout/DashboardLayout";
+import MainLayout from "../../Layout/MainLayout";
 import AR from "../../pages/Dashboard/Sales/AR";
 import SalesInvoices from "../../pages/Dashboard/Sales/SalesInvoices";
 import SalesLead from "../../pages/Dashboard/Sales/SalesLead";
 import SalesOrders from "../../pages/Dashboard/Sales/SalesOrders";
+import LogIn from "../../pages/Login/LogIn";
 import ErrorPage from "../../ui/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <MainLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "login",
+        element: <LogIn />,
+      },
+    ],
+  },
+  {
+    path: "dashboard/",
     element: <DashboardLayout />,
     errorElement: <ErrorPage />,
     children: [
