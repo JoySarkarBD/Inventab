@@ -8,7 +8,7 @@ const SalesDashboard = () => {
       <PageTitle title='Sales Dashboard' />
       <div className='row'>
         {/* KPI table */}
-        <div className='col-9 mx-auto my-4'>
+        <div className='col-12 mx-auto my-4'>
           <SalesKPI />
         </div>
 

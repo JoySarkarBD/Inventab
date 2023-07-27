@@ -4,6 +4,7 @@ import { CSVLink } from "react-csv";
 import DataTable from "react-data-table-component";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import "./sales.css";
 
 const SalesLead = () => {
   const [search, setSearch] = useState("");
@@ -149,21 +150,7 @@ const SalesLead = () => {
 
   //  main func
   return (
-    <div>
-      <select
-        className='form-select form-select-lg mb-3'
-        aria-label='.form-select-lg example'
-        onChange={(e) => setSelectedfield(e.target.value)}>
-        <option selected disabled>
-          Open this select menu
-        </option>
-        <option value='lead_id'>SLS</option>
-        <option value='client'>client</option>
-        <option value='description'>description</option>
-        <option value='department'>department</option>
-        <option value='status'>status</option>
-      </select>
-
+    <div>      
       <PageTitle title='Sales Leads' />
       <SectionTitle title='Sales Leads' />
       <div className='row'>
@@ -171,9 +158,23 @@ const SalesLead = () => {
           <div className='card'>
             <div className='card-body'>
               <DataTable
-                title='Sales Leads'
+                title={<h2>Sales Leads</h2>}
                 columns={columns}
                 data={searchData}
+                customStyles={
+                  {
+                    rows:{
+                    style:{
+                      fontSize:"16px",
+                    }
+                  },
+                    headCells: {
+                      style:{
+                        fontSize:"19px",
+                      }
+                    },
+                  }
+                }
                 fixedHeader
                 fixedHeaderScrollHeight='550px'
                 pagination
@@ -188,20 +189,39 @@ const SalesLead = () => {
                     filename={`Sales-Leads -${new Date(
                       Date.now()
                     ).toLocaleDateString("en-IN")}`}
-                    className='btn btn-success'
+                    className='btn btn-primary mb-3'
                     onClick={exportAsCsv}>
                     Export as CSV
                   </CSVLink>
                 }
-                subHeaderComponent={
-                  <input
-                    type='text'
-                    placeholder='Search here'
-                    className='form-control w-25'
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
+                subHeaderComponent={     
+                  <div className="d-flex align-items-center search-area w-100 border overflow-hidden position-relative rounded">
+                <select
+                    className='form-select form-select-lg select-type w-25 border bg-transparent border-0 shadow-none'
+                    aria-label='.form-select-lg example'
+                    onChange={(e) => setSelectedfield(e.target.value)}>
+                    <option selected disabled>
+                      Select Search Type
+                    </option>
+                    <option value='lead_id'>SLS</option>
+                    <option value='client'>Client</option>
+                    <option value='description'>Description</option>
+                    <option value='department'>Department</option>
+                    <option value='status'>Status</option>
+                  </select>
+                  <div className="separator position-absolute">
+                  </div>
+                    <input
+                  type='text'
+                  placeholder='Search here'
+                  className='form-control border-0 bg-transparent shadow-none'
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                    </div>
+                     
                 }
+                subHeaderAlign='left'
               />
             </div>
           </div>
@@ -212,35 +232,3 @@ const SalesLead = () => {
 };
 
 export default SalesLead;
-
-/* 
-<CSVLink
-                    data={csv}
-                    enclosingCharacter={`'`}
-                    className='btn btn-primary'
-                    onClick={() => {
-                      let data = [];
-                      searchData.forEach((salesData) => {
-                        const csvObj = {
-                          Sl: salesData?.lead_id || "No data found",
-                          "Sub Org": salesData?.sub_org || "No data found",
-                          Client:
-                            salesData?.client?.company_name || "No data found",
-                          "Expected PO date":
-                            salesData?.expected_date || "No data found",
-                          Value: salesData?.value || "No data found",
-                          "Probabilities value":
-                            salesData?.probability || "No data found",
-                          Description:
-                            salesData?.description || "No data found",
-                          Dept: salesData?.department?.name || "no data found",
-                          Status: salesData?.status || "No data found",
-                        };
-
-                        data.push(csvObj);
-                      });
-
-                      setCsv((prev) => [...prev, ...data]);
-                    }}>
-                    Export as CSV
-                  </CSVLink> */
