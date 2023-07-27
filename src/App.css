@@ -61588,3 +61588,17 @@ html[dir="rtl"]
 }
 
 /*# sourceMappingURL=style.css.map */
+
+
+/*#  Sales Leads Page custom css start #*/
+.separator {
+  height: 100%;
+  left: 21%;
+  border: 0.5px solid #f5f5f5;
+}
+
+.eeeVJd {
+  padding: 4px 0 !important;
+  margin-bottom: 16px !important;
+}
+/*#  Sales Leads Page custom css end #*/

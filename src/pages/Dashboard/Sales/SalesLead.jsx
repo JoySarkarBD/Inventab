@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import DataTable from "react-data-table-component";
+import { FiDownload } from "react-icons/fi";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import "./sales.css";
@@ -41,23 +42,23 @@ const SalesLead = () => {
   const columns = [
     {
       name: "SL",
-      selector: (row) => row?.lead_id,
+      selector: row => row?.lead_id,
       sortable: true,
     },
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
+      selector: row => row?.sub_org || "No data found",
       sortable: true,
     },
     {
       name: "Client",
-      selector: (row) => row?.client?.company_name,
+      selector: row => row?.client?.company_name,
       sortable: true,
     },
     {
       name: "Expected PO date",
-      selector: (row) => row?.expected_date,
+      selector: row => row?.expected_date,
       sortable: true,
     },
     {
@@ -67,22 +68,22 @@ const SalesLead = () => {
     },
     {
       name: "Probabilistic Value",
-      selector: (row) => row?.probability,
+      selector: row => row?.probability,
       sortable: true,
     },
     {
       name: "Description",
-      selector: (row) => row?.description,
+      selector: row => row?.description,
       sortable: true,
     },
     {
       name: "Dept",
-      selector: (row) => row?.department?.name,
+      selector: row => row?.department?.name,
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row?.status,
+      selector: row => row?.status,
       sortable: true,
     },
   ];
@@ -91,7 +92,7 @@ const SalesLead = () => {
   useEffect(() => {
     let result;
     if (selectedFiled) {
-      result = salesLeads.filter((saleData) => {
+      result = salesLeads.filter(saleData => {
         switch (selectedFiled) {
           case "lead_id":
             return saleData?.lead_id
@@ -129,7 +130,7 @@ const SalesLead = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach((salesData) => {
+    searchData.forEach(salesData => {
       const csvObj = {
         Sl: salesData?.lead_id || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -145,12 +146,12 @@ const SalesLead = () => {
       data.push(csvObj);
     });
 
-    setCsv((prev) => [...prev, ...data]);
+    setCsv(prev => [...prev, ...data]);
   };
 
   //  main func
   return (
-    <div>      
+    <div>
       <PageTitle title='Sales Leads' />
       <SectionTitle title='Sales Leads' />
       <div className='row'>
@@ -161,20 +162,18 @@ const SalesLead = () => {
                 title={<h2>Sales Leads</h2>}
                 columns={columns}
                 data={searchData}
-                customStyles={
-                  {
-                    rows:{
-                    style:{
-                      fontSize:"16px",
-                    }
-                  },
-                    headCells: {
-                      style:{
-                        fontSize:"19px",
-                      }
+                customStyles={{
+                  rows: {
+                    style: {
+                      fontSize: "16px",
                     },
-                  }
-                }
+                  },
+                  headCells: {
+                    style: {
+                      fontSize: "19px",
+                    },
+                  },
+                }}
                 fixedHeader
                 fixedHeaderScrollHeight='550px'
                 pagination
@@ -189,37 +188,36 @@ const SalesLead = () => {
                     filename={`Sales-Leads -${new Date(
                       Date.now()
                     ).toLocaleDateString("en-IN")}`}
-                    className='btn btn-primary mb-3'
+                    className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center'
                     onClick={exportAsCsv}>
+                    <FiDownload className='fs-4 me-2' />
                     Export as CSV
                   </CSVLink>
                 }
-                subHeaderComponent={     
-                  <div className="d-flex align-items-center search-area w-100 border overflow-hidden position-relative rounded">
-                <select
-                    className='form-select form-select-lg select-type w-25 border bg-transparent border-0 shadow-none'
-                    aria-label='.form-select-lg example'
-                    onChange={(e) => setSelectedfield(e.target.value)}>
-                    <option selected disabled>
-                      Select Search Type
-                    </option>
-                    <option value='lead_id'>SLS</option>
-                    <option value='client'>Client</option>
-                    <option value='description'>Description</option>
-                    <option value='department'>Department</option>
-                    <option value='status'>Status</option>
-                  </select>
-                  <div className="separator position-absolute">
-                  </div>
+                subHeaderComponent={
+                  <div className='d-flex align-items-center search-area w-100 border overflow-hidden position-relative rounded'>
+                    <select
+                      className='form-select form-select-lg select-type w-25 border bg-transparent border-0 shadow-none'
+                      aria-label='.form-select-lg example'
+                      onChange={e => setSelectedfield(e.target.value)}>
+                      <option selected disabled>
+                        Select Search Type
+                      </option>
+                      <option value='lead_id'>SLS</option>
+                      <option value='client'>Client</option>
+                      <option value='description'>Description</option>
+                      <option value='department'>Department</option>
+                      <option value='status'>Status</option>
+                    </select>
+                    <div className='separator position-absolute'></div>
                     <input
-                  type='text'
-                  placeholder='Search here'
-                  className='form-control border-0 bg-transparent shadow-none'
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                    </div>
-                     
+                      type='text'
+                      placeholder='Search here'
+                      className='form-control border-0 bg-transparent shadow-none'
+                      value={search}
+                      onChange={e => setSearch(e.target.value)}
+                    />
+                  </div>
                 }
                 subHeaderAlign='left'
               />
