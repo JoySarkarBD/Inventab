@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
 import DataTable from "react-data-table-component";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
@@ -9,7 +10,7 @@ const SalesLead = () => {
   const [salesLeads, setSalesLeads] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [csv, setCsv] = useState([]);
   const [selectedFiled, setSelectedfield] = useState("");
 
   // fetch table
@@ -124,6 +125,29 @@ const SalesLead = () => {
     }
   }, [search, salesLeads, selectedFiled]);
 
+  // export as csv
+  const exportAsCsv = () => {
+    let data = [];
+    searchData.forEach((salesData) => {
+      const csvObj = {
+        Sl: salesData?.lead_id || "No data found",
+        "Sub Org": salesData?.sub_org || "No data found",
+        Client: salesData?.client?.company_name || "No data found",
+        "Expected PO date": salesData?.expected_date || "No data found",
+        Value: salesData?.value || "No data found",
+        "Probabilities value": salesData?.probability || "No data found",
+        Description: salesData?.description || "No data found",
+        Dept: salesData?.department?.name || "no data found",
+        Status: salesData?.status || "No data found",
+      };
+
+      data.push(csvObj);
+    });
+
+    setCsv((prev) => [...prev, ...data]);
+  };
+
+  //  main func
   return (
     <div>
       <select
@@ -157,6 +181,18 @@ const SalesLead = () => {
                 highlightOnHover
                 subHeader
                 progressPending={loading}
+                actions={
+                  <CSVLink
+                    enclosingCharacter={` `}
+                    data={csv}
+                    filename={`Sales-Leads -${new Date(
+                      Date.now()
+                    ).toLocaleDateString("en-IN")}`}
+                    className='btn btn-success'
+                    onClick={exportAsCsv}>
+                    Export as CSV
+                  </CSVLink>
+                }
                 subHeaderComponent={
                   <input
                     type='text'
@@ -176,3 +212,35 @@ const SalesLead = () => {
 };
 
 export default SalesLead;
+
+/* 
+<CSVLink
+                    data={csv}
+                    enclosingCharacter={`'`}
+                    className='btn btn-primary'
+                    onClick={() => {
+                      let data = [];
+                      searchData.forEach((salesData) => {
+                        const csvObj = {
+                          Sl: salesData?.lead_id || "No data found",
+                          "Sub Org": salesData?.sub_org || "No data found",
+                          Client:
+                            salesData?.client?.company_name || "No data found",
+                          "Expected PO date":
+                            salesData?.expected_date || "No data found",
+                          Value: salesData?.value || "No data found",
+                          "Probabilities value":
+                            salesData?.probability || "No data found",
+                          Description:
+                            salesData?.description || "No data found",
+                          Dept: salesData?.department?.name || "no data found",
+                          Status: salesData?.status || "No data found",
+                        };
+
+                        data.push(csvObj);
+                      });
+
+                      setCsv((prev) => [...prev, ...data]);
+                    }}>
+                    Export as CSV
+                  </CSVLink> */
