@@ -17011,6 +17011,7 @@ html[dir="rtl"]
 .dlabnav .metismenu > li:focus > a g [fill] {
   fill: var(--primary);
 }
+
 .dlabnav .metismenu > li.mm-active > a {
   color: var(--primary);
   font-weight: 400;

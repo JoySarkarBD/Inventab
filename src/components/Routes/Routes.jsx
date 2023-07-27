@@ -5,6 +5,8 @@ import AR from "../../pages/Dashboard/Sales/AR";
 import SalesInvoices from "../../pages/Dashboard/Sales/SalesInvoices";
 import SalesLead from "../../pages/Dashboard/Sales/SalesLead";
 import SalesOrders from "../../pages/Dashboard/Sales/SalesOrders";
+import SalesDashboard from "../../pages/Dashboard/SalesDashboard/SalesDashboard";
+import Attendance from "../../pages/Dashboard/Support/Attendance";
 import LogIn from "../../pages/Login/LogIn";
 import ErrorPage from "../../ui/ErrorPage";
 
@@ -26,6 +28,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+        path: "sales-dashboard",
+        element: <SalesDashboard />,
+      },
+      {
         path: "sales-leads",
         element: <SalesLead />,
       },
@@ -40,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "ar",
         element: <AR />,
+      },
+      {
+        path: "attendance",
+        element: <Attendance />,
       },
     ],
   },

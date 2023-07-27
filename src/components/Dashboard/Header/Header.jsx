@@ -17,7 +17,7 @@ const Header = () => {
           <nav className='navbar navbar-expand'>
             <div className='collapse navbar-collapse justify-content-between'>
               <div className='header-left'>
-                <div className='dashboard_bar'>Dashboard</div>
+                <div className='dashboard_bar'>Welcome Mukund Sutrave</div>
               </div>
               <ul className='navbar-nav header-right'>
                 <li className='nav-item dropdown notification_dropdown'>
