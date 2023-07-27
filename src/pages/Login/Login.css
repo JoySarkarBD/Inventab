@@ -2,11 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   min-height: 100vh;
 }
-.authentication,
+
 .authentication_row {
   background-color: #f8fafc !important;
+  position: relative;
 }
 
 .login-form {
@@ -48,13 +50,32 @@
   font-weight: 500;
 }
 .login-form .error {
-  margin-top: -13px;
   color: red;
   font-weight: 500;
   background-color: #fbf2e6;
-  max-width: 70%;
+  max-width: 60%;
   padding: 5px 15px;
   border-radius: 50px;
+}
+
+.login-form .logo {
+  max-width: 120px;
+  width: 100%;
+  height: 120px;
+  margin: auto;
+}
+.login-form .logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.version {
+  position: absolute;
+  bottom: 0;
+}
+.version p {
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 /* Responsive css start*/

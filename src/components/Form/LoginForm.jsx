@@ -1,8 +1,8 @@
 import { useState } from "react";
 import {
-    // AiOutlineCamera,
-    AiOutlineEye,
-    AiOutlineEyeInvisible,
+  // AiOutlineCamera,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import ErrorMsg from "./ErrorMsg";
@@ -26,43 +26,31 @@ const LoginForm = () => {
         />
       </div>
       {/* Password */}
-      <div className="mb-4 password_field">
-        <TextInput
-          type={`${showPassword ? "text" : "password"}`}
-          title="password"
-          placeholder="Enter your password"
-          defaultValue="Password"
-        />
-        <div onClick={togglePasswordVisibility} className="eyeIcon">
-          {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+      <div className="mb-4 ">
+        <div className="password_field">
+          <TextInput
+            type={`${showPassword ? "text" : "password"}`}
+            title="password"
+            placeholder="Enter your password"
+            defaultValue="Password"
+          />
+          <div onClick={togglePasswordVisibility} className="eyeIcon">
+            {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+          </div>
+        </div>
+        <div className="mt-2 d-flex justify-content-between gap-4">
+          <ErrorMsg subject="Password not match" />
+          <Link to="forget-password">
+            <p>Forget Password?</p>
+          </Link>
         </div>
       </div>
       {/* show error msg */}
-      <ErrorMsg subject="Password not match" />
-      <div className="form-row d-flex justify-content-between mt-4 mb-2">
-        <div className="mb-4">
-          <div className="form-check custom-checkbox mb-3">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="customCheckBox1"
-              required
-            />
-            <label className="form-check-label mt-1" htmlFor="customCheckBox1">
-              Remember my preference
-            </label>
-          </div>
-        </div>
-      </div>
 
       {/* Login Button */}
-      <FormButton type="submit" title="Sign In" />
-      <p className="text-center">
-        Not registered?
-        <Link to="/register" className="btn-link text-primary">
-          Register
-        </Link>
-      </p>
+      <div className="mb-2">
+        <FormButton type="submit" title="Sign In" />
+      </div>
     </form>
   );
 };
