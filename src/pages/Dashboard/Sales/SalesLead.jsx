@@ -209,7 +209,7 @@ const SalesLead = () => {
                       <option value='department'>Department</option>
                       <option value='status'>Status</option>
                     </select>
-                    <div className='separator position-absolute'></div>
+                    <div className='separator-light position-absolute'></div>
                     <input
                       type='text'
                       placeholder='Search here'
