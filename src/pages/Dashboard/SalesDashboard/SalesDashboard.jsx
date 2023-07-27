@@ -1,4 +1,5 @@
 import RevenueChart from "../../../components/Chart/Chart";
+import SalesKPI from "../../../components/SalesKPI/SalesKPI";
 import PageTitle from "../../../components/Shared/PageTitle";
 
 const SalesDashboard = () => {
@@ -6,8 +7,13 @@ const SalesDashboard = () => {
     <>
       <PageTitle title='Sales Dashboard' />
       <div className='row'>
+        {/* KPI table */}
+        <div className='col-9 mx-auto my-4'>
+          <SalesKPI />
+        </div>
+
         {/* Chart section */}
-        <div className='col-12'>
+        <div className='col-12 my-4'>
           <div className='card'>
             <div className='card-body'>
               <RevenueChart />
@@ -15,7 +21,7 @@ const SalesDashboard = () => {
           </div>
         </div>
         {/*  */}
-        <div className='col-xl-6 col-xxl-12 my-4'>
+        <div className='col-12 my-4'>
           <div className='row'>
             {/*  */}
             <div className='col-md-6'>
