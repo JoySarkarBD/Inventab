@@ -9,11 +9,11 @@ import "./sales.css";
 
 const SalesOrders = () => {
   const [search, setSearch] = useState("");
-  const [salesLeads, setSalesLeads] = useState([]);
+  const [salesOrders, setSalesOrders] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [csv, setCsv] = useState([]);
-  const [selectedFiled, setSelectedfield] = useState("");
+  const [selectedFiled, setSelectedField] = useState("");
 
   // fetch table
   const leads = async () => {
@@ -21,11 +21,11 @@ const SalesOrders = () => {
       setLoading(true);
       const response = (
         await axios.get(
-          "http://inventab.io/api/v1/pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+          "http://inventab.io/api/v1/pipo/so/order/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
         )
       ).data;
       setLoading(false);
-      setSalesLeads(response?.results);
+      setSalesOrders(response?.results);
       setSearchData(response?.results);
     } catch (error) {
       setLoading(true);
@@ -41,8 +41,8 @@ const SalesOrders = () => {
   // columns
   const columns = [
     {
-      name: "SL",
-      selector: (row) => row?.lead_id,
+      name: "Order No",
+      selector: (row) => row?.so_id,
       sortable: true,
     },
 
@@ -57,8 +57,23 @@ const SalesOrders = () => {
       sortable: true,
     },
     {
-      name: "Expected PO date",
-      selector: (row) => row?.expected_date,
+      name: "Desc",
+      selector: (row) => row?.description,
+      sortable: true,
+    },
+    {
+      name: "Ref PO No",
+      selector: (row) => row?.ref_po,
+      sortable: true,
+    },
+    {
+      name: "PO Date",
+      selector: (row) => row?.po_date,
+      sortable: true,
+    },
+    {
+      name: "Expected Inv Date",
+      selector: (row) => row?.expected_inv_date,
       sortable: true,
     },
     {
@@ -66,16 +81,11 @@ const SalesOrders = () => {
       selector: () => "No data found",
       sortable: true,
     },
-    {
-      name: "Probabilistic Value",
-      selector: (row) => row?.probability,
-      sortable: true,
-    },
-    {
-      name: "Description",
-      selector: (row) => row?.description,
-      sortable: true,
-    },
+    // {
+    //   name: "Probabilistic Value",
+    //   selector: (row) => row?.probability,
+    //   sortable: true,
+    // },
     {
       name: "Dept",
       selector: (row) => row?.department?.name,
@@ -83,7 +93,7 @@ const SalesOrders = () => {
     },
     {
       name: "Status",
-      selector: (row) => row?.status,
+      selector: (row) => row?.so_status,
       sortable: true,
     },
   ];
@@ -92,12 +102,10 @@ const SalesOrders = () => {
   useEffect(() => {
     let result;
     if (selectedFiled) {
-      result = salesLeads.filter((saleData) => {
+      result = salesOrders.filter((saleData) => {
         switch (selectedFiled) {
-          case "lead_id":
-            return saleData?.lead_id
-              ?.toLowerCase()
-              ?.match(search.toLowerCase());
+          case "so_id":
+            return saleData?.so_id?.toLowerCase()?.match(search.toLowerCase());
 
           case "client":
             return saleData?.client?.company_name
@@ -117,30 +125,32 @@ const SalesOrders = () => {
             return saleData?.status?.toLowerCase()?.match(search.toLowerCase());
 
           default:
-            return salesLeads;
+            return salesOrders;
         }
       });
       setSearchData(result);
     } else {
       // if somehow failed the sorting
-      setSearchData(salesLeads);
+      setSearchData(salesOrders);
     }
-  }, [search, salesLeads, selectedFiled]);
+  }, [search, salesOrders, selectedFiled]);
 
   // export as csv
   const exportAsCsv = () => {
     let data = [];
     searchData.forEach((salesData) => {
       const csvObj = {
-        Sl: salesData?.lead_id || "No data found",
+        SO: salesData?.so_id || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
         Client: salesData?.client?.company_name || "No data found",
-        "Expected PO date": salesData?.expected_date || "No data found",
-        Value: salesData?.value || "No data found",
-        "Probabilities value": salesData?.probability || "No data found",
         Description: salesData?.description || "No data found",
+        "Ref PO No": salesData?.ref_po || "No data found",
+        "PO Date": salesData?.po_date || "No data found",
+        "Expected Inv Date": salesData?.expected_inv_date || "No data found",
+        Value: salesData?.value || "No data found",
         Dept: salesData?.department?.name || "no data found",
-        Status: salesData?.status || "No data found",
+        // "Probabilities value": salesData?.probability || "No data found",
+        Status: salesData?.so_status || "No data found",
       };
 
       data.push(csvObj);
@@ -184,7 +194,7 @@ const SalesOrders = () => {
                   <CSVLink
                     enclosingCharacter={` `}
                     data={csv}
-                    filename={`Sales-Leads -${new Date(
+                    filename={`Sales-Orders-${new Date(
                       Date.now()
                     ).toLocaleDateString("en-IN")}`}
                     className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center"
@@ -199,12 +209,12 @@ const SalesOrders = () => {
                     <select
                       className="form-select form-select-lg select-type w-25 border bg-transparent border-0 shadow-none"
                       aria-label=".form-select-lg example"
-                      onChange={(e) => setSelectedfield(e.target.value)}
+                      onChange={(e) => setSelectedField(e.target.value)}
                     >
                       <option selected disabled>
                         Select Search Type
                       </option>
-                      <option value="lead_id">SLS</option>
+                      <option value="so_id">SO</option>
                       <option value="client">Client</option>
                       <option value="description">Description</option>
                       <option value="department">Department</option>
