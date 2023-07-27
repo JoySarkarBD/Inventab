@@ -58,7 +58,7 @@ const data = [
 const RevenueChart = () => {
   return (
     <>
-      <h1 className='text-center mb-4'>Revenue Chart 2023-2024</h1>
+      <h2 className='text-center mb-4'>Revenue Chart 2023-2024</h2>
 
       <ResponsiveContainer width='100%' height={400}>
         <ComposedChart
