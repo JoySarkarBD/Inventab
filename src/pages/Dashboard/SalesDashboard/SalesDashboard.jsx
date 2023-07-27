@@ -1,3 +1,4 @@
+import Chart from "../../../components/Chart/Chart";
 import PageTitle from "../../../components/Shared/PageTitle";
 
 const SalesDashboard = () => {
@@ -5,7 +6,7 @@ const SalesDashboard = () => {
     <>
       <PageTitle title='Sales Dashboard' />
       <div className='row'>
-        <div className='col-xl-9 col-xxl-12'>
+        <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
               {/* <div className='row align-items-center'>
@@ -68,6 +69,7 @@ const SalesDashboard = () => {
                   </div>
                 </div>
               </div> */}
+              <Chart/>
             </div>
           </div>
         </div>
