@@ -3,7 +3,6 @@ import {
     CartesianGrid,
     Cell,
     ComposedChart,
-    Legend,
     Line,
     ResponsiveContainer,
     Tooltip,
@@ -55,8 +54,11 @@ const data = [
   },
 ];
 
-const Chart = () => {
+const RevenueChart = () => {
   return (
+  <>
+  <h1 className='text-center mb-4'>Revenue Chart 2022-2023</h1>
+  
     <ResponsiveContainer width="100%" height={400}>
       <ComposedChart
         data={data}
@@ -72,18 +74,24 @@ const Chart = () => {
         <YAxis yAxisId="left" />
         <YAxis yAxisId="right" orientation="right" />
         <Tooltip />
-        <Legend />
 
-        <Bar dataKey="pv" fill="#8884d8" yAxisId="left">
+        <Bar dataKey="uv" fill="#8884d8" yAxisId="left">
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={index === 0 ? '#82ca9d' : '#8884d8'} />
+            <Cell key={`cell-${index}`} fill={'#2e75b5'} />
+          ))}
+        </Bar>
+        <Bar dataKey="pv" fill="#f6b26b" yAxisId="left">
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={"#f6b26b"} />
           ))}
         </Bar>
 
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" yAxisId="right" />
+        <Line type="monotone" dataKey="uv" stroke="#809499" strokeWidth={3} yAxisId="right" />
+        <Line type="monotone" dataKey="pv" stroke="#ffd966" strokeWidth={3} yAxisId="right" />
       </ComposedChart>
     </ResponsiveContainer>
+    </>
   );
 };
 
-export default Chart;
+export default RevenueChart;

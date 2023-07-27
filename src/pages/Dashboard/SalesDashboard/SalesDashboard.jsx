@@ -1,4 +1,4 @@
-import Chart from "../../../components/Chart/Chart";
+import RevenueChart from "../../../components/Chart/Chart";
 import PageTitle from "../../../components/Shared/PageTitle";
 
 const SalesDashboard = () => {
@@ -69,7 +69,7 @@ const SalesDashboard = () => {
                   </div>
                 </div>
               </div> */}
-              <Chart/>
+              <RevenueChart/>
             </div>
           </div>
         </div>
