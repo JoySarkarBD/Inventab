@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Outlet } from "react-router-dom";
 import Header from "../components/Dashboard/Header/Header";
 import NavHeader from "../components/Dashboard/Header/NavHeader";
