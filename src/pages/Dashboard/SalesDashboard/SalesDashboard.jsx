@@ -17,18 +17,19 @@ const SalesDashboard = () => {
         {/*  */}
         <div className='col-xl-6 col-xxl-12 my-4'>
           <div className='row'>
+            {/*  */}
             <div className='col-md-6'>
               <div className='card progress-card'>
                 <div className='card-body d-flex'>
                   <div className='me-auto'>
-                    <h4 className='card-title'>Total Transactions</h4>
-                    <div className='d-flex align-items-center'>
+                    <h4 className='card-title'>Sales Funnel </h4>
+                    {/* <div className='d-flex align-items-center'>
                       <h2 className='fs-38 mb-0'>98k</h2>
                       <div className='text-success transaction-caret'>
                         <i className='fas fa-sort-up' />
                         <p className='mb-0'>+0.5%</p>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   {/* <div
                     className='progress progress-vertical-bottom'
@@ -73,6 +74,7 @@ const SalesDashboard = () => {
                 </div>
               </div>
             </div>
+            {/*  */}
             <div className='col-md-6'>
               <div className='card'>
                 <div className='card-body'>
