@@ -21,6 +21,7 @@ const UpdateSalesLeads = () => {
           <div className='card'>
             <div className='card-header flex'>
               <h4 className='card-title'>Update Sales Lead</h4>
+              <button className="btn btn-primary">See History</button>
             </div>
             <div className='card-body'>
               <SalesDataForm/>
