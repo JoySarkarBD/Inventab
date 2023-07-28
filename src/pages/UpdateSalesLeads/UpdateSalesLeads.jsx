@@ -45,11 +45,11 @@ const UpdateSalesLeads = () => {
                     </div>
                     {/* update po date input */}
                     <div className='mb-3 col-md-6'>
-                      <InputText title='Exprected PO Date*' type='date' />
+                      <InputText title='Expected PO Date*' type='date' />
                     </div>
                     {/* update invoice date input */}
                     <div className='mb-3 col-md-6'>
-                      <InputText title='Exprected Invoice Date*' type='date' />
+                      <InputText title='Expected Invoice Date*' type='date' />
                     </div>
                     {/* update status input */}
                     <div className='mb-3 col-md-6'>

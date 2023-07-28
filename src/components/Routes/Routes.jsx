@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import DashboardLayout from "../../Layout/DashboardLayout";
 import MainLayout from "../../Layout/MainLayout";
+import AddSalesLeads from "../../pages/AddSalesLeads/AddSalesLeads";
 import AR from "../../pages/Dashboard/Sales/AR";
 import SalesInvoices from "../../pages/Dashboard/Sales/SalesInvoices";
 import SalesLead from "../../pages/Dashboard/Sales/SalesLead";
@@ -8,8 +9,8 @@ import SalesOrders from "../../pages/Dashboard/Sales/SalesOrders";
 import SalesDashboard from "../../pages/Dashboard/SalesDashboard/SalesDashboard";
 import Attendance from "../../pages/Dashboard/Support/Attendance";
 import LogIn from "../../pages/Login/LogIn";
-import ErrorPage from "../../ui/ErrorPage";
 import UpdateSalesLeads from "../../pages/UpdateSalesLeads/UpdateSalesLeads";
+import ErrorPage from "../../ui/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "update-sales-leads",
         element: <UpdateSalesLeads />,
+      },
+      {
+        path: "add-sales-leads",
+        element: <AddSalesLeads />,
       },
     ],
   },
