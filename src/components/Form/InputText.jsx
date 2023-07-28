@@ -6,7 +6,7 @@ const InputText = ({ title, ...attributes }) => {
     <>
       <label className='mb-2 text-dark text-capitalize'>{title}</label>
       <br />
-      <input className='new_input_class' {...attributes} />
+      <input className='new_input_class form-control' {...attributes} />
     </>
   );
 };
