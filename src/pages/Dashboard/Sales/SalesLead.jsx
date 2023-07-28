@@ -43,9 +43,11 @@ const SalesLead = () => {
   const columns = [
     {
       name: "SL No",
-      cell: row => {
+      cell: (row) => {
         return (
-          <Link className='text-center text-primary' to={`${row?.lead_no}`}>
+          <Link
+            className='text-center text-primary'
+            to={`/dashboard/sales/update-sales-leads/${row?.lead_no}`}>
             {row?.lead_id}
           </Link>
         );
@@ -54,17 +56,17 @@ const SalesLead = () => {
 
     {
       name: "Sub Org",
-      selector: row => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org || "No data found",
       sortable: true,
     },
     {
       name: "Client",
-      selector: row => row?.client?.company_name,
+      selector: (row) => row?.client?.company_name,
       sortable: true,
     },
     {
       name: "Expected PO date",
-      selector: row => row?.expected_date,
+      selector: (row) => row?.expected_date,
       sortable: true,
     },
     {
@@ -74,22 +76,22 @@ const SalesLead = () => {
     },
     {
       name: "Probabilistic Value",
-      selector: row => row?.probability,
+      selector: (row) => row?.probability,
       sortable: true,
     },
     {
       name: "Description",
-      selector: row => row?.description,
+      selector: (row) => row?.description,
       sortable: true,
     },
     {
       name: "Dept",
-      selector: row => row?.department?.name || "No data found",
+      selector: (row) => row?.department?.name || "No data found",
       sortable: true,
     },
     {
       name: "Status",
-      selector: row => row?.status,
+      selector: (row) => row?.status,
       sortable: true,
     },
   ];
@@ -98,7 +100,7 @@ const SalesLead = () => {
   useEffect(() => {
     let result;
     if (selectedEl?.value) {
-      result = salesLeads.filter(saleData => {
+      result = salesLeads.filter((saleData) => {
         switch (selectedEl?.value) {
           case "lead_id":
             return saleData?.lead_id
@@ -136,7 +138,7 @@ const SalesLead = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach(salesData => {
+    searchData.forEach((salesData) => {
       const csvObj = {
         Sl: salesData?.lead_id || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -152,7 +154,7 @@ const SalesLead = () => {
       data.push(csvObj);
     });
 
-    setCsv(prev => [...prev, ...data]);
+    setCsv((prev) => [...prev, ...data]);
   };
 
   // react select options
@@ -216,27 +218,27 @@ const SalesLead = () => {
                       placeholder='Search here'
                       className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
                       value={search}
-                      onChange={e => setSearch(e.target.value)}
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
                 }
                 // Search & select area start
                 actions={
                   <>
-                  <CSVLink
-                    enclosingCharacter={` `}
-                    data={csv}
-                    filename={`Sales-Leads -${new Date(
-                      Date.now()
-                    ).toLocaleDateString("en-IN")}`}
-                    className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center'
-                    onClick={exportAsCsv}>
-                    <FiDownload className='fs-4 me-2' />
-                    Export as CSV
-                  </CSVLink>
-                  {/* Add Sale Order */}
-                  <Link to="/dashboard/sales/add-sales-leads">
-                      <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2">
+                    <CSVLink
+                      enclosingCharacter={` `}
+                      data={csv}
+                      filename={`Sales-Leads -${new Date(
+                        Date.now()
+                      ).toLocaleDateString("en-IN")}`}
+                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center'
+                      onClick={exportAsCsv}>
+                      <FiDownload className='fs-4 me-2' />
+                      Export as CSV
+                    </CSVLink>
+                    {/* Add Sale Order */}
+                    <Link to='/dashboard/sales/add-sales-leads'>
+                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2'>
                         Add Sales Lead
                       </button>
                     </Link>
