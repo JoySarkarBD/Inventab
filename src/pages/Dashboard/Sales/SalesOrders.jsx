@@ -190,6 +190,7 @@ const SalesOrders = () => {
                     },
                   },
                 }}
+                noContextMenu
                 fixedHeader
                 fixedHeaderScrollHeight="550px"
                 pagination

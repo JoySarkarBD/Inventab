@@ -193,6 +193,7 @@ const SalesLead = () => {
                     },
                   },
                 }}
+                noContextMenu
                 fixedHeader
                 fixedHeaderScrollHeight='550px'
                 pagination
