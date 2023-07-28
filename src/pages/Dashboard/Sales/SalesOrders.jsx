@@ -213,9 +213,9 @@ const SalesOrders = () => {
                     </CSVLink>
 
                     {/* Add Sale Order */}
-                    <Link to="/dashboard/sales-leads/add-sales-order">
+                    <Link to="/dashboard/sales-orders/add-sales-order">
                       <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2">
-                        Add Sales
+                        Add Sales Order
                       </button>
                     </Link>
                   </>

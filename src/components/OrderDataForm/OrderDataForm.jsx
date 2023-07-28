@@ -1,62 +1,37 @@
 import { useState } from "react";
-import { BsArrowLeft } from "react-icons/bs";
-import { Link } from "react-router-dom";
 import Select from "react-select";
 import { v4 } from "uuid";
-import InputText from "../../components/Form/InputText";
-import TextArea from "../../components/Form/TextArea";
-import PageTitle from "../../components/Shared/PageTitle";
-import "./UpdateSalesLeads.css";
+import InputText from "../Form/InputText";
+import TextArea from "../Form/TextArea";
 
-const UpdateSalesLeads = () => {
 
-  const [tableLength, setTableLength] = useState([{}]);
+export default function DataForm() {
+    const [tableLength, setTableLength] = useState([{}]);
 
-  const handleTable = () => {
-    event.preventDefault();
-    const obj = {
-      id: v4(),
-    };
-    setTableLength((prev) => [...prev, obj]);
+const handleTable = () => {
+  event.preventDefault();
+  const obj = {
+    id: v4(),
   };
+  setTableLength((prev) => [...prev, obj]);
+};
 
-  const handleRemove = (id) => {
-    const modifiedArray = tableLength.filter((table) => table.id !== id);
-    setTableLength(modifiedArray);
-  };
+const handleRemove = (id) => {
+  const modifiedArray = tableLength.filter((table) => table.id !== id);
+  setTableLength(modifiedArray);
+};
 
-  // react select options
-  const options = [
-    { value: "lead_id", label: "SLS No" },
-    { value: "client", label: "Client" },
-    { value: "description", label: "Description" },
-    { value: "department", label: "Department" },
-    { value: "status", label: "Status" },
-  ];
+// react select options
+const options = [
+  { value: "lead_id", label: "SLS No" },
+  { value: "client", label: "Client" },
+  { value: "description", label: "Description" },
+  { value: "department", label: "Department" },
+  { value: "status", label: "Status" },
+];
 
-  return (
-    <div>
-      <PageTitle title='Update Sales Leads' />
-      {/* back button */}
-      <div className='d-flex justify-content-end me-5 mb-4'>
-        <Link to='/dashboard/sales-leads' className='btn btn-primary'>
-          <BsArrowLeft className='me-2' />
-          Back
-        </Link>
-      </div>
-      <div className='row'>
-        <div className='col-xl-12 col-lg-12'>
-          <div className='card'>
-            <div className='card-header flex'>
-              <h4 className='card-title'>Update Sales Lead</h4>
-              <button
-                type='button'
-                className='btn btn-primary'
-              >
-                See History
-              </button>
-            </div>
-            <div className='card-body'>
+    return (
+        <div className='card-body'>
               <form>
                 <div className='row'>
 
@@ -186,11 +161,5 @@ const UpdateSalesLeads = () => {
                 </div>
               </form>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default UpdateSalesLeads;
+    )
+}
