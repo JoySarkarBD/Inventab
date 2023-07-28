@@ -45,7 +45,7 @@ const SalesLead = () => {
       name: "SL No",
       cell: (row) => {
         return (
-          <Link className='text-center text-primary' to={`${row?.lead_no}`}>
+          <Link className="text-center text-primary" to={`${row?.lead_no}`}>
             {row?.lead_id}
           </Link>
         );
@@ -169,12 +169,12 @@ const SalesLead = () => {
     <div>
       {/* react select */}
 
-      <PageTitle title='Sales Leads' />
-      <SectionTitle title='Sales Leads' />
-      <div className='row'>
-        <div className='col-12'>
-          <div className='card'>
-            <div className='card-body'>
+      <PageTitle title="Sales Leads" />
+      <SectionTitle title="Sales Leads" />
+      <div className="row">
+        <div className="col-12">
+          <div className="card">
+            <div className="card-body">
               <DataTable
                 title={<h2>Sales Leads</h2>}
                 columns={columns}
@@ -192,35 +192,57 @@ const SalesLead = () => {
                   },
                 }}
                 fixedHeader
-                fixedHeaderScrollHeight='550px'
+                fixedHeaderScrollHeight="550px"
                 pagination
                 striped
                 highlightOnHover
                 subHeader
                 progressPending={loading}
+                //Search & select area start
                 subHeaderComponent={
-                  <div className='row w-100'>
-                  <div className='col-3 col-sm-12 col-md-12 col-lg-2 select-search-category'>
+                  // <div className="row w-100 d-flex searchBox-salesLead align-items-center rounded">
+                  //   <div className="col-3 col-md-3 col-lg-3 select-search-category">
+                  //     <Select
+                  //       options={options}
+                  //       onChange={setSelectedEL}
+                  //       isClearable
+                  //       isSearchable
+                  //       placeholder="search"
+                  //     />
+                  //   </div>
+                  //   <div className="col-9 col-md-9 col-lg-9">
+                  //     <input
+                  //       type="search"
+                  //       placeholder="Search here"
+                  //       className="form-control " /* border-0 bg-transparent shadow-none */
+                  //       value={search}
+                  //       onChange={(e) => setSearch(e.target.value)}
+                  //     />
+                  //   </div>
+                  // </div>
+
+                  <div className="searchBox-salesLead rounded my-4">
+                    {/* Select Area */}
                     <Select
+                      className="select"
                       options={options}
                       onChange={setSelectedEL}
                       isClearable
                       isSearchable
-                      placeholder='search'
+                      placeholder="Search"
                     />
-                  </div>
-                  {/* <div className='separator-light position-absolute'></div> */}
-                  <div className='col-6 col-sm-12 col-md-12 col-lg-6'>
+                    {/* Input Search Area */}
                     <input
-                      type='search'
-                      placeholder='Search here'
-                      className='form-control ' /* border-0 bg-transparent shadow-none */
+                      type="search"
+                      placeholder="Search here"
+                      className="form-control shadow-none" /* border-0 bg-transparent shadow-none */
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
+                    
                   </div>
-                </div>
                 }
+                // Search & select area start
                 actions={
                   <CSVLink
                     enclosingCharacter={` `}
@@ -228,9 +250,10 @@ const SalesLead = () => {
                     filename={`Sales-Leads -${new Date(
                       Date.now()
                     ).toLocaleDateString("en-IN")}`}
-                    className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center'
-                    onClick={exportAsCsv}>
-                    <FiDownload className='fs-4 me-2' />
+                    className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center"
+                    onClick={exportAsCsv}
+                  >
+                    <FiDownload className="fs-4 me-2" />
                     Export as CSV
                   </CSVLink>
                 }
