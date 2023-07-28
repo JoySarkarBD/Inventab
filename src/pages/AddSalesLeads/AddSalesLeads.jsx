@@ -47,7 +47,7 @@ const AddSalesLeads = () => {
       <div className='row'>
         <div className='col-xl-12 col-lg-12'>
           <div className='card'>
-            <div className='card-header'>
+            <div className='card-header flex'>
               <h4 className='card-title'>Add Sales Lead</h4>
             </div>
             <div className='card-body'>

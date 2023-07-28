@@ -47,8 +47,14 @@ const UpdateSalesLeads = () => {
       <div className='row'>
         <div className='col-xl-12 col-lg-12'>
           <div className='card'>
-            <div className='card-header'>
+            <div className='card-header flex'>
               <h4 className='card-title'>Update Sales Lead</h4>
+              <button
+                type='button'
+                className='btn btn-primary'
+              >
+                See History
+              </button>
             </div>
             <div className='card-body'>
               <form>
