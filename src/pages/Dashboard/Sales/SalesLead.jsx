@@ -244,19 +244,3 @@ const SalesLead = () => {
 };
 
 export default SalesLead;
-
-{
-  /* <select
-                      className='form-select form-select-lg select-type w-25 border bg-transparent border-0 shadow-none'
-                      aria-label='.form-select-lg example'
-                      onChange={(e) => setSelectedfield(e.target.value)}>
-                      <option selected disabled>
-                        Select Search Type
-                      </option>
-                      <option value='lead_id'>SLS</option>
-                      <option value='client'>Client</option>
-                      <option value='description'>Description</option>
-                      <option value='department'>Department</option>
-                      <option value='status'>Status</option>
-                    </select> */
-}
