@@ -45,7 +45,7 @@ const SalesOrders = () => {
       name: "Order No",
       cell: (row) => {
         return (
-          <Link className='text-center text-primary' to={`${row?.so_id}`}>
+          <Link className="text-center text-primary" to={`${row?.so_id}`}>
             {row?.so_id}
           </Link>
         );
@@ -168,12 +168,6 @@ const SalesOrders = () => {
 
   return (
     <div className="position-relative">
-      {/* Add Sale Order */}
-      <Link to="/dashboard/sales-leads/add-sales-order">
-       <button className="position-absolute z-3 bg-primary btn text-white mb-3 border-0 bottom-0 end-0">
-          +
-      </button>
-      </Link>
       <PageTitle title="Sales Orders" />
       <SectionTitle title="Sales Orders" />
       <div className="row">
@@ -204,18 +198,27 @@ const SalesOrders = () => {
                 subHeader
                 progressPending={loading}
                 actions={
-                  <CSVLink
-                    enclosingCharacter={` `}
-                    data={csv}
-                    filename={`Sales-Orders-${new Date(
-                      Date.now()
-                    ).toLocaleDateString("en-IN")}`}
-                    className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center"
-                    onClick={exportAsCsv}
-                  >
-                    <FiDownload className="fs-4 me-2" />
-                    Export as CSV
-                  </CSVLink>
+                  <>
+                    <CSVLink
+                      enclosingCharacter={` `}
+                      data={csv}
+                      filename={`Sales-Orders-${new Date(
+                        Date.now()
+                      ).toLocaleDateString("en-IN")}`}
+                      className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center"
+                      onClick={exportAsCsv}
+                    >
+                      <FiDownload className="fs-4 me-2" />
+                      Export as CSV
+                    </CSVLink>
+
+                    {/* Add Sale Order */}
+                    <Link to="/dashboard/sales-leads/add-sales-order">
+                      <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2">
+                        Add Sales
+                      </button>
+                    </Link>
+                  </>
                 }
                 subHeaderComponent={
                   <div className="d-flex align-items-center search-area w-100 border overflow-hidden position-relative rounded">
