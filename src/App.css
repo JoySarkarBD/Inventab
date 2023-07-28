@@ -53999,7 +53999,7 @@ button:focus {
 .btn-primary:active,
 .btn-primary:focus,
 .btn-primary:hover {
-  border-color: #307bbd;
+  /* border-color: #307bbd; */
   background-color: #307bbd;
 }
 
@@ -67260,3 +67260,14 @@ html[dir="rtl"]
   width: 100%;
 }
 /* custom new text input css */
+
+/* custom modal button css */
+.btn-close {
+  outline: 0 !important;
+}
+
+.btn-close:focus {
+  box-shadow: none !important;
+  opacity: 1;
+}
+/* custom modal button css */
