@@ -180,6 +180,7 @@ const SalesInvoices = () => {
                     },
                   },
                 }}
+                noContextMenu
                 fixedHeader
                 fixedHeaderScrollHeight="550px"
                 pagination

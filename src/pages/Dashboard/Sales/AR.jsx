@@ -137,6 +137,7 @@ const AR = () => {
                     },
                   },
                 }}
+                noContextMenu
                 fixedHeader
                 fixedHeaderScrollHeight="550px"
                 pagination
