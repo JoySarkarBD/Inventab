@@ -26,6 +26,7 @@
     "react-select": "^5.7.4",
     "recharts": "^2.7.2",
     "styled-components": "^6.0.5",
+    "uuid": "^9.0.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {

@@ -200,27 +200,6 @@ const SalesLead = () => {
                 progressPending={loading}
                 //Search & select area start
                 subHeaderComponent={
-                  // <div className="row w-100 d-flex searchBox-salesLead align-items-center rounded">
-                  //   <div className="col-3 col-md-3 col-lg-3 select-search-category">
-                  //     <Select
-                  //       options={options}
-                  //       onChange={setSelectedEL}
-                  //       isClearable
-                  //       isSearchable
-                  //       placeholder="search"
-                  //     />
-                  //   </div>
-                  //   <div className="col-9 col-md-9 col-lg-9">
-                  //     <input
-                  //       type="search"
-                  //       placeholder="Search here"
-                  //       className="form-control " /* border-0 bg-transparent shadow-none */
-                  //       value={search}
-                  //       onChange={(e) => setSearch(e.target.value)}
-                  //     />
-                  //   </div>
-                  // </div>
-
                   <div className='searchBox-salesLead rounded my-4'>
                     {/* Select Area */}
                     <Select
@@ -243,6 +222,7 @@ const SalesLead = () => {
                 }
                 // Search & select area start
                 actions={
+                  <>
                   <CSVLink
                     enclosingCharacter={` `}
                     data={csv}
@@ -254,6 +234,13 @@ const SalesLead = () => {
                     <FiDownload className='fs-4 me-2' />
                     Export as CSV
                   </CSVLink>
+                  {/* Add Sale Order */}
+                  <Link to="/dashboard/sales/add-sales-leads">
+                      <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2">
+                        Add Sales Lead
+                      </button>
+                    </Link>
+                  </>
                 }
               />
             </div>
