@@ -175,29 +175,6 @@ const SalesLead = () => {
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
-              {/* ==========================================  select & search option start ===================================== */}
-              <div className='row w-100'>
-                <div className='col-3 col-sm-12 col-md-12 col-lg-2 select-search-category'>
-                  <Select
-                    options={options}
-                    onChange={setSelectedEL}
-                    isClearable
-                    isSearchable
-                    placeholder='search'
-                  />
-                </div>
-                {/* <div className='separator-light position-absolute'></div> */}
-                <div className='col-6 col-sm-12 col-md-12 col-lg-6'>
-                  <input
-                    type='search'
-                    placeholder='Search here'
-                    className='form-control ' /* border-0 bg-transparent shadow-none */
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </div>
-              </div>
-              {/* =====================================================  select & search option end ========================================= */}
               <DataTable
                 title={<h2>Sales Leads</h2>}
                 columns={columns}
@@ -221,6 +198,29 @@ const SalesLead = () => {
                 highlightOnHover
                 subHeader
                 progressPending={loading}
+                subHeaderComponent={
+                  <div className='row w-100'>
+                  <div className='col-3 col-sm-12 col-md-12 col-lg-2 select-search-category'>
+                    <Select
+                      options={options}
+                      onChange={setSelectedEL}
+                      isClearable
+                      isSearchable
+                      placeholder='search'
+                    />
+                  </div>
+                  {/* <div className='separator-light position-absolute'></div> */}
+                  <div className='col-6 col-sm-12 col-md-12 col-lg-6'>
+                    <input
+                      type='search'
+                      placeholder='Search here'
+                      className='form-control ' /* border-0 bg-transparent shadow-none */
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                </div>
+                }
                 actions={
                   <CSVLink
                     enclosingCharacter={` `}

@@ -198,6 +198,7 @@ const SalesOrders = () => {
                 subHeader
                 progressPending={loading}
                 actions={
+                  <div className="d-flex flex-row flex-sm-column justify-items-center align-items-center gap-2">
                   <CSVLink
                     enclosingCharacter={` `}
                     data={csv}
@@ -210,6 +211,10 @@ const SalesOrders = () => {
                     <FiDownload className="fs-4 me-2" />
                     Export as CSV
                   </CSVLink>
+                  <button className="bg-primary btn text-white mb-3 border-0">
+                    Add Sale Order
+                  </button>
+                  </div>
                 }
                 subHeaderComponent={
                   <div className="d-flex align-items-center search-area w-100 border overflow-hidden position-relative rounded">
