@@ -15,7 +15,7 @@ const SalesDashboard = () => {
           </div>
         </div>
         {/*  */}
-        <div className='col-xl-6 col-xxl-12 my-4'>
+        <div className='col-12 my-4'>
           <div className='row'>
             {/*  */}
             <div className='col-md-6'>
