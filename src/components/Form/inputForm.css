@@ -1,0 +1,10 @@
+.new_input_class {
+  background: #fff;
+  border: 1px solid #cccccc;
+  padding: 2px 8px;
+  color: #333333;
+  height: 38px;
+  border-radius: 4px;
+  outline: 0 !important;
+  width: 100%;
+}
