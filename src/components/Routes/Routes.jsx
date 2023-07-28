@@ -9,6 +9,7 @@ import SalesDashboard from "../../pages/Dashboard/SalesDashboard/SalesDashboard"
 import Attendance from "../../pages/Dashboard/Support/Attendance";
 import LogIn from "../../pages/Login/LogIn";
 import ErrorPage from "../../ui/ErrorPage";
+import UpdateSalesLeads from "../../pages/UpdateSalesLeads/UpdateSalesLeads";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,11 @@ const router = createBrowserRouter([
       {
         path: "attendance",
         element: <Attendance />,
+      },
+      //UpdateSalesLeads form test
+      {
+        path: "update-sales-leads",
+        element: <UpdateSalesLeads />,
       },
     ],
   },
