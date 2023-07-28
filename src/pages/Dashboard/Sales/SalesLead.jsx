@@ -224,7 +224,7 @@ const SalesLead = () => {
                   <div className='searchBox-salesLead rounded my-4'>
                     {/* Select Area */}
                     <Select
-                      className='select'
+                      className='select text-start'
                       options={options}
                       onChange={setSelectedEL}
                       isClearable
