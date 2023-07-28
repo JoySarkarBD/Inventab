@@ -1,4 +1,8 @@
 import RevenueChart from "../../../components/Chart/Chart";
+import KPIInvoice from "../../../components/KPI/KPI-Invoice/KPIInvoice";
+import KPIPO from "../../../components/KPI/KPI-PO/KPIPO";
+import MetricInvoice from "../../../components/Metric/MetricInvoice/MetricInvoice";
+import MetricPO from "../../../components/Metric/MetricPO/MetricPO";
 import SalesKPI from "../../../components/SalesKPI/SalesKPI";
 import PageTitle from "../../../components/Shared/PageTitle";
 
@@ -20,6 +24,43 @@ const SalesDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* KPI PO section */}
+        <div className='col-12 my-4'>
+          <div className='card'>
+            <div className='card-body'>
+              <KPIPO/>
+            </div>
+          </div>
+        </div>
+
+        {/* KPI Invoice section */}
+        <div className='col-12 my-4'>
+          <div className='card'>
+            <div className='card-body'>
+              <KPIInvoice/>
+            </div>
+          </div>
+        </div>
+
+        {/* Metric PO section */}
+        <div className='col-12 my-4'>
+          <div className='card'>
+            <div className='card-body'>
+              <MetricPO/>
+            </div>
+          </div>
+        </div>
+        
+        {/* Metric Invoice section */}
+        <div className='col-12 my-4'>
+          <div className='card'>
+            <div className='card-body'>
+              <MetricInvoice/>
+            </div>
+          </div>
+        </div>
+
         {/*  */}
         <div className='col-12 my-4'>
           <div className='row'>
