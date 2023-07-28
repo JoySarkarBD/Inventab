@@ -23,52 +23,52 @@ export default function MetricInvoice() {
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Department-1</th>
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>Otto</td>
-              <td>Otto</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
+              <th scope="row"><p className="text-dark">Department-1</p></th>
+              <td><p className="text-dark">Mark</p></td>
+              <td><p className="text-dark">Mark</p></td>
+              <td><p className="text-dark">Mark</p></td>
+              <td><p className="text-dark">Mark</p></td>
+              <td><p className="text-dark">Otto</p></td>
+              <td><p className="text-dark">Otto</p></td>
+              <td><p className="text-dark">Otto</p></td>
+              <td><p className="text-dark">Otto</p></td>
+              <td><p className="text-dark">@mdo</p></td>
+              <td><p className="text-dark">@mdo</p></td>
+              <td><p className="text-dark">@mdo</p></td>
+              <td><p className="text-dark">@mdo</p></td>
             </tr>
             <tr>
-              <th scope="row">Department-2</th>
-              <td>Jacob</td>
-              <td>Jacob</td>
-              <td>Jacob</td>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>Thornton</td>
-              <td>Thornton</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
+              <th scope="row"><p className="text-dark">Department-2</p></th>
+              <td><p className="text-dark">Jacob</p></td>
+              <td><p className="text-dark">Jacob</p></td>
+              <td><p className="text-dark">Jacob</p></td>
+              <td><p className="text-dark">Jacob</p></td>
+              <td><p className="text-dark">Thornton</p></td>
+              <td><p className="text-dark">Thornton</p></td>
+              <td><p className="text-dark">Thornton</p></td>
+              <td><p className="text-dark">Thornton</p></td>
+              <td><p className="text-dark">@fat</p></td>
+              <td><p className="text-dark">@fat</p></td>
+              <td><p className="text-dark">@fat</p></td>
+              <td><p className="text-dark">@fat</p></td>
             </tr>
             <tr>
-              <th scope="row">Department-3</th>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>Larry Bird</td>
-              <td>Larry Bird</td>
-              <td>Larry Bird</td>
-              <td>Larry Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
+              <th scope="row"><p className="text-dark">Department-3</p></th>
+              <td><p className="text-dark">@fat</p></td>
+              <td><p className="text-dark">@fat</p></td>
+              <td><p className="text-dark">@fat</p></td>
+              <td><p className="text-dark">@fat</p></td>
+              <td><p className="text-dark">Larry Bird</p></td>
+              <td><p className="text-dark">Larry Bird</p></td>
+              <td><p className="text-dark">Larry Bird</p></td>
+              <td><p className="text-dark">Larry Bird</p></td>
+              <td><p className="text-dark">@twitter</p></td>
+              <td><p className="text-dark">@twitter</p></td>
+              <td><p className="text-dark">@twitter</p></td>
+              <td><p className="text-dark">@twitter</p></td>
             </tr>
           </tbody>
-        </table>
+      </table>
        </> 
     )
 }
