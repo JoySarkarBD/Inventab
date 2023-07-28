@@ -61,7 +61,7 @@ const router = createBrowserRouter([
         element: <AddSalesLeads />,
       },
       {
-        path: "sales/update-sales-leads",
+        path: "sales/update-sales-leads/:lead_no",
         element: <UpdateSalesLeads />,
       },
       {
