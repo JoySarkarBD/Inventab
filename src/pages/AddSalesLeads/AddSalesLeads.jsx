@@ -35,23 +35,11 @@ const AddSalesLeads = () => {
                   </div>
                   {/* add po date input */}
                   <div className='mb-3 col-md-6'>
-                    <InputText
-                      title='Expected PO Date*'
-                      placeholder='Choose Date'
-                      type='text'
-                      onFocus={e => (e.target.type = "date")}
-                      onBlur={e => (e.target.type = "text")}
-                    />
+                    <InputText title='Expected PO Date*' type='date' />
                   </div>
                   {/* add invoice date input */}
                   <div className='mb-3 col-md-6'>
-                    <InputText
-                      title='Expected Invoice Date*'
-                      placeholder='Choose Date'
-                      type='text'
-                      onFocus={e => (e.target.type = "date")}
-                      onBlur={e => (e.target.type = "text")}
-                    />
+                    <InputText title='Expected Invoice Date*' type='date' />
                   </div>
                   {/* add status input */}
                   <div className='mb-3 col-md-6'>
