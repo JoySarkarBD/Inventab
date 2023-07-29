@@ -60,8 +60,9 @@ const AR = () => {
         isFocused={isFocused}
         isSelected={isSelected}
         getStyles={getStyles}
-        innerProps={props}>
-        <input type='checkbox' checked={isSelected} className='me-2' />
+        innerProps={props}
+      >
+        <input type="checkbox" checked={isSelected} className="me-2" />
         {children}
       </components.Option>
     );
@@ -166,7 +167,7 @@ const AR = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach(salesData => {
+    searchData.forEach((salesData) => {
       const csvObj = {
         "Inv No": salesData?.invoice_number || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -181,17 +182,17 @@ const AR = () => {
       data.push(csvObj);
     });
 
-    setCsv(prev => [...prev, ...data]);
+    setCsv((prev) => [...prev, ...data]);
   };
 
   return (
     <div>
-      <PageTitle title='AR' />
-      <SectionTitle title='AR' />
-      <div className='row'>
-        <div className='col-12'>
-          <div className='card'>
-            <div className='card-body'>
+      <PageTitle title="AR" />
+      <SectionTitle title="AR" />
+      <div className="row">
+        <div className="col-12">
+          <div className="card">
+            <div className="card-body">
               <DataTable
                 title={<h2>Account Receivables Report</h2>}
                 columns={columns}
@@ -205,23 +206,24 @@ const AR = () => {
                   headCells: {
                     style: {
                       fontSize: "19px",
-                      width:"170px"
+                      width: "170px",
                     },
                   },
                 }}
                 noContextMenu
                 fixedHeader
-                fixedHeaderScrollHeight='550px'
+                fixedHeaderScrollHeight="550px"
                 pagination
                 subHeaderComponent={
                   <Select
-                    className='text-start w-25'
+                    className="text-start w-75 select-ar"
                     defaultValue={[]}
                     closeMenuOnSelect={false}
                     hideSelectedOptions={false}
-                    onChange={options => {
+                    isMulti
+                    onChange={(options) => {
                       if (Array.isArray(options)) {
-                        setSelectedOptions(options.map(opt => opt.value));
+                        setSelectedOptions(options.map((opt) => opt.value));
                       }
                     }}
                     options={allOptions}
@@ -235,21 +237,22 @@ const AR = () => {
                 subHeader
                 progressPending={loading}
                 actions={
-                  <div className='d-flex align-items-center column-gap-4'>
+                  <div className="d-flex align-items-center column-gap-4">
                     <CSVLink
                       enclosingCharacter={` `}
                       data={csv}
                       filename={`Invoices-${new Date(
                         Date.now()
                       ).toLocaleDateString("en-IN")}`}
-                      className='bg-primary btn text-white rounded-2  border-0 d-flex align-items-center'
-                      onClick={exportAsCsv}>
-                      <FiDownload className='fs-4 me-2' />
+                      className="bg-primary btn text-white rounded-2  border-0 d-flex align-items-center"
+                      onClick={exportAsCsv}
+                    >
+                      <FiDownload className="fs-4 me-2" />
                       Download
                     </CSVLink>
                   </div>
                 }
-                subHeaderAlign='left'
+                subHeaderAlign="left"
               />
             </div>
           </div>

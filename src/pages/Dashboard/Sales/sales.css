@@ -101,9 +101,36 @@
   z-index: 0 !important;
 }
 
-select option {
-  padding: 5px 0px !important;
+.select-ar {
+  padding: 10px;
+  border: 2px solid #f5f5f5;
+  border-radius: 8px;
+  font-size: 1rem;
 }
+.css-13cymwt-control {
+  border-width: 0 !important;
+}
+
+.css-t3ipsp-control {
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.css-t3ipsp-control:hover {
+  box-shadow: none !important;
+}
+
+.css-t3ipsp-control:focus {
+  border-color: transparent !important;
+}
+.css-t3ipsp-control:hover {
+  border-color: transparent !important;
+}
+
+.select-ar .css-1u9des2-indicatorSeparator {
+  width: 0;
+}
+
 /* Responsive css end*/
 
 /*#  Sales Leads Page custom css end #*/
