@@ -101,8 +101,6 @@ export default function KPIPO() {
 
     return (
        <>
-       
-       <h2 className="text-center mb-4">KPI-PO</h2>
        {/* <table className="table table-bordered">
           <thead>
             <tr>
@@ -170,7 +168,7 @@ export default function KPIPO() {
           </tbody>
       </table> */}
       <DataTable
-                title={<h2>Sales Leads</h2>}
+                title={<h2 className="text-center">KPI PO</h2>}
                 data={kipPo}
                 columns={columns}
                 customStyles={{
