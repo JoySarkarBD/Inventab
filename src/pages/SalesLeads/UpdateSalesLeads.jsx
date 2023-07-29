@@ -71,8 +71,7 @@ function SalesLeadHistoryModal(props) {
 const UpdateSalesLeads = () => {
   const { lead_no } = useParams();
 
-  const [salesLeads, setSalesLeads] = useState([]);
-  const [updateData, setUpdateData] = useState({});
+  const [selectedData, setSelectedData] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -83,11 +82,11 @@ const UpdateSalesLeads = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+          `http://inventab.io/api/v1/pipo/sales/lead/?lead_no=${lead_no}`
         );
         setLoading(false);
-        const res = data?.results.find(sale => sale?.lead_no === lead_no);
-        setUpdateData(res);
+
+        setSelectedData(data[0]);
       } catch (error) {
         setLoading(true);
         console.log(error);
@@ -95,7 +94,7 @@ const UpdateSalesLeads = () => {
     };
     leads();
   }, [lead_no]);
-  console.log(updateData);
+
   return (
     <div>
       <PageTitle title='Update Sales Leads' />
@@ -127,7 +126,7 @@ const UpdateSalesLeads = () => {
 
             <div className='card-body'>
               {!loading ? (
-                <SalesDataForm salesData={updateData} />
+                <SalesDataForm salesData={selectedData} />
               ) : (
                 <h1>Loading...</h1>
               )}

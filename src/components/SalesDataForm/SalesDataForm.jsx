@@ -1,11 +1,111 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 import Select from "react-select";
 import { v4 } from "uuid";
+import axios from "../../utils/axios/axios";
 import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 
 export default function SalesDataForm({ salesData }) {
   const [tableLength, setTableLength] = useState([{}]);
+  const [loading, setLoading] = useState(false);
+  const [salesLeads, setSalesLeads] = useState([]);
+  const [dept, setDept] = useState([]);
+  const [client, setClient] = useState([]);
+  const [status, setStatus] = useState([]);
+  // fetch table
+  const getLeads = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+      );
+      setLoading(false);
+      setSalesLeads(data);
+    } catch (error) {
+      setLoading(true);
+      console.log(error);
+    }
+  };
+
+  // load leads
+  useEffect(() => {
+    getLeads();
+  }, []);
+
+  // sort all select type el
+  useEffect(() => {
+    let deptArr = [];
+    let clientArr = [];
+    let statusArr = [];
+    let contactArr = [];
+    if (salesLeads.length > 0) {
+      salesLeads.forEach((sale) => {
+        // dept obj
+        let deptObj = {
+          label: sale?.department?.name,
+          value: sale?.department?.id,
+        };
+
+        // client obj
+        let clientObj = {
+          label: sale?.client?.company_name,
+          value: sale?.client?.id,
+        };
+
+        // status obj
+        let statusObj = {
+          label: sale?.status,
+          value: sale?.status,
+        };
+
+        // contact obj
+        let contactObj = {
+          label: sale?.contact_name,
+          value: sale?.contact_name,
+        };
+
+        // push them array
+        deptArr.push(deptObj);
+        clientArr.push(clientObj);
+        statusArr.push(statusObj);
+        contactArr.push(contactObj);
+      });
+
+      // remove undefined data from arr
+      const removeUndefinedObj = (arr) => {
+        return arr.filter((a) => {
+          if ((a.label && a.value) !== undefined) {
+            return a;
+          }
+        });
+      };
+
+      let newDept = removeUndefinedObj(deptArr);
+      let newClient = removeUndefinedObj(clientArr);
+      let newStatus = removeUndefinedObj(statusArr);
+
+      // remove duplicates data from arr of obj
+      const removeDuplicateObjects = (arr) => {
+        const uniqueObjects = new Set(arr.map(JSON.stringify));
+        return Array.from(uniqueObjects).map(JSON.parse);
+      };
+
+      // dept
+      const uniqueDept = removeDuplicateObjects(newDept);
+      setDept(uniqueDept);
+
+      // client
+      const uniqueClient = removeDuplicateObjects(newClient);
+      setClient(uniqueClient);
+
+      // status
+      const uniqueStatus = removeDuplicateObjects(newStatus);
+      console.log(uniqueStatus);
+      setStatus(uniqueStatus);
+    }
+  }, [salesLeads]);
+  // ==============================table stuff==============
 
   const handleTable = () => {
     event.preventDefault();
@@ -36,7 +136,13 @@ export default function SalesDataForm({ salesData }) {
         {/* add department input */}
         <div className='mb-3 col-md-6'>
           <label className='mb-2 text-dark text-capitalize'>Department</label>
-          <Select title='Department' placeholder='Select Department' />
+          <Select
+            title='Department'
+            placeholder='Select Department'
+            options={dept}
+            isClearable
+            isSearchable
+          />
         </div>
 
         {/* add sub org input */}
@@ -54,13 +160,24 @@ export default function SalesDataForm({ salesData }) {
         {/* add status input */}
         <div className='mb-3 col-md-6'>
           <label className='mb-2 text-dark text-capitalize'>Status*</label>
-          <Select placeholder='Select Status' />
+          <Select
+            placeholder='Select Status'
+            options={status}
+            isClearable
+            isSearchable
+            isLoading
+          />
         </div>
 
         {/* add client input */}
         <div className='mb-3 col-md-6'>
-          <label className='mb-2 text-dark text-capitalize'>Status*</label>
-          <Select placeholder='Select Client' />
+          <label className='mb-2 text-dark text-capitalize'>Client*</label>
+          <Select
+            placeholder='Select Client'
+            options={client}
+            isSearchable
+            isClearable
+          />
         </div>
 
         {/* add po date input */}
