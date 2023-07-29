@@ -2,7 +2,7 @@ export default function MetricInvoice() {
     return (
        <>
        
-       <h2 className="text-center mb-4">Metric-Invoice</h2>
+       <h2 className="text-center mb-4">Actual-Invoice</h2>
        <table className="table table-bordered">
           <thead>
             <tr>
