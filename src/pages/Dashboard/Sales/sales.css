@@ -107,23 +107,23 @@
   border-radius: 8px;
   font-size: 1rem;
 }
-.css-13cymwt-control {
+.select-ar .css-13cymwt-control {
   border-width: 0 !important;
 }
 
-.css-t3ipsp-control {
+.select-ar .css-t3ipsp-control {
   box-shadow: none !important;
   border-color: transparent !important;
 }
 
-.css-t3ipsp-control:hover {
+.select-ar .css-t3ipsp-control:hover {
   box-shadow: none !important;
 }
 
-.css-t3ipsp-control:focus {
+.select-ar .css-t3ipsp-control:focus {
   border-color: transparent !important;
 }
-.css-t3ipsp-control:hover {
+.select-ar .css-t3ipsp-control:hover {
   border-color: transparent !important;
 }
 

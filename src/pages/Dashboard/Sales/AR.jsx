@@ -101,7 +101,7 @@ const AR = () => {
     fetchReports();
   }, []);
 
-  // console.log(reports);
+  console.log(reports);
 
   // columns
   const columns = [
