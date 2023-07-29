@@ -5,10 +5,6 @@
   border: 0.5px solid #f5f5f5;
 }
 
-.select-search-category {
-  z-index: 99 !important;
-}
-
 .searchBox-salesLead {
   width: 100%;
   border: 2px solid #f5f5f5;
@@ -20,12 +16,12 @@
 .searchBox-salesLead .select {
   flex-basis: 200px;
   border: none;
-  z-index: 99 !important;
+  z-index: 1 !important;
   font-size: 1.25rem;
 }
 
-#react-select-4-listbox{
-  z-index: 99999999999999 !important;
+#react-select-4-listbox {
+  z-index: 99 !important;
 }
 
 .searchBox-salesLead .select .css-13cymwt-control {
@@ -99,6 +95,14 @@
     flex-basis: 140px;
     font-size: 14px;
   }
+}
+
+.kDLGkH {
+  z-index: 0 !important;
+}
+
+select option {
+  padding: 5px 0px !important;
 }
 /* Responsive css end*/
 

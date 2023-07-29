@@ -7,6 +7,7 @@ import Select, { components } from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import axios from "../../../utils/axios/axios";
+import "./sales.css";
 
 const AR = () => {
   const [reports, setReports] = useState([]);
@@ -14,7 +15,6 @@ const AR = () => {
   const [loading, setLoading] = useState(false);
   const [csv, setCsv] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-
 
   /* React Select with checkbox */
   const InputOption = ({
@@ -31,28 +31,28 @@ const AR = () => {
     const onMouseDown = () => setIsActive(true);
     const onMouseUp = () => setIsActive(false);
     const onMouseLeave = () => setIsActive(false);
-  
+
     // styles
     let bg = "transparent";
     if (isFocused) bg = "#eee";
     if (isActive) bg = "#B2D4FF";
-  
+
     const style = {
       alignItems: "center",
       backgroundColor: bg,
       color: "inherit",
-      display: "flex "
+      display: "flex ",
     };
-  
+
     // prop assignment
     const props = {
       ...innerProps,
       onMouseDown,
       onMouseUp,
       onMouseLeave,
-      style
+      style,
     };
-  
+
     return (
       <components.Option
         {...rest}
@@ -60,24 +60,22 @@ const AR = () => {
         isFocused={isFocused}
         isSelected={isSelected}
         getStyles={getStyles}
-        innerProps={props}
-      >
-        <input type="checkbox" checked={isSelected} />
+        innerProps={props}>
+        <input type='checkbox' checked={isSelected} className='me-2' />
         {children}
       </components.Option>
     );
   };
 
   const allOptions = [
-    { value: 'Overdue (>30 days)', label: 'Overdue (>30 days)' },
-    { value: 'Overdue (>15 days)', label: 'Overdue (>15 days)' },
-    { value: 'Overdue (<15days)', label: 'Overdue (<15days)' },
-    { value: 'Due in 15 Days', label: 'Due in 15 Days' },
-    { value: 'Due in 30 Days', label: 'Due in 30 Days' },
-    { value: 'Due in > 30 Days', label: 'Due in > 30 Days' },
+    { value: "Overdue (>30 days)", label: "Overdue (>30 days)" },
+    { value: "Overdue (>15 days)", label: "Overdue (>15 days)" },
+    { value: "Overdue (<15days)", label: "Overdue (<15days)" },
+    { value: "Due in 15 Days", label: "Due in 15 Days" },
+    { value: "Due in 30 Days", label: "Due in 30 Days" },
+    { value: "Due in > 30 Days", label: "Due in > 30 Days" },
   ];
   /* React Select with checkbox */
-
 
   // fetch table
   const fetchReports = async () => {
@@ -96,7 +94,6 @@ const AR = () => {
       console.log(error);
     }
   };
-
 
   // load leads
   useEffect(() => {
@@ -131,7 +128,6 @@ const AR = () => {
       sortable: true,
     },
 
-
     {
       name: "Paid",
       selector: () => "No data found",
@@ -159,19 +155,18 @@ const AR = () => {
   ];
 
   const options = [
-    { value: 'Overdue (>30 days)', label: 'Overdue (>30 days)' },
-    { value: 'Overdue (>15 days)', label: 'Overdue (>15 days)' },
-    { value: 'Overdue (<15days)', label: 'Overdue (<15days)' },
-    { value: 'Due in 15 Days', label: 'Due in 15 Days' },
-    { value: 'Due in 30 Days', label: 'Due in 30 Days' },
-    { value: 'Due in > 30 Days', label: 'Due in > 30 Days' },
-  ]
-
+    { value: "Overdue (>30 days)", label: "Overdue (>30 days)" },
+    { value: "Overdue (>15 days)", label: "Overdue (>15 days)" },
+    { value: "Overdue (<15days)", label: "Overdue (<15days)" },
+    { value: "Due in 15 Days", label: "Due in 15 Days" },
+    { value: "Due in 30 Days", label: "Due in 30 Days" },
+    { value: "Due in > 30 Days", label: "Due in > 30 Days" },
+  ];
 
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach((salesData) => {
+    searchData.forEach(salesData => {
       const csvObj = {
         "Inv No": salesData?.invoice_number || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -186,32 +181,17 @@ const AR = () => {
       data.push(csvObj);
     });
 
-    setCsv((prev) => [...prev, ...data]);
+    setCsv(prev => [...prev, ...data]);
   };
 
   return (
     <div>
-      <PageTitle title="AR" />
-      <SectionTitle title="AR" />
-      <div className="row">
-      <Select
-        className='text-start'
-        defaultValue={[]}
-        closeMenuOnSelect={false}
-        hideSelectedOptions={false}
-        onChange={(options) => {
-          if (Array.isArray(options)) {
-            setSelectedOptions(options.map((opt) => opt.value));
-          }
-        }}
-        options={allOptions}
-        components={{
-          Option: InputOption,
-        }}
-      />
-        <div className="col-12">
-          <div className="card">
-            <div className="card-body">
+      <PageTitle title='AR' />
+      <SectionTitle title='AR' />
+      <div className='row'>
+        <div className='col-12'>
+          <div className='card'>
+            <div className='card-body'>
               <DataTable
                 title={<h2>Account Receivables Report</h2>}
                 columns={columns}
@@ -230,29 +210,45 @@ const AR = () => {
                 }}
                 noContextMenu
                 fixedHeader
-                fixedHeaderScrollHeight="550px"
+                fixedHeaderScrollHeight='550px'
                 pagination
+                subHeaderComponent={
+                  <Select
+                    className='text-start w-25'
+                    defaultValue={[]}
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    onChange={options => {
+                      if (Array.isArray(options)) {
+                        setSelectedOptions(options.map(opt => opt.value));
+                      }
+                    }}
+                    options={allOptions}
+                    components={{
+                      Option: InputOption,
+                    }}
+                  />
+                }
                 striped
                 highlightOnHover
                 subHeader
                 progressPending={loading}
                 actions={
-                  <div className="d-flex align-items-center">
-                  <CSVLink
-                    enclosingCharacter={` `}
-                    data={csv}
-                    filename={`Invoices-${new Date(
-                      Date.now()
-                    ).toLocaleDateString("en-IN")}`}
-                    className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center"
-                    onClick={exportAsCsv}
-                  >
-                    <FiDownload className="fs-4 me-2" />
-                    Download
-                  </CSVLink>
-                  
-                </div>}
-                subHeaderAlign="left"
+                  <div className='d-flex align-items-center column-gap-4'>
+                    <CSVLink
+                      enclosingCharacter={` `}
+                      data={csv}
+                      filename={`Invoices-${new Date(
+                        Date.now()
+                      ).toLocaleDateString("en-IN")}`}
+                      className='bg-primary btn text-white rounded-2  border-0 d-flex align-items-center'
+                      onClick={exportAsCsv}>
+                      <FiDownload className='fs-4 me-2' />
+                      Download
+                    </CSVLink>
+                  </div>
+                }
+                subHeaderAlign='left'
               />
             </div>
           </div>
