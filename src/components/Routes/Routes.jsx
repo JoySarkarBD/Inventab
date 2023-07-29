@@ -78,6 +78,10 @@ const router = createBrowserRouter([
         path: "sales-orders/update-sales-order",
         element: <UpdateSalesOrder />,
       },
+      {
+        path: "attendance",
+        element: <Attendance />,
+      },
     ],
   },
 ]);
