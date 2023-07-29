@@ -36,32 +36,11 @@ const router = createBrowserRouter([
         path: "sales-dashboard",
         element: <SalesDashboard />,
       },
+      /* Leads */
       {
         path: "sales-leads",
         element: <SalesLead />,
       },
-      {
-        path: "sales-orders",
-        element: <SalesOrders />,
-      },
-      {
-        path: "sales-invoices",
-        element: <SalesInvoices />,
-      },
-
-      {
-        path: "sales-invoices/sales-invoices-details",
-        element: <SalesInvoiceDetails />,
-      },
-      {
-        path: "ar",
-        element: <AR />,
-      },
-      {
-        path: "attendance",
-        element: <Attendance />,
-      },
-      //UpdateSalesLeads form test
       {
         path: "sales/add-sales-leads",
         element: <AddSalesLeads />,
@@ -70,14 +49,35 @@ const router = createBrowserRouter([
         path: "sales/update-sales-leads/:lead_no",
         element: <UpdateSalesLeads />,
       },
+      /* Orders */
+      {
+        path: "sales-orders",
+        element: <SalesOrders />,
+      },
       {
         path: "sales-orders/add-sales-order",
         element: <AddSalesOrder />,
       },
+      
       {
         path: "sales-orders/update-sales-order",
         element: <UpdateSalesOrder />,
       },
+      /* invoice */
+      {
+        path: "sales-invoices",
+        element: <SalesInvoices />,
+      },
+      {
+        path: "sales-invoices/sales-invoices-details",
+        element: <SalesInvoiceDetails />,
+      },
+      /* ar */
+      {
+        path: "ar",
+        element: <AR />,
+      },
+      /* attendance */
       {
         path: "attendance",
         element: <Attendance />,

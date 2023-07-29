@@ -100,7 +100,7 @@ const SalesInvoiceDetails = () => {
           </div>
         </div>
 
-        <div className="col-12 col-md-6 col-lg-6 invoice-details-card">
+        <div className="col-12 invoice-details-card">
           <div className="invoice-details bg-white mt-3 card-body">
             {/* Payment Terms */}
             <div className="d-flex align-items-center column-gap-3 mb-2">
