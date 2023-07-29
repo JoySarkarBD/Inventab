@@ -186,7 +186,7 @@ const SalesOrders = () => {
                   },
                   headCells: {
                     style: {
-                      fontSize: "19px",
+                      fontSize: "19px",width:"170px"
                     },
                   },
                 }}

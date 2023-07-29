@@ -177,6 +177,7 @@ const SalesInvoices = () => {
                   headCells: {
                     style: {
                       fontSize: "19px",
+                      width:"170px"
                     },
                   },
                 }}
