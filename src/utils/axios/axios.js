@@ -1,6 +1,7 @@
 import axios from "axios";
-
-export const axiosInstance = axios.create({
-  baseURL: `http://inventab.io/api/v1`,
-  withCredentials: true,
+export default axios.create({
+  baseURL: "http://inventab.io/api/v1/",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });

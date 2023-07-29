@@ -1,10 +1,11 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import DataTable from "react-data-table-component";
 import { FiDownload } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
 const SalesOrders = () => {
@@ -21,7 +22,7 @@ const SalesOrders = () => {
       setLoading(true);
       const response = (
         await axios.get(
-          "http://inventab.io/api/v1/pipo/so/order/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+          "pipo/so/order/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
         )
       ).data;
       setLoading(false);
@@ -42,7 +43,13 @@ const SalesOrders = () => {
   const columns = [
     {
       name: "Order No",
-      selector: (row) => row?.so_id,
+      cell: (row) => {
+        return (
+          <Link className='text-center text-primary' to={`${row?.so_id}`}>
+            {row?.so_id}
+          </Link>
+        );
+      },
       sortable: true,
     },
 

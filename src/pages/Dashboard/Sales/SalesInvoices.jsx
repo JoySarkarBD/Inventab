@@ -1,10 +1,11 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import DataTable from "react-data-table-component";
 import { FiDownload } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
 const SalesInvoices = () => {
@@ -21,7 +22,7 @@ const SalesInvoices = () => {
       setLoading(true);
       const response = (
         await axios.get(
-          "http://inventab.io/api/v1/invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
         )
       ).data;
       setLoading(false);
@@ -42,7 +43,13 @@ const SalesInvoices = () => {
   const columns = [
     {
       name: "Inv No",
-      selector: (row) => row?.invoice_number,
+      cell: (row) => {
+        return (
+          <Link className='text-center text-primary' to={`${row?.invoice_number}`}>
+            {row?.invoice_number}
+          </Link>
+        );
+      },
       sortable: true,
     },
 
