@@ -2,7 +2,7 @@ export default function MetricPO() {
     return (
        <>
        
-       <h2 className="text-center mb-4">Metric-PO</h2>
+       <h2 className="text-center mb-4">Actual-PO</h2>
        <table className="table table-bordered">
           <thead>
             <tr>
