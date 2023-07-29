@@ -1,12 +1,18 @@
-import { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+/* eslint-disable no-unused-vars */
+import { useState } from "react";
+import { Calendar } from "react-modern-calendar-datepicker";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from '../../../components/Shared/SectionTitle';
 import "./Attendance.css";
 
 const Attendance = () => {
-  const [value, onChange] = useState(new Date());
+
+  const [selectedDayRange, setSelectedDayRange] = useState({
+    from: null,
+    to: null
+  });
+  
   return (
     <div>
         <PageTitle title="Attendance Page" />
@@ -66,7 +72,38 @@ const Attendance = () => {
               </div>
             </section>
             <section className="col-md-6">
-              <Calendar className='border-dark' onChange={onChange} value={value} />
+              <div className="d-flex align-items-center justify-content-center h-100">
+            <Calendar
+                value={selectedDayRange}
+                onChange={setSelectedDayRange}
+                shouldHighlightWeekends
+                calendarClassName="custom-calendar" 
+                calendarTodayClassName="custom-today-day" 
+                renderFooter={() => (
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 2rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedDayRange({
+                          from:null,
+                          to:null
+                        })
+                      }}
+                      style={{
+                        background:"red",
+                        fontSize:"15px",
+                        border: '#0fbcf9',
+                        color: '#fff',
+                        borderRadius: '0.5rem',
+                        padding: '1rem 2rem',
+                      }}
+                    >
+                      Reset Value!
+                    </button>
+                  </div>
+                )}
+             />
+              </div>
             </section>
           </div>
 
@@ -83,7 +120,7 @@ const Attendance = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h1 className="modal-title fs-5" id="exampleModalLabel">
+                    <h1 className="modal-title fs-4" id="exampleModalLabel">
                       Leave Application
                     </h1>
                     <button
@@ -95,29 +132,53 @@ const Attendance = () => {
                   </div>
                   <div className="modal-body">
                     <div className="mb-3">
-                      <p className='text-dark fs-4'>Total Leaves: Taken / Available</p>
-                      <p className='text-dark fs-4'>Casual Leaves: Taken / Available</p>
-                      <p className='text-dark fs-4'>Sick: Taken / Available</p>
+                      <p className='text-dark fs-5'>Total Leaves: Taken / Available</p>
+                      <p className='text-dark fs-5'>Casual Leaves: Taken / Available</p>
+                      <p className='text-dark fs-5'>Sick: Taken / Available</p>
                     </div>
-                    <div className="row gap-1">
-                      <button className="col-6 btn btn-primary">Form Date</button>
-                      <button className="col-6 btn btn-primary">Half/Full Day</button>
-                      <button className="col-6 btn btn-primary">To Date</button>
-                      <button className="col-6 btn btn-primary">Half/Full Day</button>
+                    <div className='row'>
+                        {/* form date button */}
+                        <div className='col-md-6 col-sm-12 text-center'>
+                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
+                            Form Date
+                          </button>
+                        </div>
+
+                        {/* Half or Full Day button */}
+                        <div className='col-md-6 col-sm-12 text-center'>
+                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
+                            Half/Full Day
+                          </button>
+                        </div>
+
+                        {/* To Date button */}
+                        <div className='col-md-6 col-sm-12 text-center'>
+                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
+                            To Date
+                          </button>
+                        </div>
+
+                        {/* Half/Full Day button */}
+                        <div className='col-md-6 col-sm-12 text-center'>
+                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
+                            Half/Full Day
+                          </button>
+                        </div>
+                      </div>
+                  </div>
+                  <div className='modal-footer'>
+                      <button
+                        type='button'
+                        className='btn btn-secondary rounded-1 w-25'
+                        data-bs-dismiss='modal'>
+                        Close
+                      </button>
+                      <button
+                        type='button'
+                        className='btn btn-primary rounded-1'>
+                        Save changes
+                      </button>
                     </div>
-                  </div>
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
-                    <button type="button" className="btn btn-primary">
-                      Save changes
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
