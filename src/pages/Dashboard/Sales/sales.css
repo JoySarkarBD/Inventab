@@ -56,6 +56,20 @@
   border-color: #f5f5f5 !important;
 }
 
+.invoice-details p {
+  font-size: 16px;
+  font-weight: 600;
+}
+.invoice-details .title {
+  color: black;
+}
+
+.invoice-details-card,
+.invoice-details,
+.userInfo-invoice-details {
+  border-radius: 8px !important;
+}
+
 /* Responsive css start*/
 
 @media only screen and (max-width: 575px) {

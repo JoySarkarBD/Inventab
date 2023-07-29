@@ -45,7 +45,7 @@ const SalesInvoices = () => {
       name: "Inv No",
       cell: (row) => {
         return (
-          <Link className='text-center text-primary' to={`${row?.invoice_number}`}>
+          <Link className='text-center text-primary' to="sales-invoices-details">
             {row?.invoice_number}
           </Link>
         );

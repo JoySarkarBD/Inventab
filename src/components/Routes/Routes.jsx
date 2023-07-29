@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import DashboardLayout from "../../Layout/DashboardLayout";
 import MainLayout from "../../Layout/MainLayout";
 import AR from "../../pages/Dashboard/Sales/AR";
+import SalesInvoiceDetails from "../../pages/Dashboard/Sales/SalesInvoiceDetails";
 import SalesInvoices from "../../pages/Dashboard/Sales/SalesInvoices";
 import SalesLead from "../../pages/Dashboard/Sales/SalesLead";
 import SalesOrders from "../../pages/Dashboard/Sales/SalesOrders";
@@ -46,6 +47,11 @@ const router = createBrowserRouter([
       {
         path: "sales-invoices",
         element: <SalesInvoices />,
+      },
+
+      {
+        path: "sales-invoices/sales-invoices-details",
+        element: <SalesInvoiceDetails />,
       },
       {
         path: "ar",
