@@ -23,6 +23,11 @@
   z-index: 99 !important;
   font-size: 1.25rem;
 }
+
+#react-select-4-listbox{
+  z-index: 99999999999999 !important;
+}
+
 .searchBox-salesLead .select .css-13cymwt-control {
   border: none !important;
   text-align: left;
