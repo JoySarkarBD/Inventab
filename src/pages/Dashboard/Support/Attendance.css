@@ -1,0 +1,36 @@
+/* src/Calendar.css */
+
+/* Customize the overall appearance of the calendar */
+.react-calendar {
+    border-radius: 0.75rem;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+/* month-view */
+.react-calendar__month-view__weekdays {
+    font-size: 15px;
+    color: black;
+}
+
+.react-calendar__month-view__weekdays>abbr[title] {
+
+    text-decoration: none !important;
+}
+
+/* navigation */
+.react-calendar__navigation__label,
+.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__prev-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
+    font-size: 20px;
+}
+
+/* Style the days in the calendar */
+.react-calendar__month-view__days__day {
+    padding: 20px 0;
+    cursor: pointer;
+}

@@ -16,6 +16,7 @@
     "formik": "^2.4.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
+    "react-calendar": "^4.6.0",
     "react-csv": "^2.2.2",
     "react-data-table-component": "^7.5.3",
     "react-datepicker": "^4.16.0",
