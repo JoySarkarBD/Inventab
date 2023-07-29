@@ -9,6 +9,7 @@ utils.removeUndefinedObj = (arr) => {
   });
 };
 
+// remove duplicate object from arr
 utils.removeDuplicateObjects = (arr) => {
   const uniqueObjects = new Set(arr.map(JSON.stringify));
   return Array.from(uniqueObjects).map(JSON.parse);
