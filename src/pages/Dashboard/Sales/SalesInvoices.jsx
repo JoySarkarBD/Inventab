@@ -3,6 +3,7 @@ import { CSVLink } from "react-csv";
 import DataTable from "react-data-table-component";
 import { FiDownload } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import axios from "../../../utils/axios/axios";
@@ -10,151 +11,165 @@ import "./sales.css";
 
 const SalesInvoices = () => {
   const [search, setSearch] = useState("");
-  const [invoice, setInvoice] = useState([]);
+  const [invoices, setInvoice] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [csv, setCsv] = useState([]);
-  const [selectedFiled, setSelectedField] = useState("");
+  const [selectedEl, setSelectedEL] = useState(null);
 
-  // fetch table
-  const leads = async () => {
-    try {
-      setLoading(true);
-      const response = (
-        await axios.get(
-          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-        )
-      ).data;
-      setLoading(false);
-      setInvoice(response?.results);
-      setSearchData(response?.results);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
+// fetch table
+const getInvoiceList = async () => {
+  try {
+    setLoading(true);
+    const response = (
+      await axios.get(
+        "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+      )
+    ).data;
+    setLoading(false);
+    setInvoice(response?.results);
+    setSearchData(response?.results);
+  } catch (error) {
+    setLoading(true);
+    console.log(error);
+  }
+};
 
-  // load leads
-  useEffect(() => {
-    leads();
-  }, []);
+// load leads
+useEffect(() => {
+  getInvoiceList();
+}, []);
 
-  // columns
-  const columns = [
-    {
-      name: "Inv No",
-      cell: (row) => {
-        return (
-          <Link className='text-center text-primary' to="sales-invoices-details">
-            {row?.invoice_number}
-          </Link>
-        );
-      },
-      sortable: true,
+// columns
+const columns = [
+  {
+    name: "Inv No",
+    cell: (row) => {
+      return (
+        <Link
+          className='text-center text-primary'
+          to={`${row?.invoice_number}`}>
+          {row?.invoice_number}
+        </Link>
+      );
     },
+  },
 
-    {
-      name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
-      sortable: true,
-    },
+  {
+    name: "Sub Org",
+    selector: (row) => row?.sub_org || "No data found",
+    sortable: true,
+  },
 
-    {
-      name: "Client",
-      selector: (row) => row?.org?.company_name,
-      sortable: true,
-    },
+  {
+    name: "Client",
+    selector: (row) => row?.org?.company_name || "No data found",
+    sortable: true,
+  },
 
-    {
-      name: "Sales Order",
-      selector: (row) => row?.sale_order,
-      sortable: true,
-    },
+  {
+    name: "Sales Order",
+    selector: (row) => row?.sale_order || "No data found",
+    sortable: true,
+  },
 
-    // Ref PO No - which field is this in API?
-    {
-      name: "Ref PO No",
-      selector: (row) => row?.ref_po,
-      sortable: true,
-    },
+  // Ref PO No - which field is this in API?
+  {
+    name: "Ref PO No",
+    selector: (row) => row?.po_no || "No data found",
+    sortable: true,
+  },
 
-    // Value - which field is this in API?
-    {
-      name: "Value",
-      selector: () => "No data found",
-      sortable: true,
-    },
+  // Value - which field is this in API?
+  {
+    name: "Value",
+    selector: () => "No data found",
+    sortable: true,
+  },
 
-    {
-      name: "Dept",
-      selector: (row) => row?.dept,
-      sortable: true,
-    },
+  {
+    name: "Dept",
+    selector: (row) => row?.dept || "No data found",
+    sortable: true,
+  },
 
-    {
-      name: "Status",
-      selector: (row) => row?.status,
-      sortable: true,
-    },
-  ];
+  {
+    name: "Status",
+    selector: (row) => row?.status || "No data found",
+    sortable: true,
+  },
+];
 
-  // search function
-  useEffect(() => {
-    let result;
-    if (selectedFiled) {
-      result = invoice.filter((saleData) => {
-        switch (selectedFiled) {
-          case "so_id":
-            return saleData?.so_id?.toLowerCase()?.match(search.toLowerCase());
+// search function
+useEffect(() => {
+  let result;
+  if (selectedEl?.value) {
+    result = invoices.filter((invoice) => {
+      switch (selectedEl?.value) {
+        case "invoice_number":
+          return invoice?.invoice_number
+            ?.toLowerCase()
+            ?.match(search.toLowerCase());
 
-          case "client":
-            return saleData?.client?.company_name
-              ?.toLowerCase()
-              ?.match(search.toLowerCase());
+        case "client":
+          return invoice?.org?.company_name
+            ?.toLowerCase()
+            ?.match(search.toLowerCase());
 
-          case "description":
-            return saleData?.description
-              ?.toLowerCase()
-              ?.match(search.toLowerCase());
+        case "sale_order":
+          return invoice?.sale_order
+            ?.toLowerCase()
+            ?.match(search.toLowerCase());
 
-          case "department":
-            return saleData?.department?.name
-              ?.toLowerCase()
-              ?.match(search.toLowerCase());
-          case "status":
-            return saleData?.status?.toLowerCase()?.match(search.toLowerCase());
+        case "ref_po": //this property was not found
+          return invoice?.po_no?.toLowerCase()?.match(search.toLowerCase());
 
-          default:
-            return invoice;
-        }
-      });
-      setSearchData(result);
-    } else {
-      // if somehow failed the sorting
-      setSearchData(invoice);
-    }
-  }, [search, invoice, selectedFiled]);
+        case "dept":
+          return invoice?.dept?.toLowerCase()?.match(search.toLowerCase());
+        case "status":
+          return invoice?.status?.toLowerCase()?.match(search.toLowerCase());
 
-  // export as csv
-  const exportAsCsv = () => {
-    let data = [];
-    searchData.forEach((salesData) => {
-      const csvObj = {
-        "Inv No": salesData?.invoice_number || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.org?.company_name || "No data found",
-        "Sales Order": salesData?.sale_order || "No data found",
-        "Ref PO No": salesData?.ref_po || "No data found", // Ref PO No - which field is this in API?
-        Value: salesData?.value || "No data found", // Value - which field is this in API?
-        Dept: salesData?.dept || "no data found",
-        Status: salesData?.status || "No data found",
-      };
-
-      data.push(csvObj);
+        default:
+          return invoices;
+      }
     });
+    setSearchData(result);
+  } else {
+    // if somehow failed the sorting
+    setSearchData(invoices);
+  }
+}, [search, invoices, selectedEl?.value]);
 
-    setCsv((prev) => [...prev, ...data]);
-  };
+// export as csv
+const exportAsCsv = () => {
+  let data = [];
+  searchData.forEach((salesData) => {
+    const csvObj = {
+      "Inv No": salesData?.invoice_number || "No data found",
+      "Sub Org": salesData?.sub_org || "No data found",
+      Client: salesData?.org?.company_name || "No data found",
+      "Sales Order": salesData?.sale_order || "No data found",
+      "Ref PO No": salesData?.po_no || "No data found", // Ref PO No - which field is this in API?
+      Value: salesData?.value || "No data found", // Value - which field is this in API?
+      Dept: salesData?.dept || "no data found",
+      Status: salesData?.status || "No data found",
+    };
+
+    data.push(csvObj);
+  });
+
+  setCsv((prev) => [...prev, ...data]);
+};
+
+// react select options
+const options = [
+  { value: "invoice_number", label: "Invoice No" },
+  { value: "client", label: "Client" },
+  { value: "sale_order", label: "Sale Order" },
+  { value: "ref_po", label: "Ref PO" },
+  { value: "dept", label: "Department" },
+  { value: "status", label: "Status" },
+];
 
   return (
     <div>
@@ -204,26 +219,21 @@ const SalesInvoices = () => {
                   </CSVLink>
                 }
                 subHeaderComponent={
-                  <div className="d-flex align-items-center search-area w-100 border overflow-hidden position-relative rounded">
-                    <select
-                      className="form-select form-select-lg select-type w-25 border bg-transparent border-0 shadow-none"
-                      aria-label=".form-select-lg example"
-                      onChange={(e) => setSelectedField(e.target.value)}
-                    >
-                      <option selected disabled>
-                        Select Search Type
-                      </option>
-                      <option value="invoice_number">Inv No</option>
-                      <option value="client">Client</option>
-                      <option value="description">Description</option>
-                      <option value="department">Department</option>
-                      <option value="status">Status</option>
-                    </select>
-                    <div className="separator-light position-absolute"></div>
+                  <div className='searchBox-salesLead rounded my-4'>
+                    {/* Select Area */}
+                    <Select
+                      className='select text-start'
+                      options={options}
+                      onChange={setSelectedEL}
+                      isClearable
+                      isSearchable
+                      placeholder='Search'
+                    />
+                    {/* Input Search Area */}
                     <input
-                      type="text"
-                      placeholder="Search here"
-                      className="form-control border-0 bg-transparent shadow-none"
+                      type='search'
+                      placeholder='Search here'
+                      className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
