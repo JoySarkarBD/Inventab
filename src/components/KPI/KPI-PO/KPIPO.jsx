@@ -21,8 +21,6 @@ export default function KPIPO() {
     console.log(error);
   }
  }
-
- console.log(kipPo);
  
  // load leads
   useEffect(() => {
