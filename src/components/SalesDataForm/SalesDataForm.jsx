@@ -190,7 +190,7 @@ export default function SalesDataForm({ salesData }) {
 
             {/* add mobile number input */}
             <div className='mb-3 col-md-6'>
-              <InputText title='Mobile Number*' type='Phone' />
+              <InputText title='Mobile Number*' type='Phone' placeholder="Phone"/>
             </div>
 
             {/* add description input */}

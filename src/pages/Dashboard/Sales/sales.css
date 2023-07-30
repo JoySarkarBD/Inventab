@@ -133,4 +133,72 @@
 
 /* Responsive css end*/
 
+[data-theme-version="dark"] .ilXFdd {
+  background-color: #212130;
+}
+
+[data-theme-version="dark"] .JujPC {
+  background-color: #212130;
+}
+
+[data-theme-version="dark"] .itDhT {
+  background-color: #212130;
+}
+
+[data-theme-version="dark"] .gDLXna {
+  background-color: #212130;
+}
+[data-theme-version="dark"] .ckJNCn {
+  background-color: #212130;
+  color: #f5f5f5;
+}
+[data-theme-version="dark"] .gJLolM {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+[data-theme-version="dark"] .gJLolM:hover {
+  background-color: #ffffff;
+  color: #000 !important;
+}
+[data-theme-version="dark"] .giYxYh {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .giYxYh:hover {
+  background-color: #ffffff;
+  color: #000 !important;
+}
+
+[data-theme-version="dark"] .dark_theme_text:hover {
+  background-color: #ffffff;
+  color: #000 !important;
+}
+
+[data-theme-version="dark"] .gbeJol {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .css-13cymwt-control {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .fxMZcL:disabled {
+  cursor: unset;
+  color: rgba(0, 0, 0, 0.18);
+  fill: #f5f5f5;
+}
+[data-theme-version="dark"] .fxMZcL {
+  cursor: unset;
+  color: rgba(0, 0, 0, 0.18);
+  fill: #f5f5f5;
+}
+
+[data-theme-version="dark"] .css-w9q2zk-Input2 {
+  /* background-color: #212130; */
+  color: #f5f5f5 !important;
+}
+
 /*#  Sales Leads Page custom css end #*/
