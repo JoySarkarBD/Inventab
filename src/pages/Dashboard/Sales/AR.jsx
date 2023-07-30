@@ -16,6 +16,7 @@ const AR = () => {
   const [csv, setCsv] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
+
   /* React Select with checkbox */
   const InputOption = ({
     getStyles,
@@ -32,15 +33,18 @@ const AR = () => {
     const onMouseUp = () => setIsActive(false);
     const onMouseLeave = () => setIsActive(false);
 
+    // const isDark=true
+
     // styles
     let bg = "transparent";
-    if (isFocused) bg = "#eee";
+    // if (isFocused) bg = "#eee";
     if (isActive) bg = "#B2D4FF";
 
     const style = {
       alignItems: "center",
       backgroundColor: bg,
-      color: "inherit",
+      // color: `${isDark ? "white":'black'}`, @TODO toggle color dark or light mode
+      color: "black",
       display: "flex ",
     };
 
@@ -88,8 +92,8 @@ const AR = () => {
         )
       ).data;
       setLoading(false);
-      setReports(response?.results);
-      setSearchData(response?.results);
+      setReports(response);
+      setSearchData(response);
     } catch (error) {
       setLoading(true);
       console.log(error);

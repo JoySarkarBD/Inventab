@@ -28,12 +28,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "dashboard/",
+    path: "/dashboard",
     element: <DashboardLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "sales-dashboard",
+        path: "/dashboard",
         element: <SalesDashboard />,
       },
       /* Leads */
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
         path: "sales-orders/add-sales-order",
         element: <AddSalesOrder />,
       },
-      
+
       {
         path: "sales-orders/update-sales-order",
         element: <UpdateSalesOrder />,

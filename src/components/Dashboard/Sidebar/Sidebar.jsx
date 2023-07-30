@@ -19,7 +19,7 @@ const Sidebar = () => {
               </a>
               <ul aria-expanded='false'>
                 <li>
-                  <NavLink to='sales-dashboard' className='fs-4'>
+                  <NavLink to='/dashboard' className='fs-4'>
                     Sales Dashboard
                   </NavLink>
                 </li>

@@ -25,7 +25,6 @@ const SalesLead = () => {
       const { data } = await axios.get(
         "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
       );
-      console.log(data);
 
       setLoading(false);
       setSalesLeads(data);
@@ -48,7 +47,7 @@ const SalesLead = () => {
       cell: (row) => {
         return (
           <Link
-            className='text-center text-primary'
+            className='text-center text-info dark_theme_text'
             to={`/dashboard/sales/update-sales-leads/${row?.lead_no}`}>
             {row?.lead_id}
           </Link>

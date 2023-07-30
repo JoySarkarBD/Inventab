@@ -27,8 +27,8 @@ const getInvoiceList = async () => {
       )
     ).data;
     setLoading(false);
-    setInvoice(response?.results);
-    setSearchData(response?.results);
+    setInvoice(response);
+    setSearchData(response);
   } catch (error) {
     setLoading(true);
     console.log(error);
