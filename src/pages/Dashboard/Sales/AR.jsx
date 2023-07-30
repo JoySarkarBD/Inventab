@@ -33,7 +33,6 @@ const AR = () => {
     const onMouseUp = () => setIsActive(false);
     const onMouseLeave = () => setIsActive(false);
 
-    // const isDark=true
 
     // styles
     let bg = "transparent";
@@ -43,7 +42,6 @@ const AR = () => {
     const style = {
       alignItems: "center",
       backgroundColor: bg,
-      // color: `${isDark ? "white":'black'}`, @TODO toggle color dark or light mode
       color: "black",
       display: "flex ",
     };

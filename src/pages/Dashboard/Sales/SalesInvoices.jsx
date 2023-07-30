@@ -47,7 +47,7 @@ const columns = [
     cell: (row) => {
       return (
         <Link
-          className='text-center text-primary'
+          className='text-center text-info dk_theme_text'
           to={`${row?.invoice_number}`}>
           {row?.invoice_number}
         </Link>

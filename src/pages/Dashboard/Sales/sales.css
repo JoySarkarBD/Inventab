@@ -116,16 +116,7 @@
   color: #f5f5f5 !important;
 }
 
-[data-theme-version="dark"] .select-ar #react-select-2-listbox {
-  background-color: #212130 !important;
-  color: #f5f5f5 !important;
-}
-
 [data-theme-version="dark"] .eCLjab {
-  background-color: #212130 !important;
-  color: #f5f5f5 !important;
-}
-[data-theme-version="dark"] .select-ar .css-1jj59y3-MenuList2 {
   background-color: #212130 !important;
   color: #f5f5f5 !important;
 }
@@ -216,7 +207,14 @@
 }
 
 [data-theme-version="dark"] .css-w9q2zk-Input2 {
-  /* background-color: #212130; */
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .css-1nmdiq5-menu {
+  color: #212130 !important;
+}
+
+[data-theme-version="dark"] .css-1dimb5e-singleValue {
   color: #f5f5f5 !important;
 }
 
