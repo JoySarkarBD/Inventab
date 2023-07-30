@@ -33,7 +33,6 @@ const AR = () => {
     const onMouseUp = () => setIsActive(false);
     const onMouseLeave = () => setIsActive(false);
 
-    // const isDark=true
 
     // styles
     let bg = "transparent";
@@ -43,7 +42,6 @@ const AR = () => {
     const style = {
       alignItems: "center",
       backgroundColor: bg,
-      // color: `${isDark ? "white":'black'}`, @TODO toggle color dark or light mode
       color: "black",
       display: "flex ",
     };
@@ -248,7 +246,7 @@ const AR = () => {
                       filename={`Invoices-${new Date(
                         Date.now()
                       ).toLocaleDateString("en-IN")}`}
-                      className="bg-primary btn text-white rounded-2  border-0 d-flex align-items-center"
+                      className="bg-primary btn text-white rounded-1  border-0 d-flex align-items-center"
                       onClick={exportAsCsv}
                     >
                       <FiDownload className="fs-4 me-2" />
