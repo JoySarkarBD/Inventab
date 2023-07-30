@@ -234,14 +234,14 @@ const SalesLead = () => {
                       filename={`Sales-Leads -${new Date(
                         Date.now()
                       ).toLocaleDateString("en-IN")}`}
-                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center'
+                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
                       onClick={exportAsCsv}>
                       <FiDownload className='fs-4 me-2' />
                       Export as CSV
                     </CSVLink>
                     {/* Add Sale Order */}
                     <Link to='/dashboard/sales/add-sales-leads'>
-                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2'>
+                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
                         Add Sales Lead
                       </button>
                     </Link>

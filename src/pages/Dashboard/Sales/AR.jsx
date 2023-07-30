@@ -246,7 +246,7 @@ const AR = () => {
                       filename={`Invoices-${new Date(
                         Date.now()
                       ).toLocaleDateString("en-IN")}`}
-                      className="bg-primary btn text-white rounded-2  border-0 d-flex align-items-center"
+                      className="bg-primary btn text-white rounded-1  border-0 d-flex align-items-center"
                       onClick={exportAsCsv}
                     >
                       <FiDownload className="fs-4 me-2" />

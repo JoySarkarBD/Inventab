@@ -215,7 +215,7 @@ const SalesOrders = () => {
                       filename={`Sales-Orders-${new Date(
                         Date.now()
                       ).toLocaleDateString("en-IN")}`}
-                      className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center"
+                      className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1"
                       onClick={exportAsCsv}
                     >
                       <FiDownload className="fs-4 me-2" />
@@ -224,7 +224,7 @@ const SalesOrders = () => {
 
                     {/* Add Sale Order */}
                     <Link to="/dashboard/sales-orders/add-sales-order">
-                      <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2">
+                      <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1">
                         Add Sales Order
                       </button>
                     </Link>
@@ -240,7 +240,6 @@ const SalesOrders = () => {
                       isClearable
                       isSearchable
                       placeholder='Search'
-                      defaultMenuIsOpen
                     />
                     {/* Input Search Area */}
                     <input

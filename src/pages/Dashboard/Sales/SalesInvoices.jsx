@@ -211,7 +211,7 @@ const options = [
                     filename={`Invoices-${new Date(
                       Date.now()
                     ).toLocaleDateString("en-IN")}`}
-                    className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center"
+                    className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1"
                     onClick={exportAsCsv}
                   >
                     <FiDownload className="fs-4 me-2" />
