@@ -111,6 +111,25 @@
   border-width: 0 !important;
 }
 
+[data-theme-version="dark"] .select-ar .css-t3ipsp-control {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .select-ar #react-select-2-listbox {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .eCLjab {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+[data-theme-version="dark"] .select-ar .css-1jj59y3-MenuList2 {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
 .select-ar .css-t3ipsp-control {
   box-shadow: none !important;
   border-color: transparent !important;

@@ -46,7 +46,7 @@ const SalesOrders = () => {
       name: "Order No",
       cell: (row) => {
         return (
-          <Link className='text-center text-black dark_theme_text' to={`${row?.so_id}`}>
+          <Link className='text-center text-info dark_theme_text' to={`${row?.so_id}`}>
             {row?.so_id}
           </Link>
         );
@@ -240,6 +240,7 @@ const SalesOrders = () => {
                       isClearable
                       isSearchable
                       placeholder='Search'
+                      defaultMenuIsOpen
                     />
                     {/* Input Search Area */}
                     <input

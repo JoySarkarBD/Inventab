@@ -47,7 +47,7 @@ const SalesLead = () => {
       cell: (row) => {
         return (
           <Link
-            className='text-center text-black dark_theme_text'
+            className='text-center text-info dark_theme_text'
             to={`/dashboard/sales/update-sales-leads/${row?.lead_no}`}>
             {row?.lead_id}
           </Link>
