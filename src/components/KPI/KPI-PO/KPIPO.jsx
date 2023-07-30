@@ -1,28 +1,26 @@
-
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "../../../utils/axios/axios";
 
 export default function KPIPO() {
-
   const [kipPo, setKpiPo] = useState([]);
   const [loading, setLoading] = useState(false);
 
- const kpiPo = async ()=>{
-  setLoading(true);
-  try{
-    const { data } = await axios.get(
-      "pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=PO"
-    );
-    setKpiPo(data?.results);
-    setLoading(false);
-  } catch (error) {
+  const kpiPo = async () => {
     setLoading(true);
-    console.log(error);
-  }
- }
- 
- // load leads
+    try {
+      const { data } = await axios.get(
+        "pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=PO"
+      );
+      setKpiPo(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(true);
+      console.log(error);
+    }
+  };
+
+  // load leads
   useEffect(() => {
     kpiPo();
   }, []);
@@ -96,35 +94,34 @@ export default function KPIPO() {
     },
   ];
 
-
-    return (
-       <>
+  return (
+    <>
       <DataTable
-                title={<h2 className="text-center">KPI PO</h2>}
-                data={kipPo}
-                columns={columns}
-                customStyles={{
-                  rows: {
-                    style: {
-                      fontSize: "16px",
-                    },
-                  },
-                  headCells: {
-                    style: {
-                      fontSize: "19px",
-                      width:"170px"
-                    },
-                  },
-                }}
-                progressPending={loading}
-                noContextMenu
-                fixedHeader
-                fixedHeaderScrollHeight='550px'
-                pagination
-                striped
-                highlightOnHover
-                subHeader
+        title={<h2 className='text-center'>KPI PO</h2>}
+        data={kipPo}
+        columns={columns}
+        customStyles={{
+          rows: {
+            style: {
+              fontSize: "16px",
+            },
+          },
+          headCells: {
+            style: {
+              fontSize: "19px",
+              width: "170px",
+            },
+          },
+        }}
+        progressPending={loading}
+        noContextMenu
+        fixedHeader
+        fixedHeaderScrollHeight='550px'
+        pagination
+        striped
+        highlightOnHover
+        subHeader
       />
-       </> 
-    )
+    </>
+  );
 }
