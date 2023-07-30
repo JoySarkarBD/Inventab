@@ -14,7 +14,7 @@ export default function KPIInvoice() {
     const { data } = await axios.get(
       "pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=INVOICE"
     );
-    setKpiInvoice(data?.results);
+    setKpiInvoice(data);
     setLoading(false);
   } catch (error) {
     setLoading(true);
