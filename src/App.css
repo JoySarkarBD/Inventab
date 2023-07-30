@@ -59332,7 +59332,7 @@ body > * {
   background-color: #171622;
 }
 
-[data-theme-version="dark"][data-layout="vertical"][data-sidebar-position="fixed"]
+/* [data-theme-version="dark"][data-layout="vertical"][data-sidebar-position="fixed"]
   .dlabnav {
   border-color: #2e2e42;
 }
@@ -59373,7 +59373,7 @@ body > * {
   a
   > i {
   color: rgba(255, 255, 255, 0.3);
-}
+} */
 
 [data-theme-version="dark"] .dlabnav .header-profile > a.nav-link {
   border-color: #2e2e42;
