@@ -15,4 +15,35 @@ utils.removeDuplicateObjects = (arr) => {
   return Array.from(uniqueObjects).map(JSON.parse);
 };
 
-export const { removeDuplicateObjects, removeUndefinedObj } = utils;
+// number Differentiation
+utils.numDifferentiation = (value) => {
+  const val = Math.abs(value);
+  if (val >= 10000000) return `${(value / 10000000).toFixed(2)} Cr`;
+  if (val >= 100000) return `${(value / 100000).toFixed(2)} Lac`;
+  return value;
+};
+
+utils.kpiEachTotal = (kpi) => {
+  const total =
+    (parseFloat(kpi?.jan) || 0) +
+    (parseFloat(kpi?.feb) || 0) +
+    (parseFloat(kpi?.mar) || 0) +
+    (parseFloat(kpi?.apr) || 0) +
+    (parseFloat(kpi?.may) || 0) +
+    (parseFloat(kpi?.jun) || 0) +
+    (parseFloat(kpi?.jul) || 0) +
+    (parseFloat(kpi?.aug) || 0) +
+    (parseFloat(kpi?.sep) || 0) +
+    (parseFloat(kpi?.oct) || 0) +
+    (parseFloat(kpi?.nov) || 0) +
+    (parseFloat(kpi?.dec) || 0);
+
+  return { department: kpi.department, total };
+};
+
+export const {
+  removeDuplicateObjects,
+  removeUndefinedObj,
+  numDifferentiation,
+  kpiEachTotal,
+} = utils;
