@@ -23,6 +23,7 @@ utils.numDifferentiation = (value) => {
   return value;
 };
 
+// kpi Each total
 utils.kpiEachTotal = (kpi) => {
   const total =
     (parseFloat(kpi?.jan) || 0) +
