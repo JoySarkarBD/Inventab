@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { v4 } from "uuid";
@@ -11,13 +12,36 @@ import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 
 export default function SalesDataForm({ salesData }) {
-  const [tableLength, setTableLength] = useState([{}]);
+  const [tableLength, setTableLength] = useState([]);
   const [loading, setLoading] = useState(false);
   const [salesLeads, setSalesLeads] = useState([]);
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
   const [status, setStatus] = useState([]);
-  // fetch table
+
+  // table lowerpart data
+  const [unitCost, setUnitCost] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [net_price, setNet_price] = useState(0);
+  const [extd_gross_price, setExtd_gross_price] = useState(0);
+
+  // extract data from props
+  const {
+    department,
+    sub_org,
+    probability,
+    status: st,
+    client: cl,
+    expected_date,
+    expected_invoice_date,
+    company_name,
+    mobile,
+    description,
+    lead_id,
+    contact_name,
+  } = salesData;
+
+  // fetch all leads
   const getLeads = async () => {
     try {
       setLoading(true);
@@ -85,7 +109,6 @@ export default function SalesDataForm({ salesData }) {
 
       // status
       const uniqueStatus = removeDuplicateObjects(newStatus);
-      console.log(uniqueStatus);
       setStatus(uniqueStatus);
     }
   }, [salesLeads]);
@@ -95,8 +118,18 @@ export default function SalesDataForm({ salesData }) {
     event.preventDefault();
     const obj = {
       id: v4(),
+      unit_cost: unitCost,
+      quantity: totalQuantity,
+      net_price,
+      extd_gross_price,
     };
     setTableLength((prev) => [...prev, obj]);
+
+    // clear input field
+    setUnitCost(0);
+    setTotalQuantity(0);
+    setNet_price(0);
+    setExtd_gross_price(0);
   };
 
   const handleRemove = (id) => {
@@ -113,11 +146,47 @@ export default function SalesDataForm({ salesData }) {
     { value: "status", label: "Status" },
   ];
 
+  // dept
+  const deptDefaultSelect = {
+    label: department?.name,
+    value: department?.id,
+  };
+
+  // status
+  const statusDefaultSelect = {
+    label: st,
+    value: st,
+  };
+
+  // client
+  const clientDefaultSelect = {
+    label: cl?.company_name,
+    value: cl?.id,
+  };
+
+  // handle update form
+  const { values, handleSubmit, handleChange, setFieldValue } = useFormik({
+    initialValues: {
+      department: "" || deptDefaultSelect.value,
+      sub_org: "" || null,
+      probability,
+      status: "" || statusDefaultSelect.value,
+      client: "" || clientDefaultSelect.value,
+      expected_date: expected_date,
+      expected_invoice_date,
+      contact_name,
+      mobile,
+      description,
+    },
+    onSubmit: async (values) => {
+      console.log({ ...values, parts: tableLength });
+    },
+  });
+
   return (
     <>
       {!loading ? (
-        <form>
-          {JSON.stringify(salesData)}
+        <form onSubmit={handleSubmit}>
           <div className='row'>
             {/* add department input */}
             <div className='mb-3 col-md-6'>
@@ -130,13 +199,16 @@ export default function SalesDataForm({ salesData }) {
                 options={dept}
                 isClearable
                 isSearchable
+                name='department'
+                defaultValue={deptDefaultSelect}
+                onChange={(option) => setFieldValue("department", option.value)}
               />
             </div>
 
             {/* add sub org input */}
             <div className='mb-3 col-md-6'>
               <label className='mb-2 text-dark text-capitalize'>Sub org</label>
-              <Select placeholder='Select Sub Org' />
+              <Select placeholder='Select Sub Org' name='sub-org' />
             </div>
 
             {/* add probability input */}
@@ -144,7 +216,12 @@ export default function SalesDataForm({ salesData }) {
               <label className='mb-2 text-dark text-capitalize'>
                 Probability
               </label>
-              <Select title='Probability' type='text' />
+              <InputText
+                type='number'
+                name='probability'
+                value={values.probability}
+                onChange={handleChange}
+              />
             </div>
 
             {/* add status input */}
@@ -156,6 +233,9 @@ export default function SalesDataForm({ salesData }) {
                 isClearable
                 isSearchable
                 isLoading
+                name='status'
+                defaultValue={statusDefaultSelect}
+                onChange={(option) => setFieldValue("status", option.value)}
               />
             </div>
 
@@ -167,17 +247,33 @@ export default function SalesDataForm({ salesData }) {
                 options={client}
                 isSearchable
                 isClearable
+                name='client'
+                defaultValue={clientDefaultSelect}
+                value={clientDefaultSelect}
+                onChange={(option) => setFieldValue("client", option.value)}
               />
             </div>
 
             {/* add po date input */}
             <div className='mb-3 col-md-6'>
-              <InputText title='Expected PO Date*' type='date' />
+              <InputText
+                title='Expected PO Date*'
+                type='date'
+                name='expected_date'
+                value={values.expected_date}
+                onChange={handleChange}
+              />
             </div>
 
             {/* add invoice date input */}
             <div className='mb-3 col-md-6'>
-              <InputText title='Expected Invoice Date*' type='date' />
+              <InputText
+                title='Expected Invoice Date*'
+                type='date'
+                name='expected_invoice_date'
+                value={values.expected_invoice_date}
+                onChange={handleChange}
+              />
             </div>
 
             {/* add contact name input */}
@@ -185,12 +281,23 @@ export default function SalesDataForm({ salesData }) {
               <label className='mb-2 text-dark text-capitalize'>
                 Contact Name
               </label>
-              <Select placeholder='Select Contact' />
+              <InputText
+                name='contact_name'
+                type='text'
+                value={values.contact_name}
+                onChange={handleChange}
+              />
             </div>
 
             {/* add mobile number input */}
             <div className='mb-3 col-md-6'>
-              <InputText title='Mobile Number*' type='Phone' />
+              <InputText
+                title='Mobile Number*'
+                type='Phone'
+                name='mobile'
+                value={values.mobile}
+                onChange={handleChange}
+              />
             </div>
 
             {/* add description input */}
@@ -199,17 +306,15 @@ export default function SalesDataForm({ salesData }) {
                 title='Description*'
                 className='w-100'
                 placeholder='Description'
+                name='description'
+                value={values.description}
+                onChange={handleChange}
               />
               <br />
             </div>
           </div>
           {/* Table Part */}
-          {/* Table Row Add Button */}
-          <div className='d-flex justify-content-end my-4'>
-            <button className='btn btn-primary rounded' onClick={handleTable}>
-              Add Table Row
-            </button>
-          </div>
+
           {/* Table */}
           <div className='table-responsive'>
             <table className='table table-bordered table-responsive'>
@@ -224,59 +329,156 @@ export default function SalesDataForm({ salesData }) {
                 </tr>
               </thead>
               <tbody>
-                {tableLength.map((table) => {
-                  return (
-                    <tr key={table.id}>
-                      <td>
-                        <div className='select-port'>
-                          <Select
-                            className='select'
-                            options={options}
-                            placeholder='Select Port No'
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Unit Cost'
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Total Quntity'
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Extd Net Cost'
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Extd Gross Cost'
-                        />
-                      </td>
-                      <td>
-                        <button
-                          className='btn btn-danger btn-sm'
-                          onClick={() => handleRemove(table.id)}>
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                <tr>
+                  <td>
+                    <div className='select-port'>
+                      <Select
+                        className='select'
+                        options={options}
+                        placeholder='Select Port No'
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Unit Cost'
+                      name='unit_cost'
+                      value={unitCost || ""}
+                      onChange={(e) => setUnitCost(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Total Quntity'
+                      name='quantity'
+                      value={totalQuantity || ""}
+                      onChange={(e) => setTotalQuantity(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Extd Net Cost'
+                      name='net_price'
+                      value={net_price || ""}
+                      onChange={(e) => setNet_price(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Extd Gross Cost'
+                      name='extd_gross_price'
+                      value={extd_gross_price || ""}
+                      onChange={(e) => setExtd_gross_price(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      className='btn btn-primary rounded'
+                      disabled={
+                        !(
+                          net_price ||
+                          unitCost ||
+                          extd_gross_price ||
+                          net_price
+                        )
+                      }
+                      onClick={handleTable}>
+                      Add Table Row
+                    </button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
+          {/*  */}
+
+          {/*========================= dynamic table=============== */}
+
+          {tableLength?.length > 0 && (
+            <div className='table-responsive'>
+              <table className='table table-bordered table-responsive'>
+                <thead>
+                  <tr>
+                    <th scope='col'>Port No</th>
+                    <th scope='col'>Unit Cost</th>
+                    <th scope='col'>Total Quantity</th>
+                    <th scope='col'>Extd Net Cost</th>
+                    <th scope='col'>Extd Gross Cost</th>
+                    <th scope='col'>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableLength.map((table) => {
+                    return (
+                      <tr key={table.id}>
+                        <td>
+                          <div className='select-port'>
+                            <Select
+                              className='select'
+                              options={options}
+                              placeholder='Select Port No'
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <input
+                            className='new_input_class'
+                            type='number'
+                            placeholder='Unit Cost'
+                            name='unit_cost'
+                            defaultValue={table?.unit_cost}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className='new_input_class'
+                            type='number'
+                            placeholder='Total Quntity'
+                            name='quantity'
+                            defaultValue={table?.quantity}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className='new_input_class'
+                            type='number'
+                            placeholder='Extd Net Cost'
+                            name='net_price'
+                            defaultValue={table?.net_price}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className='new_input_class'
+                            type='number'
+                            placeholder='Extd Gross Cost'
+                            name='extd_gross_price'
+                            defaultValue={table?.extd_gross_price}
+                          />
+                        </td>
+                        <td>
+                          <button
+                            className='btn btn-danger btn-sm'
+                            onClick={() => handleRemove(table.id)}>
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           {/* Submit Button */}
           <div className='d-flex justify-content-end my-4'>
             <input
