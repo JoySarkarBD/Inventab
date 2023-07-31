@@ -2,14 +2,21 @@ form {
   /* position: relative; */
 }
 
-.table-responsive {
-  overflow-y: hidden;
+.table-responsive1 {
+  overflow-x: auto;
   /* position: relative; */
   /* max-height: 300px; */
-  height: 180px;
+  /* height: 180px;
   border: 2px solid red;
-  z-index: 9;
+  z-index: 9; */
 }
+
+@media (max-width: 1199.98px) {
+    .table-responsive111 {
+    overflow-x: auto;
+    } 
+}
+
 
 form .css-1jj59y3-MenuList2 {
   /* position: absolute; */

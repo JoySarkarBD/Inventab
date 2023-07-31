@@ -317,8 +317,10 @@ export default function SalesDataForm({ salesData }) {
           {/* Table Part */}
 
           {/* Table */}
-          <div className='table-responsive'>
-            <table className='table table-bordered '>
+          <div className="row">
+            {/* <div className="col-lg-12">
+            <div className='table-responsive overflow-visible'>
+            <table className='table table-bordered table-responsive-md table-responsive-sm overflow-scroll'>
               <thead>
                 <tr>
                   <th scope='col'>Port No</th>
@@ -399,6 +401,101 @@ export default function SalesDataForm({ salesData }) {
                 </tr>
               </tbody>
             </table>
+          </div>
+            </div> */}
+           <div className="col-lg-12">
+  <div className="card">
+    <div className="card-body">
+      <div className="table-responsive111">
+        <table className="table header-border table-responsive-sm111">
+        <thead>
+                <tr>
+                  <th scope='col'>Port No</th>
+                  <th scope='col'>Unit Cost</th>
+                  <th scope='col'>Total Quantity</th>
+                  <th scope='col'>Extd Net Cost</th>
+                  <th scope='col'>Extd Gross Cost</th>
+                  <th scope='col'>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div className='select-port'>
+                      <Select
+                        className='select'
+                        options={options}
+                        placeholder='Select Port No'
+                        defaultMenuIsOpen
+                        menuPortalTarget={document.querySelector('body')}
+                      />
+                   
+
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Unit Cost'
+                      name='unit_cost'
+                      value={unitCost || ""}
+                      onChange={e => setUnitCost(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Total Quntity'
+                      name='quantity'
+                      value={totalQuantity || ""}
+                      onChange={e => setTotalQuantity(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Extd Net Cost'
+                      name='net_price'
+                      value={net_price || ""}
+                      onChange={e => setNet_price(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className='new_input_class'
+                      type='number'
+                      placeholder='Extd Gross Cost'
+                      name='extd_gross_price'
+                      value={extd_gross_price || ""}
+                      onChange={e => setExtd_gross_price(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      className='btn btn-primary rounded'
+                      disabled={
+                        !(
+                          net_price ||
+                          unitCost ||
+                          extd_gross_price ||
+                          net_price
+                        )
+                      }
+                      onClick={handleTable}>
+                      Add Table Row
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
           </div>
           {/*  */}
 
