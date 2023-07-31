@@ -25,7 +25,7 @@ utils.numDifferentiation = (value) => {
 
 // kpi Each total
 utils.kpiEachTotal = (kpi) => {
-  const total =
+  return (
     (parseFloat(kpi?.jan) || 0) +
     (parseFloat(kpi?.feb) || 0) +
     (parseFloat(kpi?.mar) || 0) +
@@ -37,9 +37,8 @@ utils.kpiEachTotal = (kpi) => {
     (parseFloat(kpi?.sep) || 0) +
     (parseFloat(kpi?.oct) || 0) +
     (parseFloat(kpi?.nov) || 0) +
-    (parseFloat(kpi?.dec) || 0);
-
-  return { department: kpi.department, total };
+    (parseFloat(kpi?.dec) || 0)
+  );
 };
 
 utils.getMonthName = (dateString) => {

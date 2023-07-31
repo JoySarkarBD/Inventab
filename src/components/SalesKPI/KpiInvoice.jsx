@@ -20,7 +20,7 @@ const KpiInvoice = () => {
       setLoading(false);
       setInvoices(data);
     } catch (error) {
-      console.log(error);
+      console.log(error?.message);
     }
   };
 
@@ -31,39 +31,26 @@ const KpiInvoice = () => {
 
   //kpi PO each sub total
   useEffect(() => {
-    if (invoices.length > 0) {
+    if (invoices.length > 0 && !loading) {
       let kpiInvoiceTotalArr = [];
+
       invoices.forEach((invoice) => {
-        if (
-          invoice.department === "SLS-KAM-WEST" &&
-          invoice.id === "54a97d7f-ced4-4308-865b-8b7f9c1e6e99"
-        ) {
-          let res = kpiEachTotal(invoice);
-          kpiInvoiceTotalArr.push(res);
-        }
-
-        // south
-        if (
-          invoice.department === "SLS-KAM-SOUTH" &&
-          invoice.id === "e5ad66d4-23a3-485e-8a04-6191e865502b"
-        ) {
-          let res = kpiEachTotal(invoice);
-          kpiInvoiceTotalArr.push(res);
-        }
-
-        // north
-        if (
-          invoice.department === "SLS-KAM-NORTH" &&
-          invoice.id === "57bfdda3-ebd2-4ddc-8b19-ac5057572cfd"
-        ) {
-          let res = kpiEachTotal(invoice);
-          kpiInvoiceTotalArr.push(res);
+        // find the specific obj
+        let findInvoiceEntry = kpiInvoiceTotalArr.find(
+          (inv) => inv.department === invoice.data
+        );
+        // if not found then add
+        if (!findInvoiceEntry) {
+          findInvoiceEntry = {
+            department: invoice?.department,
+            total: kpiEachTotal(invoice),
+          };
+          kpiInvoiceTotalArr.push(findInvoiceEntry);
         }
       });
-
       setInvoicesTotal(kpiInvoiceTotalArr);
     }
-  }, [invoices]);
+  }, [invoices, loading]);
 
   //invoice sub total
   let invoiceSubtotal = 0;

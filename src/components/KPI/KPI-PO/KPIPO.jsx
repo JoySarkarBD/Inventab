@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "../../../utils/axios/axios";
+import { numDifferentiation } from "../../../utils/utilityFunc/utilityFunc";
 
 export default function KPIPO() {
   const [kipPo, setKpiPo] = useState([]);
@@ -29,67 +30,67 @@ export default function KPIPO() {
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.department || "No data found",
+      selector: (row) => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: (row) => row?.apr || "No data found",
+      selector: (row) => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: (row) => row?.may || "No data found",
+      selector: (row) => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: (row) => row?.jun || "No data found",
+      selector: (row) => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: (row) => row?.jul || "No data found",
+      selector: (row) => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: (row) => row?.aug || "No data found",
+      selector: (row) => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: (row) => row?.sep || "No data found",
+      selector: (row) => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: (row) => row?.oct || "No data found",
+      selector: (row) => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: (row) => row?.nov || "No data found",
+      selector: (row) => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: (row) => row?.dec || "No data found",
+      selector: (row) => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: (row) => row?.jan || "No data found",
+      selector: (row) => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: (row) => row?.feb || "No data found",
+      selector: (row) => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: (row) => row?.mar || "No data found",
+      selector: (row) => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
   ];

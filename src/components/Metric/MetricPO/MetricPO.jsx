@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "../../../utils/axios/axios";
-import { getMonthName } from "../../../utils/utilityFunc/utilityFunc";
+import {
+  getMonthName,
+  numDifferentiation,
+} from "../../../utils/utilityFunc/utilityFunc";
 
 export default function MetricPO() {
   const [loading, setLoading] = useState(false);
@@ -67,55 +70,68 @@ export default function MetricPO() {
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.department || 0,
-    },
-    {
-      name: "Jan",
-      selector: (row) => row?.jan || 0,
-    },
-    {
-      name: "Fab",
-      selector: (row) => row?.feb || 0,
-    },
-    {
-      name: "Mar",
-      selector: (row) => row?.mar || 0,
+      selector: (row) => row?.department,
+      sortable: true,
     },
     {
       name: "Apr",
-      selector: (row) => row?.apr || 0,
+      selector: (row) => numDifferentiation(row?.apr) || 0,
+      sortable: true,
     },
     {
       name: "May",
-      selector: (row) => row?.may || 0,
+      selector: (row) => numDifferentiation(row?.may) || 0,
+      sortable: true,
     },
     {
       name: "Jun",
-      selector: (row) => row?.jun || 0,
+      selector: (row) => numDifferentiation(row?.jun) || 0,
+      sortable: true,
     },
     {
       name: "Jul",
-      selector: (row) => row?.jul || 0,
+      selector: (row) => numDifferentiation(row?.jul) || 0,
+      sortable: true,
     },
     {
       name: "Aug",
-      selector: (row) => row?.aug || 0,
+      selector: (row) => numDifferentiation(row?.aug) || 0,
+      sortable: true,
     },
     {
       name: "Sep",
-      selector: (row) => row?.sep | 0,
+      selector: (row) => numDifferentiation(row?.sep) || 0,
+      sortable: true,
     },
     {
       name: "Oct",
-      selector: (row) => row?.oct || 0,
+      selector: (row) => numDifferentiation(row?.oct) || 0,
+      sortable: true,
     },
     {
       name: "Nov",
-      selector: (row) => row?.nov || 0,
+      selector: (row) => numDifferentiation(row?.nov) || 0,
+      sortable: true,
     },
     {
       name: "Dec",
-      selector: (row) => row?.dec || 0,
+      selector: (row) => numDifferentiation(row?.dec) || 0,
+      sortable: true,
+    },
+    {
+      name: "Jan",
+      selector: (row) => numDifferentiation(row?.jan) || 0,
+      sortable: true,
+    },
+    {
+      name: "Feb",
+      selector: (row) => numDifferentiation(row?.feb) || 0,
+      sortable: true,
+    },
+    {
+      name: "Mar",
+      selector: (row) => numDifferentiation(row?.mar) || 0,
+      sortable: true,
     },
   ];
   return (
