@@ -42,9 +42,48 @@ utils.kpiEachTotal = (kpi) => {
   return { department: kpi.department, total };
 };
 
+utils.getMonthName = (dateString) => {
+  const months = [
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+
+  // Split the dateString into year, month, and day parts
+  const [year, month, day] = dateString.includes("-")
+    ? dateString.split("-")
+    : dateString.split("/");
+
+  // Convert the month part (which is 0-indexed) to a number and subtract 1 (since months in JS are 0-11)
+  const monthIndex = parseInt(month) - 1;
+
+  // Return the month name
+  return months[monthIndex];
+};
+
+// month total value
+utils.monthTotalValue = (arr) => {
+  let t = 0;
+  for (let i of arr) {
+    t += i;
+  }
+  return t;
+};
+
 export const {
   removeDuplicateObjects,
   removeUndefinedObj,
   numDifferentiation,
   kpiEachTotal,
+  monthTotalValue,
+  getMonthName,
 } = utils;
