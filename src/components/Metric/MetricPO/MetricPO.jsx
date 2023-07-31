@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "../../../utils/axios/axios";
-import {
-  getMonthName,
-  monthTotalValue,
-} from "../../../utils/utilityFunc/utilityFunc";
+import { getMonthName } from "../../../utils/utilityFunc/utilityFunc";
 
 export default function MetricPO() {
   const [loading, setLoading] = useState(false);
@@ -33,319 +30,92 @@ export default function MetricPO() {
 
   useEffect(() => {
     if (!loading && salesOrders?.length && salesOrders?.length > 0) {
-      // west arr
-      let jan = [];
-      let feb = [];
-      let mar = [];
-      let apr = [];
-      let may = [];
-      let jun = [];
-      let jul = [];
-      let aug = [];
-      let sep = [];
-      let oct = [];
-      let nov = [];
-      let dec = [];
+      // total dept list obj
+      const result = [];
 
-      // south arr
-      let sjan = [];
-      let sfeb = [];
-      let smar = [];
-      let sapr = [];
-      let smay = [];
-      let sjun = [];
-      let sjul = [];
-      let saug = [];
-      let ssep = [];
-      let soct = [];
-      let snov = [];
-      let sdec = [];
+      // sales order total
+      salesOrders?.forEach((item) => {
+        // Get the month name from the expected_date property
+        const month = getMonthName(item.po_date);
 
-      // north arr
-      let njan = [];
-      let nfeb = [];
-      let nmar = [];
-      let napr = [];
-      let nmay = [];
-      let njun = [];
-      let njul = [];
-      let naug = [];
-      let nsep = [];
-      let noct = [];
-      let nnov = [];
-      let ndec = [];
-
-      salesOrders.forEach((order) => {
-        if (order?.department?.name === "SLS-KAM-WEST") {
-          if ("jan" === getMonthName(order?.po_date)) {
-            jan.push(parseFloat(order?.total));
-          }
-          if ("feb" === getMonthName(order?.po_date)) {
-            feb.push(parseFloat(order?.total));
-          }
-          if ("mar" === getMonthName(order?.po_date)) {
-            mar.push(parseFloat(order?.total));
-          }
-          if ("apr" === getMonthName(order?.po_date)) {
-            apr.push(parseFloat(order?.total));
-          }
-          if ("may" === getMonthName(order?.po_date)) {
-            may.push(parseFloat(order?.total));
-          }
-          if ("jun" === getMonthName(order?.po_date)) {
-            jun.push(parseFloat(order?.total));
-          }
-          if ("jul" === getMonthName(order?.po_date)) {
-            jul.push(parseFloat(order?.total));
-          }
-          if ("aug" === getMonthName(order?.po_date)) {
-            aug.push(parseFloat(order?.total));
-          }
-          if ("sep" === getMonthName(order?.po_date)) {
-            sep.push(parseFloat(order?.total));
-          }
-          if ("oct" === getMonthName(order?.po_date)) {
-            oct.push(parseFloat(order?.total));
-          }
-          if ("nov" === getMonthName(order?.po_date)) {
-            nov.push(parseFloat(order?.total));
-          }
-          if ("dec" === getMonthName(order?.po_date)) {
-            dec.push(parseFloat(order?.total));
-          }
+        // Find the department in the result array or add it if not found
+        let departmentEntry = result.find(
+          (entry) => entry?.department === item?.department?.name
+        );
+        if (!departmentEntry) {
+          departmentEntry = {
+            department: item?.department?.name,
+          };
+          result.push(departmentEntry);
         }
-        // north section
-        if (order?.department?.name === "SLS-KAM-NORTH") {
-          if ("jan" === getMonthName(order?.po_date)) {
-            njan.push(parseFloat(order?.total));
-          }
-          if ("feb" === getMonthName(order?.po_date)) {
-            nfeb.push(parseFloat(order?.total));
-          }
-          if ("mar" === getMonthName(order?.po_date)) {
-            nmar.push(parseFloat(order?.total));
-          }
-          if ("apr" === getMonthName(order?.po_date)) {
-            napr.push(parseFloat(order?.total));
-          }
-          if ("may" === getMonthName(order?.po_date)) {
-            nmay.push(parseFloat(order?.total));
-          }
-          if ("jun" === getMonthName(order?.po_date)) {
-            njun.push(parseFloat(order?.total));
-          }
-          if ("jul" === getMonthName(order?.po_date)) {
-            njul.push(parseFloat(order?.total));
-          }
-          if ("aug" === getMonthName(order?.po_date)) {
-            naug.push(parseFloat(order?.total));
-          }
-          if ("sep" === getMonthName(order?.po_date)) {
-            nsep.push(parseFloat(order?.total));
-          }
-          if ("oct" === getMonthName(order?.po_date)) {
-            noct.push(parseFloat(order?.total));
-          }
-          if ("nov" === getMonthName(order?.po_date)) {
-            nnov.push(parseFloat(order?.total));
-          }
-          if ("dec" === getMonthName(order?.po_date)) {
-            ndec.push(parseFloat(order?.total));
-          }
-        }
-        // south section
-        if (order?.department?.name === "SLS-KAM-SOUTH") {
-          if ("jan" === getMonthName(order?.po_date)) {
-            sjan.push(parseFloat(order?.total));
-          }
-          if ("feb" === getMonthName(order?.po_date)) {
-            sfeb.push(parseFloat(order?.total));
-          }
-          if ("mar" === getMonthName(order?.po_date)) {
-            smar.push(parseFloat(order?.total));
-          }
-          if ("apr" === getMonthName(order?.po_date)) {
-            sapr.push(parseFloat(order?.total));
-          }
-          if ("may" === getMonthName(order?.po_date)) {
-            smay.push(parseFloat(order?.total));
-          }
-          if ("jun" === getMonthName(order?.po_date)) {
-            sjun.push(parseFloat(order?.total));
-          }
-          if ("jul" === getMonthName(order?.po_date)) {
-            sjul.push(parseFloat(order?.total));
-          }
-          if ("aug" === getMonthName(order?.po_date)) {
-            saug.push(parseFloat(order?.total));
-          }
-          if ("sep" === getMonthName(order?.po_date)) {
-            ssep.push(parseFloat(order?.total));
-          }
-          if ("oct" === getMonthName(order?.po_date)) {
-            soct.push(parseFloat(order?.total));
-          }
-          if ("nov" === getMonthName(order?.po_date)) {
-            snov.push(parseFloat(order?.total));
-          }
-          if ("dec" === getMonthName(order?.po_date)) {
-            sdec.push(parseFloat(order?.total));
-          }
+
+        // Check if the departmentEntry already has data for the specific month
+        if (departmentEntry[month.toLowerCase()]) {
+          // If data exists for the month, add the new total to it
+          departmentEntry[month.toLowerCase()] += parseFloat(item.total);
+        } else {
+          // If data doesn't exist for the month, create a new entry
+          departmentEntry[month.toLowerCase()] = parseFloat(item.total);
         }
       });
 
-      // west
-      let janTotal = monthTotalValue(jan);
-      let febTotal = monthTotalValue(feb);
-      let marTotal = monthTotalValue(mar);
-      let aprTotal = monthTotalValue(apr);
-      let mayTotal = monthTotalValue(may);
-      let junTotal = monthTotalValue(jun);
-      let julTotal = monthTotalValue(jul);
-      let augTotal = monthTotalValue(aug);
-      let sepTotal = monthTotalValue(sep);
-      let octTotal = monthTotalValue(oct);
-      let novTotal = monthTotalValue(nov);
-      let decTotal = monthTotalValue(dec);
-
-      // south
-      let sjanTotal = monthTotalValue(sjan);
-      let sfebTotal = monthTotalValue(sfeb);
-      let smarTotal = monthTotalValue(smar);
-      let saprTotal = monthTotalValue(sapr);
-      let smayTotal = monthTotalValue(smay);
-      let sjunTotal = monthTotalValue(sjun);
-      let sjulTotal = monthTotalValue(sjul);
-      let saugTotal = monthTotalValue(saug);
-      let ssepTotal = monthTotalValue(ssep);
-      let soctTotal = monthTotalValue(soct);
-      let snovTotal = monthTotalValue(snov);
-      let sdecTotal = monthTotalValue(sdec);
-
-      // north
-
-      let njanTotal = monthTotalValue(njan);
-      let nfebTotal = monthTotalValue(nfeb);
-      let nmarTotal = monthTotalValue(nmar);
-      let naprTotal = monthTotalValue(napr);
-      let nmayTotal = monthTotalValue(nmay);
-      let njunTotal = monthTotalValue(njun);
-      let njulTotal = monthTotalValue(njul);
-      let naugTotal = monthTotalValue(naug);
-      let nsepTotal = monthTotalValue(nsep);
-      let noctTotal = monthTotalValue(noct);
-      let nnovTotal = monthTotalValue(nnov);
-      let ndecTotal = monthTotalValue(ndec);
-
-      let westObj = {
-        department: "SLS-KAM-WEST",
-        jan: janTotal,
-        feb: febTotal,
-        mar: marTotal,
-        apr: aprTotal,
-        may: mayTotal,
-        jun: junTotal,
-        jul: julTotal,
-        aug: augTotal,
-        sep: sepTotal,
-        oct: octTotal,
-        nov: novTotal,
-        dec: decTotal,
-      };
-
-      // south
-      let southObj = {
-        department: "SLS-KAM-SOUTH",
-        jan: sjanTotal,
-        feb: sfebTotal,
-        mar: smarTotal,
-        apr: saprTotal,
-        may: smayTotal,
-        jun: sjunTotal,
-        jul: sjulTotal,
-        aug: saugTotal,
-        sep: ssepTotal,
-        oct: soctTotal,
-        nov: snovTotal,
-        dec: sdecTotal,
-      };
-
-      // north
-      let northObj = {
-        department: "SLS-KAM-NORTH",
-        jan: njanTotal,
-        feb: nfebTotal,
-        mar: nmarTotal,
-        apr: naprTotal,
-        may: nmayTotal,
-        jun: njunTotal,
-        jul: njulTotal,
-        aug: naugTotal,
-        sep: nsepTotal,
-        oct: noctTotal,
-        nov: nnovTotal,
-        dec: ndecTotal,
-      };
-
-      /* console.log(westObj);
-      console.log(northObj);
-      console.log(southObj); */
-      setSalesData([westObj, northObj, southObj]);
+      let res = result.filter((res) => res.department !== undefined);
+      setSalesData(res);
     }
   }, [salesOrders?.length, salesOrders, loading]);
 
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.department,
+      selector: (row) => row?.department || 0,
     },
     {
       name: "Jan",
-      selector: (row) => row?.jan,
+      selector: (row) => row?.jan || 0,
     },
     {
       name: "Fab",
-      selector: (row) => row?.feb,
+      selector: (row) => row?.feb || 0,
     },
     {
       name: "Mar",
-      selector: (row) => row?.mar,
+      selector: (row) => row?.mar || 0,
     },
     {
       name: "Apr",
-      selector: (row) => row?.apr,
+      selector: (row) => row?.apr || 0,
     },
     {
       name: "May",
-      selector: (row) => row?.may,
+      selector: (row) => row?.may || 0,
     },
     {
       name: "Jun",
-      selector: (row) => row?.jun,
+      selector: (row) => row?.jun || 0,
     },
     {
       name: "Jul",
-      selector: (row) => row?.jul,
+      selector: (row) => row?.jul || 0,
     },
     {
       name: "Aug",
-      selector: (row) => row?.aug,
+      selector: (row) => row?.aug || 0,
     },
     {
       name: "Sep",
-      selector: (row) => row?.sep,
+      selector: (row) => row?.sep | 0,
     },
     {
       name: "Oct",
-      selector: (row) => row?.oct,
+      selector: (row) => row?.oct || 0,
     },
     {
       name: "Nov",
-      selector: (row) => row?.nov,
+      selector: (row) => row?.nov || 0,
     },
     {
       name: "Dec",
-      selector: (row) => row?.dec,
+      selector: (row) => row?.dec || 0,
     },
   ];
   return (
