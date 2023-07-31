@@ -69,7 +69,7 @@ export default function SalesDataForm({ salesData }) {
     let statusArr = [];
 
     if (salesLeads.length > 0) {
-      salesLeads.forEach((sale) => {
+      salesLeads.forEach(sale => {
         // dept obj
         let deptObj = {
           label: sale?.department?.name,
@@ -124,7 +124,7 @@ export default function SalesDataForm({ salesData }) {
       net_price,
       extd_gross_price,
     };
-    setTableLength((prev) => [...prev, obj]);
+    setTableLength(prev => [...prev, obj]);
 
     // clear input field
     setUnitCost(0);
@@ -133,8 +133,8 @@ export default function SalesDataForm({ salesData }) {
     setExtd_gross_price(0);
   };
 
-  const handleRemove = (id) => {
-    const modifiedArray = tableLength.filter((table) => table.id !== id);
+  const handleRemove = id => {
+    const modifiedArray = tableLength.filter(table => table.id !== id);
     setTableLength(modifiedArray);
   };
 
@@ -179,7 +179,7 @@ export default function SalesDataForm({ salesData }) {
       mobile,
       description,
     },
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       console.log({ ...values, parts: tableLength });
     },
   });
@@ -202,7 +202,7 @@ export default function SalesDataForm({ salesData }) {
                 isSearchable
                 name='department'
                 defaultValue={deptDefaultSelect}
-                onChange={(option) => setFieldValue("department", option.value)}
+                onChange={option => setFieldValue("department", option.value)}
               />
             </div>
 
@@ -236,7 +236,7 @@ export default function SalesDataForm({ salesData }) {
                 isLoading
                 name='status'
                 defaultValue={statusDefaultSelect}
-                onChange={(option) => setFieldValue("status", option.value)}
+                onChange={option => setFieldValue("status", option.value)}
               />
             </div>
 
@@ -251,7 +251,7 @@ export default function SalesDataForm({ salesData }) {
                 name='client'
                 defaultValue={clientDefaultSelect}
                 value={clientDefaultSelect}
-                onChange={(option) => setFieldValue("client", option.value)}
+                onChange={option => setFieldValue("client", option.value)}
               />
             </div>
 
@@ -354,7 +354,7 @@ export default function SalesDataForm({ salesData }) {
                               placeholder='Unit Cost'
                               name='unit_cost'
                               value={unitCost || ""}
-                              onChange={(e) => setUnitCost(e.target.value)}
+                              onChange={e => setUnitCost(e.target.value)}
                             />
                           </td>
                           <td>
@@ -364,7 +364,7 @@ export default function SalesDataForm({ salesData }) {
                               placeholder='Total Quntity'
                               name='quantity'
                               value={totalQuantity || ""}
-                              onChange={(e) => setTotalQuantity(e.target.value)}
+                              onChange={e => setTotalQuantity(e.target.value)}
                             />
                           </td>
                           <td>
@@ -374,7 +374,7 @@ export default function SalesDataForm({ salesData }) {
                               placeholder='Extd Net Cost'
                               name='net_price'
                               value={net_price || ""}
-                              onChange={(e) => setNet_price(e.target.value)}
+                              onChange={e => setNet_price(e.target.value)}
                             />
                           </td>
                           <td>
@@ -384,7 +384,7 @@ export default function SalesDataForm({ salesData }) {
                               placeholder='Extd Gross Cost'
                               name='extd_gross_price'
                               value={extd_gross_price || ""}
-                              onChange={(e) =>
+                              onChange={e =>
                                 setExtd_gross_price(e.target.value)
                               }
                             />
@@ -430,7 +430,7 @@ export default function SalesDataForm({ salesData }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableLength.map((table) => {
+                  {tableLength.map(table => {
                     return (
                       <tr key={table.id}>
                         <td>
