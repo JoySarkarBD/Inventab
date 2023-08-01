@@ -124,11 +124,11 @@ const UpdateSalesLeads = () => {
             />
             {/* -------modal hidden------- */}
 
-            <div className='card-body'>
+            <div className='card-body '>
               {!loading ? (
                 <SalesDataForm salesData={selectedData} />
               ) : (
-                <h1>Loading...</h1>
+                <h1 className=''>Loading...</h1>
               )}
             </div>
           </div>

@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import SalesDataForm from "../../components/SalesDataForm/SalesDataForm";
+import AddSalesDataForm from "../../components/SalesDataForm/AddSalesDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
 import "./AddSalesLeads.css";
 
@@ -100,7 +100,7 @@ const AddSalesLeads = () => {
             {/* -------modal hidden------- */}
 
             <div className='card-body'>
-              <SalesDataForm />
+              <AddSalesDataForm />
             </div>
           </div>
         </div>

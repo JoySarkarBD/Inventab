@@ -1,12 +1,10 @@
 import { BsArrowLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import OrderDataForm from "../../components/OrderDataForm/OrderDataForm";
+import UpdateOrderDataForm from "../../components/OrderDataForm/UpdateOrderDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
 import "./AddSalesOrder.css";
 
 export default function UpdateSalesOrder() {
-   
-
   return (
     <div>
       <PageTitle title='Update Sales Order' />
@@ -23,7 +21,7 @@ export default function UpdateSalesOrder() {
             <div className='card-header flex'>
               <h4 className='card-title'>Update Sales Order</h4>
             </div>
-            <OrderDataForm/>
+            <UpdateOrderDataForm />
           </div>
         </div>
       </div>
