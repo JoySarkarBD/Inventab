@@ -10,6 +10,13 @@ export default function MetricPO() {
   const [loading, setLoading] = useState(false);
   const [salesOrders, setSalesOrders] = useState([]);
   let [salesdata, setSalesData] = useState([]);
+  
+
+  let allTotal = 0;
+
+  for (const i of salesdata) {
+    allTotal += i.total
+  }
 
   // get order list
   const getOrderList = async () => {
@@ -48,6 +55,7 @@ export default function MetricPO() {
         if (!departmentEntry) {
           departmentEntry = {
             department: item?.department?.name,
+            total:0
           };
           result.push(departmentEntry);
         }
@@ -60,6 +68,7 @@ export default function MetricPO() {
           // If data doesn't exist for the month, create a new entry
           departmentEntry[month.toLowerCase()] = parseFloat(item.total);
         }
+        departmentEntry.total += parseFloat(item.total)
       });
 
       let res = result.filter(res => res.department !== undefined);
@@ -133,12 +142,16 @@ export default function MetricPO() {
       selector: row => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
+    {
+      name: "Total",
+      selector: row => numDifferentiation(row?.total) || 0,
+      sortable: true,
+    },
   ];
   return (
     <>
-      <h2 className='text-center mb-4'>Actual-PO</h2>
-
-      <DataTable
+    <DataTable
+      title={<h2 className='text-start'>Actual-PO</h2>}
         columns={columns}
         data={salesdata}
         progressPending={loading}
@@ -155,6 +168,14 @@ export default function MetricPO() {
             },
           },
         }}
+        // total KPI Invoice amount
+        actions={
+          <>
+            <h3 className='bg-primary text-white rounded-0 p-3'>
+              Total: {numDifferentiation(allTotal)}.
+            </h3>
+          </>
+        }
       />
     </>
   );
