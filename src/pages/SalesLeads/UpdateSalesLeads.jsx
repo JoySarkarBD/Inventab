@@ -88,7 +88,7 @@ const UpdateSalesLeads = () => {
         );
         setLoading(false);
 
-        setSelectedData(data[0]);
+        setSelectedData(data?.results[0]);
       } catch (error) {
         setLoading(true);
         console.log(error);
