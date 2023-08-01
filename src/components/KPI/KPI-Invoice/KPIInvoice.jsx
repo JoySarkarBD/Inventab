@@ -13,15 +13,15 @@ export default function KPIInvoice() {
 
   // get kpi po invoice
   const kpiPoInvoice = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       const { data } = await axios.get(
         "pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=INVOICE"
       );
       setKpiInvoice(data?.results);
       setLoading(false);
     } catch (error) {
-      setLoading(true);
+      setLoading(false);
       console.log(error);
     }
   };

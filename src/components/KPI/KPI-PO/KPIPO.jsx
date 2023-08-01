@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "../../../utils/axios/axios";
-import { numDifferentiation } from "../../../utils/utilityFunc/utilityFunc";
+import {
+  kpiEachTotal,
+  numDifferentiation,
+} from "../../../utils/utilityFunc/utilityFunc";
 
 export default function KPIPO() {
   const [kipPo, setKpiPo] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
 
-  const kpiPo = async () => {
+  // get kpi po
+  const getKpiPo = async () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
@@ -16,81 +21,100 @@ export default function KPIPO() {
       setKpiPo(data?.results);
       setLoading(false);
     } catch (error) {
-      setLoading(true);
+      setLoading(false);
       console.log(error);
     }
   };
 
   // load leads
   useEffect(() => {
-    kpiPo();
+    getKpiPo();
   }, []);
+
+  // sub total after mount this page
+  useEffect(() => {
+    if (!loading && kipPo?.length > 0) {
+      let allTotal = 0;
+
+      kipPo.forEach((kip) => {
+        let res = kpiEachTotal(kip);
+        kip["total"] = res;
+        allTotal += res;
+      });
+      setTotal(allTotal);
+    }
+  }, [loading, kipPo, kipPo?.length]);
 
   // columns for table
   const columns = [
     {
       name: "Department",
-      selector: row => row?.department,
+      selector: (row) => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: row => numDifferentiation(row?.apr) || 0,
+      selector: (row) => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: row => numDifferentiation(row?.may) || 0,
+      selector: (row) => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: row => numDifferentiation(row?.jun) || 0,
+      selector: (row) => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: row => numDifferentiation(row?.jul) || 0,
+      selector: (row) => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: row => numDifferentiation(row?.aug) || 0,
+      selector: (row) => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: row => numDifferentiation(row?.sep) || 0,
+      selector: (row) => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: row => numDifferentiation(row?.oct) || 0,
+      selector: (row) => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: row => numDifferentiation(row?.nov) || 0,
+      selector: (row) => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: row => numDifferentiation(row?.dec) || 0,
+      selector: (row) => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: row => numDifferentiation(row?.jan) || 0,
+      selector: (row) => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: row => numDifferentiation(row?.feb) || 0,
+      selector: (row) => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: row => numDifferentiation(row?.mar) || 0,
+      selector: (row) => numDifferentiation(row?.mar) || 0,
+      sortable: true,
+    },
+    {
+      name: "Total",
+      selector: (row) => numDifferentiation(row?.total) || 0,
       sortable: true,
     },
   ];
@@ -126,7 +150,7 @@ export default function KPIPO() {
         actions={
           <>
             <h3 className='bg-primary text-white rounded-0 p-3'>
-              Total: 00.00 Cr.
+              Total: {numDifferentiation(total)}
             </h3>
           </>
         }
