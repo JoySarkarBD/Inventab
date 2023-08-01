@@ -25,10 +25,10 @@ const SalesLead = () => {
       const { data } = await axios.get(
         "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
       );
-
+console.log(data);
       setLoading(false);
-      setSalesLeads(data);
-      setSearchData(data);
+      setSalesLeads(data?.results);
+      setSearchData(data?.results);
     } catch (error) {
       setLoading(true);
       console.log(error);

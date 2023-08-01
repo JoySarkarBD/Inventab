@@ -90,8 +90,8 @@ const AR = () => {
         )
       ).data;
       setLoading(false);
-      setReports(response);
-      setSearchData(response);
+      setReports(response?.results);
+      setSearchData(response?.results);
     } catch (error) {
       setLoading(true);
       console.log(error);

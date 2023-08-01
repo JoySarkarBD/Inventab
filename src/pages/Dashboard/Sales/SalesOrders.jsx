@@ -27,8 +27,8 @@ const SalesOrders = () => {
         )
       ).data;
       setLoading(false);
-      setSalesOrders(response);
-      setSearchData(response);
+      setSalesOrders(response?.results);
+      setSearchData(response?.results);
     } catch (error) {
       setLoading(true);
       console.log(error);
