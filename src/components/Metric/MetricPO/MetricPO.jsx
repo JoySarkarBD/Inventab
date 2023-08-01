@@ -49,7 +49,7 @@ export default function MetricPO() {
         const month = getMonthName(item.po_date);
 
         // Find the department in the result array or add it if not found
-        let departmentEntry = result.find(
+        let departmentEntry = result?.find(
           entry => entry?.department === item?.department?.name
         );
         if (!departmentEntry) {
@@ -63,12 +63,12 @@ export default function MetricPO() {
         // Check if the departmentEntry already has data for the specific month
         if (departmentEntry[month.toLowerCase()]) {
           // If data exists for the month, add the new total to it
-          departmentEntry[month.toLowerCase()] += parseFloat(item.total);
+          departmentEntry[month.toLowerCase()] += parseFloat(item?.total);
         } else {
           // If data doesn't exist for the month, create a new entry
-          departmentEntry[month.toLowerCase()] = parseFloat(item.total);
+          departmentEntry[month.toLowerCase()] = parseFloat(item?.total);
         }
-        departmentEntry.total += parseFloat(item.total)
+        departmentEntry.total += parseFloat(item?.total)
       });
 
       let res = result.filter(res => res.department !== undefined);
