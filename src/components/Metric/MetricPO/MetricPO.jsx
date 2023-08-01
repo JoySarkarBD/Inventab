@@ -19,7 +19,7 @@ export default function MetricPO() {
         `pipo/so/order/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
       );
       setLoading(false);
-      setSalesOrders(data);
+      setSalesOrders(data?.results);
     } catch (error) {
       setLoading(false);
       console.log(error);

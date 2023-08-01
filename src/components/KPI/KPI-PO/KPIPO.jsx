@@ -13,7 +13,7 @@ export default function KPIPO() {
       const { data } = await axios.get(
         "pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=PO"
       );
-      setKpiPo(data);
+      setKpiPo(data?.results);
       setLoading(false);
     } catch (error) {
       setLoading(true);

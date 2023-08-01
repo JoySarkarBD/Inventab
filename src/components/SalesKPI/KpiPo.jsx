@@ -18,7 +18,7 @@ const KpiPo = () => {
         `pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=PO`
       );
       setLoading(false);
-      setKpiList(data);
+      setKpiList(data?.results);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -29,6 +29,7 @@ const KpiPo = () => {
   useEffect(() => {
     getKpiPo();
   }, []);
+
 
   //kpi PO each sub total
   useEffect(() => {
