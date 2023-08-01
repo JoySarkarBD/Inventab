@@ -503,7 +503,7 @@ export default function SalesDataForm({ salesData }) {
           </div>
         </form>
       ) : (
-        <h1>Loading</h1>
+        <h1 className="custom-loading">Loading...</h1>
       )}
     </>
   );

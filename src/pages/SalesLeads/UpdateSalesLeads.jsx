@@ -12,25 +12,26 @@ function SalesLeadHistoryModal(props) {
   return (
     <Modal
       {...props}
-      size='lg'
-      aria-labelledby='contained-modal-title-vcenter'
-      centered>
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <Modal.Header closeButton>
-        <Modal.Title id='contained-modal-title-vcenter'>
+        <Modal.Title id="contained-modal-title-vcenter">
           History for Lead - xxx
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <table className='table  table-striped'>
-          <thead className='table-dark '>
+        <table className="table  table-striped">
+          <thead className="table-dark ">
             <tr>
-              <th scope='col' className='text-light'>
+              <th scope="col" className="text-light">
                 Date & Time
               </th>
-              <th scope='col' className='text-light'>
+              <th scope="col" className="text-light">
                 Created by
               </th>
-              <th scope='col' className='text-light'>
+              <th scope="col" className="text-light">
                 Discussion
               </th>
             </tr>
@@ -57,10 +58,11 @@ function SalesLeadHistoryModal(props) {
       <Modal.Footer>
         <Button
           onClick={props.onHide}
-          className='rounded-1 px-5 py-3 outline-none border-0'>
+          className="rounded-1 px-5 py-3 outline-none border-0"
+        >
           Cancel
         </Button>
-        <Button className='rounded-1 px-5 py-3 outline-none border-0'>
+        <Button className="rounded-1 px-5 py-3 outline-none border-0">
           Add
         </Button>
       </Modal.Footer>
@@ -97,22 +99,23 @@ const UpdateSalesLeads = () => {
 
   return (
     <div>
-      <PageTitle title='Update Sales Leads' />
+      <PageTitle title="Update Sales Leads" />
       {/* back button */}
-      <div className='d-flex justify-content-end me-5 mb-4'>
-        <Link to='/dashboard/sales-leads' className='btn btn-primary'>
-          <BsArrowLeft className='me-2' />
+      <div className="d-flex justify-content-end me-5 mb-4">
+        <Link to="/dashboard/sales-leads" className="btn btn-primary">
+          <BsArrowLeft className="me-2" />
           Back
         </Link>
       </div>
-      <div className='row'>
-        <div className='col-xl-12 col-lg-12'>
-          <div className='card'>
-            <div className='card-header flex'>
-              <h4 className='card-title'>Update Sales Lead</h4>
+      <div className="row">
+        <div className="col-xl-12 col-lg-12">
+          <div className="card">
+            <div className="card-header flex">
+              <h4 className="card-title">Update Sales Lead</h4>
               <button
-                className='btn btn-primary'
-                onClick={() => setModalShow(true)}>
+                className="btn btn-primary"
+                onClick={() => setModalShow(true)}
+              >
                 See History
               </button>
             </div>
@@ -124,12 +127,13 @@ const UpdateSalesLeads = () => {
             />
             {/* -------modal hidden------- */}
 
-            <div className='card-body '>
+            <div className="card-body ">
               {!loading ? (
                 <SalesDataForm salesData={selectedData} />
               ) : (
-                <h1 className=''>Loading...</h1>
+                <h1 className='custom-loading'>Loading...</h1>
               )}
+
             </div>
           </div>
         </div>

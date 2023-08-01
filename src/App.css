@@ -59518,3 +59518,18 @@ body > * {
   opacity: 1;
 }
 /* custom modal button css */
+
+
+.btn-common:hover{
+border-color: #2e75b5 !important;
+}
+
+.btn-common:focus{
+box-shadow: none !important;
+}
+
+.btn-common:active{
+  background-color: #2e75b5 !important;
+  border-color: #2e75b5 !important;
+  color:white;
+}

@@ -23,7 +23,7 @@ const Attendance = () => {
             {/* <!-- Button trigger modal --> */}
             <button
               type='button'
-              className='btn btn-primary'
+              className='btn btn-primary btn-common rounded-1'
               data-bs-toggle='modal'
               data-bs-target='#exampleModal'>
               Leave Application

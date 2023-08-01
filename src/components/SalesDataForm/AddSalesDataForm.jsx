@@ -121,7 +121,7 @@ const AddSalesDataForm = () => {
         {/* Table Part */}
         {/* Table Row Add Button */}
         <div className='d-flex justify-content-end my-4'>
-          <button className='btn btn-primary rounded' onClick={handleTable}>
+          <button className='btn btn-primary btn-common rounded-1' onClick={handleTable}>
             Add Table Row
           </button>
         </div>
@@ -182,7 +182,7 @@ const AddSalesDataForm = () => {
                     </td>
                     <td>
                       <button
-                        className='btn btn-danger btn-sm'
+                        className='btn btn-danger btn-sm rounded-1'
                         onClick={() => handleRemove(table.id)}>
                         Remove
                       </button>
@@ -196,7 +196,7 @@ const AddSalesDataForm = () => {
         {/* Submit Button */}
         <div className='d-flex justify-content-end my-4'>
           <input
-            className='btn btn-primary'
+            className='btn btn-primary btn-common rounded-1'
             type='submit'
             value='Add Sales Lead'
           />
