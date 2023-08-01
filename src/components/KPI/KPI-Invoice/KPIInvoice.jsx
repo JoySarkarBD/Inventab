@@ -30,67 +30,67 @@ export default function KPIInvoice() {
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.department,
+      selector: row => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: (row) => numDifferentiation(row?.apr) || 0,
+      selector: row => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: (row) => numDifferentiation(row?.may) || 0,
+      selector: row => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: (row) => numDifferentiation(row?.jun) || 0,
+      selector: row => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: (row) => numDifferentiation(row?.jul) || 0,
+      selector: row => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: (row) => numDifferentiation(row?.aug) || 0,
+      selector: row => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: (row) => numDifferentiation(row?.sep) || 0,
+      selector: row => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: (row) => numDifferentiation(row?.oct) || 0,
+      selector: row => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: (row) => numDifferentiation(row?.nov) || 0,
+      selector: row => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: (row) => numDifferentiation(row?.dec) || 0,
+      selector: row => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: (row) => numDifferentiation(row?.jan) || 0,
+      selector: row => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: (row) => numDifferentiation(row?.feb) || 0,
+      selector: row => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: (row) => numDifferentiation(row?.mar) || 0,
+      selector: row => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
   ];
@@ -98,7 +98,7 @@ export default function KPIInvoice() {
   return (
     <>
       <DataTable
-        title={<h2 className='text-center'>KPI Invoice</h2>}
+        title={<h2 className='text-start'>KPI Invoice</h2>}
         data={kipInvoice}
         columns={columns}
         customStyles={{
@@ -122,6 +122,14 @@ export default function KPIInvoice() {
         striped
         highlightOnHover
         subHeader
+        // total KPI Invoice amount
+        actions={
+          <>
+            <h3 className='bg-primary text-white rounded-0 p-3'>
+              Total: 00.00 Cr.
+            </h3>
+          </>
+        }
       />
     </>
   );
