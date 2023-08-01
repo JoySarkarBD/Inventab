@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "../../../utils/axios/axios";
-import { kpiEachTotal, numDifferentiation } from "../../../utils/utilityFunc/utilityFunc";
+import {
+  kpiEachTotal,
+  numDifferentiation,
+} from "../../../utils/utilityFunc/utilityFunc";
 
 export default function KPIInvoice() {
   const [kipInvoice, setKpiInvoice] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [allTotal, setAllTotal] = useState(0);
+  const [total, setTotal] = useState([]);
 
-  const kpiPo = async () => {
+  // get kpi po invoice
+  const kpiPoInvoice = async () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
@@ -22,95 +26,96 @@ export default function KPIInvoice() {
     }
   };
 
-  // load leads
+  // load kpi po invoice
   useEffect(() => {
-    kpiPo();
+    kpiPoInvoice();
   }, []);
-   
-  
+
+  // calculate total after mount page
   useEffect(() => {
+    let total = 0;
     if (!loading && kipInvoice?.length && kipInvoice?.length > 0) {
-      let allTotal = 0
-
-      kipInvoice.forEach(invoice =>{
+      kipInvoice.forEach((invoice) => {
         let res = kpiEachTotal(invoice);
-        allTotal += res;
+        // added total property in existing invoice obj
+        invoice["total"] = res;
+        // calculate all total
+        total += res;
       });
-      setAllTotal(allTotal);
-}
-}, [kipInvoice?.length, kipInvoice, loading]);
-
+      setTotal(total);
+    }
+  }, [kipInvoice?.length, kipInvoice, loading]);
 
   // columns for table
   const columns = [
     {
       name: "Department",
-      selector: row => row?.department,
+      selector: (row) => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: row => numDifferentiation(row?.apr) || 0,
+      selector: (row) => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: row => numDifferentiation(row?.may) || 0,
+      selector: (row) => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: row => numDifferentiation(row?.jun) || 0,
+      selector: (row) => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: row => numDifferentiation(row?.jul) || 0,
+      selector: (row) => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: row => numDifferentiation(row?.aug) || 0,
+      selector: (row) => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: row => numDifferentiation(row?.sep) || 0,
+      selector: (row) => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: row => numDifferentiation(row?.oct) || 0,
+      selector: (row) => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: row => numDifferentiation(row?.nov) || 0,
+      selector: (row) => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: row => numDifferentiation(row?.dec) || 0,
+      selector: (row) => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: row => numDifferentiation(row?.jan) || 0,
+      selector: (row) => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: row => numDifferentiation(row?.feb) || 0,
+      selector: (row) => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: row => numDifferentiation(row?.mar) || 0,
+      selector: (row) => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
     {
       name: "Total",
-      // selector: row => numDifferentiation(row?.mar) || 0,
+      selector: (row) => numDifferentiation(row?.total) || 0,
       sortable: true,
     },
   ];
@@ -146,7 +151,7 @@ export default function KPIInvoice() {
         actions={
           <>
             <h3 className='bg-primary text-white rounded-0 p-3'>
-              Total: {numDifferentiation(allTotal)}.
+              Total:{numDifferentiation(total)}
             </h3>
           </>
         }
