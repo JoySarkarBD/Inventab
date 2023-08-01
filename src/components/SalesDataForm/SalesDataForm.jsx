@@ -49,6 +49,7 @@ export default function SalesDataForm({ salesData }) {
       const { data } = await axios.get(
         "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
       );
+      console.log(data.results)
       setLoading(false);
       setSalesLeads(data?.results);
     } catch (error) {

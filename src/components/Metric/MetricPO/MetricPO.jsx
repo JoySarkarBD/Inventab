@@ -37,13 +37,13 @@ export default function MetricPO() {
       const result = [];
 
       // sales order total
-      salesOrders?.forEach((item) => {
+      salesOrders?.forEach(item => {
         // Get the month name from the expected_date property
         const month = getMonthName(item.po_date);
 
         // Find the department in the result array or add it if not found
         let departmentEntry = result.find(
-          (entry) => entry?.department === item?.department?.name
+          entry => entry?.department === item?.department?.name
         );
         if (!departmentEntry) {
           departmentEntry = {
@@ -62,7 +62,7 @@ export default function MetricPO() {
         }
       });
 
-      let res = result.filter((res) => res.department !== undefined);
+      let res = result.filter(res => res.department !== undefined);
       setSalesData(res);
     }
   }, [salesOrders?.length, salesOrders, loading]);
@@ -70,67 +70,67 @@ export default function MetricPO() {
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.department,
+      selector: row => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: (row) => numDifferentiation(row?.apr) || 0,
+      selector: row => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: (row) => numDifferentiation(row?.may) || 0,
+      selector: row => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: (row) => numDifferentiation(row?.jun) || 0,
+      selector: row => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: (row) => numDifferentiation(row?.jul) || 0,
+      selector: row => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: (row) => numDifferentiation(row?.aug) || 0,
+      selector: row => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: (row) => numDifferentiation(row?.sep) || 0,
+      selector: row => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: (row) => numDifferentiation(row?.oct) || 0,
+      selector: row => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: (row) => numDifferentiation(row?.nov) || 0,
+      selector: row => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: (row) => numDifferentiation(row?.dec) || 0,
+      selector: row => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: (row) => numDifferentiation(row?.jan) || 0,
+      selector: row => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: (row) => numDifferentiation(row?.feb) || 0,
+      selector: row => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: (row) => numDifferentiation(row?.mar) || 0,
+      selector: row => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
   ];
@@ -138,7 +138,24 @@ export default function MetricPO() {
     <>
       <h2 className='text-center mb-4'>Actual-PO</h2>
 
-      <DataTable columns={columns} data={salesdata} progressPending={loading} />
+      <DataTable
+        columns={columns}
+        data={salesdata}
+        progressPending={loading}
+        customStyles={{
+          rows: {
+            style: {
+              fontSize: "16px",
+            },
+          },
+          headCells: {
+            style: {
+              fontSize: "19px",
+              width: "170px",
+            },
+          },
+        }}
+      />
     </>
   );
 }
