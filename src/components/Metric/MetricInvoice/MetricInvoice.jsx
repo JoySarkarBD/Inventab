@@ -34,33 +34,38 @@ export default function MetricInvoice() {
 
   useEffect(() => {
     if (!loading && actualInvoices?.length > 0) {
-      const invoices = [];
+      // total dept list obj
+      const result = [];
 
-      actualInvoices.forEach((invoice) => {
-        let month = getMonthName(invoice?.invoice_date);
+      // sales order total
+      actualInvoices?.forEach((item) => {
+        // Get the month name from the expected_date property
+        const month = getMonthName(item?.invoice_date);
 
-        let findInvoice = invoices.find((inv) => inv?.dept === invoice?.dept);
-
-        if (!findInvoice) {
-          findInvoice = {
-            dept: invoice?.dept,
+        // Find the department in the result array or add it if not found
+        let departmentEntry = result?.find(
+          (entry) => entry?.department === item?.dept?.name
+        );
+        if (!departmentEntry) {
+          departmentEntry = {
+            department: item?.dept?.name,
             total: 0,
           };
-          invoices.push(findInvoice);
+          result.push(departmentEntry);
         }
 
-        // Check if the findInvoice already has data for the specific month
-        if (findInvoice[month.toLowerCase()]) {
+        // Check if the departmentEntry already has data for the specific month
+        if (departmentEntry[month.toLowerCase()]) {
           // If data exists for the month, add the new total to it
-          findInvoice[month.toLowerCase()] += parseFloat(invoice?.total);
+          departmentEntry[month.toLowerCase()] += parseFloat(item?.total);
         } else {
           // If data doesn't exist for the month, create a new entry
-          findInvoice[month.toLowerCase()] = parseFloat(invoice?.total);
+          departmentEntry[month.toLowerCase()] = parseFloat(item?.total);
         }
-        findInvoice.total += parseFloat(invoice?.total);
+        departmentEntry.total += parseFloat(item?.total);
       });
-      let res = invoices.filter((res) => res.dept !== undefined);
 
+      let res = result.filter((res) => res?.department !== undefined);
       setInvoices(res);
     }
   }, [loading, actualInvoices, actualInvoices?.length]);
@@ -69,7 +74,7 @@ export default function MetricInvoice() {
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.dept,
+      selector: (row) => row?.department,
       sortable: true,
     },
     {
@@ -144,7 +149,6 @@ export default function MetricInvoice() {
   for (const i of invoices) {
     allTotal += i?.total;
   }
-  console.log(invoices);
 
   return (
     <>
