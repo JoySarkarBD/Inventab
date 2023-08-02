@@ -59533,3 +59533,7 @@ box-shadow: none !important;
   border-color: #2e75b5 !important;
   color:white;
 }
+.avatar-profile{
+  width: 40px;
+  height:40px;
+}
