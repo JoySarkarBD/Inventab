@@ -1,30 +1,50 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "../../../utils/axios/axios";
-import { numDifferentiation } from "../../../utils/utilityFunc/utilityFunc";
+import {
+  kpiEachTotal,
+  numDifferentiation,
+} from "../../../utils/utilityFunc/utilityFunc";
 
 export default function KPIInvoice() {
   const [kipInvoice, setKpiInvoice] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState([]);
 
-  const kpiPo = async () => {
-    setLoading(true);
+  // get kpi po invoice
+  const kpiPoInvoice = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(
         "pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=INVOICE"
       );
       setKpiInvoice(data?.results);
       setLoading(false);
     } catch (error) {
-      setLoading(true);
+      setLoading(false);
       console.log(error);
     }
   };
 
-  // load leads
+  // load kpi po invoice
   useEffect(() => {
-    kpiPo();
+    kpiPoInvoice();
   }, []);
+
+  // calculate total after mount page
+  useEffect(() => {
+    let total = 0;
+    if (!loading && kipInvoice?.length && kipInvoice?.length > 0) {
+      kipInvoice.forEach((invoice) => {
+        let res = kpiEachTotal(invoice);
+        // added total property in existing invoice obj
+        invoice["total"] = res;
+        // calculate all total
+        total += res;
+      });
+      setTotal(total);
+    }
+  }, [kipInvoice?.length, kipInvoice, loading]);
 
   // columns for table
   const columns = [
@@ -93,12 +113,17 @@ export default function KPIInvoice() {
       selector: (row) => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
+    {
+      name: "Total",
+      selector: (row) => numDifferentiation(row?.total) || 0,
+      sortable: true,
+    },
   ];
 
   return (
     <>
       <DataTable
-        title={<h2 className='text-center'>KPI Invoice</h2>}
+        title={<h2 className='text-start'>KPI Invoice</h2>}
         data={kipInvoice}
         columns={columns}
         customStyles={{
@@ -122,6 +147,14 @@ export default function KPIInvoice() {
         striped
         highlightOnHover
         subHeader
+        // total KPI Invoice amount
+        actions={
+          <>
+            <h3 className='bg-primary text-white rounded-0 p-3'>
+              Total:{numDifferentiation(total)}
+            </h3>
+          </>
+        }
       />
     </>
   );
