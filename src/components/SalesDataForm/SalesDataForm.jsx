@@ -17,7 +17,9 @@ export default function SalesDataForm({ salesData }) {
   const [loading, setLoading] = useState(false);
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
-  const [subOrg, setsubOrg] = useState();
+  const [subOrg, setsubOrg] = useState([]);
+  const [parts, setParts] = useState([]);
+  const [partsLoading, setPartsLoading] = useState(false);
 
   // table lowerpart data
   const [unitCost, setUnitCost] = useState(0);
@@ -113,6 +115,28 @@ export default function SalesDataForm({ salesData }) {
         setsubOrg(uniqueArr);
       } catch (error) {
         setLoading(false);
+        console.log(error);
+      }
+    })();
+
+    (async function () {
+      try {
+        setPartsLoading(true);
+        const { data } = await axios.get("parts/parts");
+        setPartsLoading(false);
+        const partArr = [];
+        data?.results?.forEach((data) => {
+          const partObj = {
+            label: data?.part_number,
+            value: data?.id,
+          };
+          partArr.push(partObj);
+        });
+        const removeUndefinedData = removeUndefinedObj(partArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setParts(uniqueArr);
+      } catch (error) {
+        setPartsLoading(false);
         console.log(error);
       }
     })();
@@ -353,6 +377,10 @@ export default function SalesDataForm({ salesData }) {
                             <Select
                               className='select'
                               placeholder='Select Port No'
+                              options={parts}
+                              isClearable
+                              isSearchable
+                              isLoading={partsLoading}
                             />
                           </div>
                         </td>
