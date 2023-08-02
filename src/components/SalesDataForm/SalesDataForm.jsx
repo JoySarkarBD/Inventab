@@ -52,7 +52,7 @@ export default function SalesDataForm({ salesData }) {
         );
         setLoading(false);
         const deptArr = [];
-        data?.results?.forEach((dept) => {
+        data?.results?.forEach(dept => {
           const deptObj = {
             label: dept?.name,
             value: dept?.id,
@@ -74,7 +74,7 @@ export default function SalesDataForm({ salesData }) {
         const { data } = await axios.get(`organizations/fetch/org/`);
         setLoading(false);
         const clientArr = [];
-        data?.results?.forEach((client) => {
+        data?.results?.forEach(client => {
           const clientObj = {
             label: client?.company_name,
             value: client?.id,
@@ -100,7 +100,7 @@ export default function SalesDataForm({ salesData }) {
         );
         setLoading(false);
         const subOrgArr = [];
-        data?.results?.forEach((sub) => {
+        data?.results?.forEach(sub => {
           const clientObj = {
             label: sub?.sub_company_name,
             value: sub?.id,
@@ -129,7 +129,7 @@ export default function SalesDataForm({ salesData }) {
       net_price,
       extd_gross_price,
     };
-    setTableLength((prev) => [...prev, obj]);
+    setTableLength(prev => [...prev, obj]);
 
     // clear input field
     setUnitCost(0);
@@ -138,8 +138,8 @@ export default function SalesDataForm({ salesData }) {
     setExtd_gross_price(0);
   };
 
-  const handleRemove = (id) => {
-    const modifiedArray = tableLength.filter((table) => table.id !== id);
+  const handleRemove = id => {
+    const modifiedArray = tableLength.filter(table => table.id !== id);
     setTableLength(modifiedArray);
   };
 
@@ -177,7 +177,7 @@ export default function SalesDataForm({ salesData }) {
       mobile,
       description,
     },
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       console.log({ ...values, parts: tableLength });
     },
   });
@@ -209,7 +209,7 @@ export default function SalesDataForm({ salesData }) {
               options={dept}
               isLoading={loading}
               defaultValue={deptDefaultSelect}
-              onChange={(option) => setFieldValue("department", option?.value)}
+              onChange={option => setFieldValue("department", option?.value)}
             />
           </div>
 
@@ -222,7 +222,7 @@ export default function SalesDataForm({ salesData }) {
               isSearchable
               options={subOrg}
               isLoading={loading}
-              onChange={(option) => setFieldValue("sub_org", option?.value)}
+              onChange={option => setFieldValue("sub_org", option?.value)}
             />
           </div>
 
@@ -250,7 +250,7 @@ export default function SalesDataForm({ salesData }) {
               options={statusOptions}
               isLoading={loading}
               defaultValue={statusDefaultSelect}
-              onChange={(option) => setFieldValue("status", option?.value)}
+              onChange={option => setFieldValue("status", option?.value)}
             />
           </div>
 
@@ -264,7 +264,7 @@ export default function SalesDataForm({ salesData }) {
               name='client'
               options={client}
               defaultValue={clientDefaultSelect}
-              onChange={(option) => setFieldValue("client", option?.value)}
+              onChange={option => setFieldValue("client", option?.value)}
             />
           </div>
 
@@ -339,10 +339,13 @@ export default function SalesDataForm({ salesData }) {
                     <thead>
                       <tr>
                         <th scope='col'>Part No</th>
+                        <th scope='col'>Short Description</th>
+                        <th scope='col'>Quantity</th>
                         <th scope='col'>Unit Cost</th>
-                        <th scope='col'>Total Quantity</th>
-                        <th scope='col'>Extd Net Cost</th>
-                        <th scope='col'>Extd Gross Cost</th>
+                        <th scope='col'>Status</th>
+                        <th scope='col'>GST</th>
+                        <th scope='col'>Net Price</th>
+                        <th scope='col'>Extd Gross Price</th>
                         <th scope='col'>Action</th>
                       </tr>
                     </thead>
@@ -352,9 +355,27 @@ export default function SalesDataForm({ salesData }) {
                           <div className='select-port'>
                             <Select
                               className='select'
-                              placeholder='Select Port No'
+                              placeholder='Select Part No'
                             />
                           </div>
+                        </td>
+                        <td>
+                          <input
+                            className='new_input_class'
+                            type='text'
+                            placeholder='Short Description'
+                            name='short_description'
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className='new_input_class'
+                            type='number'
+                            placeholder='Total Quantity'
+                            name='quantity'
+                            value={totalQuantity || ""}
+                            onChange={e => setTotalQuantity(e.target.value)}
+                          />
                         </td>
                         <td>
                           <input
@@ -363,44 +384,48 @@ export default function SalesDataForm({ salesData }) {
                             placeholder='Unit Cost'
                             name='unit_cost'
                             value={unitCost || ""}
-                            onChange={(e) => setUnitCost(e.target.value)}
+                            onChange={e => setUnitCost(e.target.value)}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className='new_input_class'
+                            type='text'
+                            placeholder='Status'
+                            name='status'
                           />
                         </td>
                         <td>
                           <input
                             className='new_input_class'
                             type='number'
-                            placeholder='Total Quntity'
-                            name='quantity'
-                            value={totalQuantity || ""}
-                            onChange={(e) => setTotalQuantity(e.target.value)}
+                            placeholder='GST'
+                            name='gst'
                           />
                         </td>
                         <td>
                           <input
                             className='new_input_class'
                             type='number'
-                            placeholder='Extd Net Cost'
+                            placeholder='Net Price'
                             name='net_price'
                             value={net_price || ""}
-                            onChange={(e) => setNet_price(e.target.value)}
+                            onChange={e => setNet_price(e.target.value)}
                           />
                         </td>
                         <td>
                           <input
                             className='new_input_class'
                             type='number'
-                            placeholder='Extd Gross Cost'
+                            placeholder='Extd Gross Price'
                             name='extd_gross_price'
                             value={extd_gross_price || ""}
-                            onChange={(e) =>
-                              setExtd_gross_price(e.target.value)
-                            }
+                            onChange={e => setExtd_gross_price(e.target.value)}
                           />
                         </td>
                         <td>
                           <button
-                            className='btn btn-primary rounded'
+                            className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
                             disabled={
                               !(
                                 net_price ||
@@ -410,7 +435,7 @@ export default function SalesDataForm({ salesData }) {
                               )
                             }
                             onClick={handleTable}>
-                            Add Table Row
+                            Add
                           </button>
                         </td>
                       </tr>
@@ -439,7 +464,7 @@ export default function SalesDataForm({ salesData }) {
                 </tr>
               </thead>
               <tbody>
-                {tableLength.map((table) => {
+                {tableLength.map(table => {
                   return (
                     <tr key={table.id}>
                       <td>
@@ -504,7 +529,7 @@ export default function SalesDataForm({ salesData }) {
         {/* Submit Button */}
         <div className='d-flex justify-content-end my-4'>
           <input
-            className='btn btn-primary'
+            className='btn btn-primary rounded-1'
             type='submit'
             value='Add Sales Lead'
           />
