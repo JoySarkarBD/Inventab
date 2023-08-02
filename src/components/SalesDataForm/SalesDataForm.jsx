@@ -2,7 +2,6 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import { v4 } from "uuid";
 import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
@@ -18,12 +17,17 @@ export default function SalesDataForm({ salesData }) {
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
   const [subOrg, setsubOrg] = useState([]);
-  const [parts, setParts] = useState([]);
+  const [allParts, setParts] = useState([]);
+  const [addAllParts, setAddAllParts] = useState([]);
   const [partsLoading, setPartsLoading] = useState(false);
+  const [selectPart, setSelectPart] = useState([]);
 
   // table lowerpart data
-  const [unitCost, setUnitCost] = useState(0);
+  const [short_description, setshort_description] = useState("");
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const [unitCost, setUnitCost] = useState(0);
+  const [status, setstatus] = useState("");
+  const [gst, setgst] = useState(0);
   const [net_price, setNet_price] = useState(0);
   const [extd_gross_price, setExtd_gross_price] = useState(0);
 
@@ -41,6 +45,7 @@ export default function SalesDataForm({ salesData }) {
     description,
     lead_id,
     contact_name,
+    parts,
   } = salesData;
 
   // load dept, sub org, client, status all
@@ -54,7 +59,7 @@ export default function SalesDataForm({ salesData }) {
         );
         setLoading(false);
         const deptArr = [];
-        data?.results?.forEach(dept => {
+        data?.results?.forEach((dept) => {
           const deptObj = {
             label: dept?.name,
             value: dept?.id,
@@ -76,7 +81,7 @@ export default function SalesDataForm({ salesData }) {
         const { data } = await axios.get(`organizations/fetch/org/`);
         setLoading(false);
         const clientArr = [];
-        data?.results?.forEach(client => {
+        data?.results?.forEach((client) => {
           const clientObj = {
             label: client?.company_name,
             value: client?.id,
@@ -102,7 +107,7 @@ export default function SalesDataForm({ salesData }) {
         );
         setLoading(false);
         const subOrgArr = [];
-        data?.results?.forEach(sub => {
+        data?.results?.forEach((sub) => {
           const clientObj = {
             label: sub?.sub_company_name,
             value: sub?.id,
@@ -118,53 +123,76 @@ export default function SalesDataForm({ salesData }) {
         console.log(error);
       }
     })();
-
-    (async function () {
-      try {
-        setPartsLoading(true);
-        const { data } = await axios.get("parts/parts");
-        setPartsLoading(false);
-        const partArr = [];
-        data?.results?.forEach((data) => {
-          const partObj = {
-            label: data?.part_number,
-            value: data?.id,
-          };
-          partArr.push(partObj);
-        });
-        const removeUndefinedData = removeUndefinedObj(partArr);
-        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
-        setParts(uniqueArr);
-      } catch (error) {
-        setPartsLoading(false);
-        console.log(error);
-      }
-    })();
   }, []);
+
+  useEffect(() => {
+    // parts
+    if (parts?.length > 0) {
+      (async function () {
+        try {
+          setPartsLoading(true);
+          const { data } = await axios.get("parts/parts");
+          setPartsLoading(false);
+          const partArr = [];
+          data?.results?.forEach((data) => {
+            const partObj = {
+              label: data?.part_number,
+              value: data?.id,
+            };
+            partArr.push(partObj);
+          });
+          const removeUndefinedData = removeUndefinedObj(partArr);
+          const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+          setParts(uniqueArr);
+        } catch (error) {
+          setPartsLoading(false);
+          console.log(error);
+        }
+      })();
+    }
+  }, [parts]);
+
+  // load all existing and created
+  useEffect(() => {
+    setAddAllParts(parts);
+  }, [parts]);
 
   // ==============================table stuff start==============
 
   const handleTable = () => {
     event.preventDefault();
-    const obj = {
-      id: v4(),
-      unit_cost: unitCost,
+
+    const newPart = {
+      part_id: {
+        id: selectPart?.value,
+        part_number: selectPart.label,
+      },
+      short_description,
       quantity: totalQuantity,
+      unit_cost: unitCost,
+      status,
+      gst,
       net_price,
       extd_gross_price,
     };
-    setTableLength(prev => [...prev, obj]);
 
+    setFieldValue("parts", [...values.parts, newPart]);
     // clear input field
-    setUnitCost(0);
+    setSelectPart("");
+    setshort_description("");
     setTotalQuantity(0);
+    setUnitCost(0);
+    setstatus("");
+    setgst(0);
     setNet_price(0);
     setExtd_gross_price(0);
   };
 
-  const handleRemove = id => {
-    const modifiedArray = tableLength.filter(table => table.id !== id);
-    setTableLength(modifiedArray);
+  // remove row
+  const handleRemovePart = (index) => {
+    const updatedParts = [...values.parts];
+    updatedParts.splice(index, 1); // Remove the object at the specified index
+    setFieldValue("parts", updatedParts);
   };
 
   // ==============================table stuff end==============
@@ -190,19 +218,44 @@ export default function SalesDataForm({ salesData }) {
   // handle update form
   const { values, handleSubmit, handleChange, setFieldValue } = useFormik({
     initialValues: {
-      department: "" || deptDefaultSelect.value,
+      department: "" || deptDefaultSelect,
       sub_org: "" || null,
       probability,
-      status: "" || statusDefaultSelect.value,
-      client: "" || clientDefaultSelect.value,
+      status: "" || statusDefaultSelect,
+      client: "" || clientDefaultSelect,
       expected_date: expected_date,
       expected_invoice_date,
       contact_name,
       mobile,
       description,
+      parts,
     },
-    onSubmit: async values => {
-      console.log({ ...values, parts: tableLength });
+
+    onSubmit: async (values) => {
+      const { department, status, client, parts: partArr } = values;
+      // sort part obj data
+      let parts = [];
+      partArr.forEach((p) => {
+        const partObj = {
+          part_id: p?.part_id?.id,
+          short_description: p?.short_description,
+          quantity: p?.quantity,
+          unit_cost: p?.unit_cost,
+          status: p?.status,
+          gst: p?.gst,
+          net_price: p?.net_price,
+          extd_gross_price: p?.extd_gross_price,
+        };
+        parts?.push(partObj);
+      });
+
+      console.log({
+        ...values,
+        department: department?.value,
+        status: status?.value,
+        client: client?.value,
+        parts,
+      });
     },
   });
 
@@ -216,6 +269,14 @@ export default function SalesDataForm({ salesData }) {
     { label: "Close the Deal", value: "Close the Deal" },
     { label: "Lost Deal", value: "Lost Deal" },
   ];
+
+  //update && change select options
+  const handlePartSelectChange = (selectedOption, index) => {
+    const updatedParts = [...values.parts];
+    updatedParts[index].part_id.id = selectedOption.value;
+    updatedParts[index].part_id.part_number = selectedOption.label;
+    setFieldValue("parts", updatedParts);
+  };
 
   return (
     <>
@@ -232,8 +293,9 @@ export default function SalesDataForm({ salesData }) {
               name='department'
               options={dept}
               isLoading={loading}
-              defaultValue={deptDefaultSelect}
-              onChange={option => setFieldValue("department", option?.value)}
+              value={deptDefaultSelect}
+              // defaultValue={deptDefaultSelect}
+              onChange={(option) => setFieldValue("department", option)}
             />
           </div>
 
@@ -246,7 +308,7 @@ export default function SalesDataForm({ salesData }) {
               isSearchable
               options={subOrg}
               isLoading={loading}
-              onChange={option => setFieldValue("sub_org", option?.value)}
+              onChange={(option) => setFieldValue("sub_org", option?.value)}
             />
           </div>
 
@@ -273,8 +335,8 @@ export default function SalesDataForm({ salesData }) {
               name='status'
               options={statusOptions}
               isLoading={loading}
-              defaultValue={statusDefaultSelect}
-              onChange={option => setFieldValue("status", option?.value)}
+              value={statusDefaultSelect}
+              onChange={(option) => setFieldValue("status", option)}
             />
           </div>
 
@@ -287,8 +349,8 @@ export default function SalesDataForm({ salesData }) {
               isClearable
               name='client'
               options={client}
-              defaultValue={clientDefaultSelect}
-              onChange={option => setFieldValue("client", option?.value)}
+              value={clientDefaultSelect}
+              onChange={(option) => setFieldValue("client", option)}
             />
           </div>
 
@@ -345,7 +407,7 @@ export default function SalesDataForm({ salesData }) {
               className='w-100'
               placeholder='Description'
               name='description'
-              value={values.description}
+              value={values?.description}
               onChange={handleChange}
             />
             <br />
@@ -379,15 +441,12 @@ export default function SalesDataForm({ salesData }) {
                           <div className='select-port'>
                             <Select
                               className='select'
-<<<<<<< HEAD
-                              placeholder='Select Port No'
-                              options={parts}
-                              isClearable
-                              isSearchable
-                              isLoading={partsLoading}
-=======
                               placeholder='Select Part No'
->>>>>>> e4017d37a0ad3fbc3035340bc42d4c2f7cba1e5f
+                              isSearchable
+                              isClearable
+                              isLoading={partsLoading && parts?.length > 0}
+                              options={allParts}
+                              onChange={setSelectPart}
                             />
                           </div>
                         </td>
@@ -397,6 +456,10 @@ export default function SalesDataForm({ salesData }) {
                             type='text'
                             placeholder='Short Description'
                             name='short_description'
+                            value={short_description || ""}
+                            onChange={(e) =>
+                              setshort_description(e.target.value)
+                            }
                           />
                         </td>
                         <td>
@@ -406,7 +469,7 @@ export default function SalesDataForm({ salesData }) {
                             placeholder='Total Quantity'
                             name='quantity'
                             value={totalQuantity || ""}
-                            onChange={e => setTotalQuantity(e.target.value)}
+                            onChange={(e) => setTotalQuantity(e.target.value)}
                           />
                         </td>
                         <td>
@@ -416,7 +479,7 @@ export default function SalesDataForm({ salesData }) {
                             placeholder='Unit Cost'
                             name='unit_cost'
                             value={unitCost || ""}
-                            onChange={e => setUnitCost(e.target.value)}
+                            onChange={(e) => setUnitCost(e.target.value)}
                           />
                         </td>
                         <td>
@@ -425,6 +488,8 @@ export default function SalesDataForm({ salesData }) {
                             type='text'
                             placeholder='Status'
                             name='status'
+                            value={status}
+                            onChange={(e) => setstatus(e.target.value)}
                           />
                         </td>
                         <td>
@@ -433,6 +498,8 @@ export default function SalesDataForm({ salesData }) {
                             type='number'
                             placeholder='GST'
                             name='gst'
+                            value={gst}
+                            onChange={(e) => setgst(e.target.value)}
                           />
                         </td>
                         <td>
@@ -442,7 +509,7 @@ export default function SalesDataForm({ salesData }) {
                             placeholder='Net Price'
                             name='net_price'
                             value={net_price || ""}
-                            onChange={e => setNet_price(e.target.value)}
+                            onChange={(e) => setNet_price(e.target.value)}
                           />
                         </td>
                         <td>
@@ -452,20 +519,22 @@ export default function SalesDataForm({ salesData }) {
                             placeholder='Extd Gross Price'
                             name='extd_gross_price'
                             value={extd_gross_price || ""}
-                            onChange={e => setExtd_gross_price(e.target.value)}
+                            onChange={(e) =>
+                              setExtd_gross_price(e.target.value)
+                            }
                           />
                         </td>
                         <td>
                           <button
                             className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
-                            disabled={
+                            /* disabled={
                               !(
                                 net_price ||
                                 unitCost ||
                                 extd_gross_price ||
                                 net_price
                               )
-                            }
+                            } */
                             onClick={handleTable}>
                             Add
                           </button>
@@ -482,56 +551,108 @@ export default function SalesDataForm({ salesData }) {
 
         {/*========================= dynamic table=============== */}
 
-        {tableLength?.length > 0 && (
+        {(addAllParts?.length && allParts.length) > 0 && (
           <div className='table-responsive'>
             <table className='table table-bordered table-responsive'>
               <thead>
                 <tr>
-                  <th scope='col'>Port No</th>
+                  <th scope='col'>Part No</th>
+                  <th scope='col'>Short Description</th>
+                  <th scope='col'>Quantity</th>
                   <th scope='col'>Unit Cost</th>
-                  <th scope='col'>Total Quantity</th>
-                  <th scope='col'>Extd Net Cost</th>
-                  <th scope='col'>Extd Gross Cost</th>
+                  <th scope='col'>Status</th>
+                  <th scope='col'>GST</th>
+                  <th scope='col'>Net Price</th>
+                  <th scope='col'>Extd Gross Price</th>
                   <th scope='col'>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {tableLength.map(table => {
+                {values?.parts?.map((part, index) => {
                   return (
-                    <tr key={table.id}>
+                    <tr key={part?.part_id?.id}>
                       <td>
                         <div className='select-port'>
                           <Select
                             className='select'
                             placeholder='Select Port No'
+                            value={{
+                              label: part?.part_id?.part_number,
+                              value: part?.part_id?.id,
+                            }}
+                            options={allParts}
+                            name='part_id'
+                            isSearchable
+                            isClearable
+                            onChange={(selectedOption) =>
+                              handlePartSelectChange(selectedOption, index)
+                            }
                           />
                         </div>
                       </td>
                       <td>
                         <input
                           className='new_input_class'
-                          type='number'
-                          placeholder='Unit Cost'
-                          name='unit_cost'
-                          defaultValue={table?.unit_cost}
+                          type='text'
+                          placeholder='Short Description'
+                          name={`parts[${index}].short_description`}
+                          value={part.short_description}
+                          onChange={handleChange}
                         />
                       </td>
+
                       <td>
                         <input
                           className='new_input_class'
                           type='number'
                           placeholder='Total Quntity'
-                          name='quantity'
-                          defaultValue={table?.quantity}
+                          name={`parts[${index}].quantity`}
+                          value={part.quantity}
+                          onChange={handleChange}
                         />
                       </td>
+
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Unit Cost'
+                          name={`parts[${index}].unit_cost`}
+                          value={part?.unit_cost}
+                          onChange={handleChange}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='text'
+                          placeholder='Status'
+                          name={`parts[${index}].status`}
+                          value={part?.status}
+                          onChange={handleChange}
+                        />
+                      </td>
+
                       <td>
                         <input
                           className='new_input_class'
                           type='number'
                           placeholder='Extd Net Cost'
-                          name='net_price'
-                          defaultValue={table?.net_price}
+                          name={`parts[${index}].gst`}
+                          value={part?.gst}
+                          onChange={handleChange}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Extd Net Cost'
+                          name={`parts[${index}].net_price`}
+                          value={part?.net_price}
+                          onChange={handleChange}
                         />
                       </td>
                       <td>
@@ -539,14 +660,15 @@ export default function SalesDataForm({ salesData }) {
                           className='new_input_class'
                           type='number'
                           placeholder='Extd Gross Cost'
-                          name='extd_gross_price'
-                          defaultValue={table?.extd_gross_price}
+                          name={`parts[${index}].extd_gross_price`}
+                          value={part?.extd_gross_price}
+                          onChange={handleChange}
                         />
                       </td>
                       <td>
                         <button
                           className='btn btn-danger btn-sm'
-                          onClick={() => handleRemove(table.id)}>
+                          onClick={() => handleRemovePart(index)}>
                           Remove
                         </button>
                       </td>
