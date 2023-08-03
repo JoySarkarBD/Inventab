@@ -58,7 +58,7 @@ const SalesLead = () => {
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org?.sub_company_name || "No data found",
+      selector: (row) => row?.sub_org?.sub_company_name || "",
       sortable: true,
     },
     {
@@ -73,7 +73,7 @@ const SalesLead = () => {
     },
     {
       name: "Value",
-      selector: () => "No data found",
+      selector: () => 0,
       sortable: true,
     },
     {
@@ -88,7 +88,7 @@ const SalesLead = () => {
     },
     {
       name: "Dept",
-      selector: (row) => row?.department?.name || "No data found",
+      selector: (row) => row?.department?.name || "",
       sortable: true,
     },
     {
@@ -142,15 +142,15 @@ const SalesLead = () => {
     let data = [];
     searchData.forEach((salesData) => {
       const csvObj = {
-        Sl: salesData?.lead_id || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.client?.company_name || "No data found",
-        "Expected PO date": salesData?.expected_date || "No data found",
-        Value: salesData?.value || "No data found",
-        "Probabilities value": salesData?.probability || "No data found",
-        Description: salesData?.description || "No data found",
-        Dept: salesData?.department?.name || "no data found",
-        Status: salesData?.status || "No data found",
+        Sl: salesData?.lead_id || "",
+        "Sub Org": salesData?.sub_org || "",
+        Client: salesData?.client?.company_name || "",
+        "Expected PO date": salesData?.expected_date || "",
+        Value: salesData?.value || 0,
+        "Probabilities value": salesData?.probability || 0,
+        Description: salesData?.description || "",
+        Dept: salesData?.department?.name || "",
+        Status: salesData?.status || "",
       };
 
       data.push(csvObj);
