@@ -387,13 +387,6 @@ const AddSalesDataForm = () => {
           </div>
         </div>
         {/* Table Part */}
-        {/* Table Row Add Button */}
-        <div className='d-flex justify-content-end my-4'>
-          <button className='btn btn-primary btn-common rounded-1'>
-            Add Table Row
-          </button>
-        </div>
-        {/* Table */}
         {/* Table */}
         <div className='row'>
           <div className='col-lg-12'>
@@ -579,7 +572,7 @@ const AddSalesDataForm = () => {
                       <input
                         className='new_input_class'
                         type='number'
-                        placeholder='Total Quntity'
+                        placeholder='Total Quantity'
                         name={`parts[${index}].quantity`}
                         value={part.quantity}
                         onChange={handleChange}

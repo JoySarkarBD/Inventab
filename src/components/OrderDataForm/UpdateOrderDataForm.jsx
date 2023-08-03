@@ -1,34 +1,8 @@
-import { useState } from "react";
 import Select from "react-select";
-import { v4 } from "uuid";
 import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 
 const UpdateOrderDataForm = () => {
-  const [tableLength, setTableLength] = useState([{}]);
-
-  const handleTable = () => {
-    event.preventDefault();
-    const obj = {
-      id: v4(),
-    };
-    setTableLength(prev => [...prev, obj]);
-  };
-
-  const handleRemove = id => {
-    const modifiedArray = tableLength.filter(table => table.id !== id);
-    setTableLength(modifiedArray);
-  };
-
-  // react select options
-  const options = [
-    { value: "lead_id", label: "SLS No" },
-    { value: "client", label: "Client" },
-    { value: "description", label: "Description" },
-    { value: "department", label: "Department" },
-    { value: "status", label: "Status" },
-  ];
-
   return (
     <div className='card-body'>
       <form>
@@ -36,28 +10,36 @@ const UpdateOrderDataForm = () => {
           {/* Sales Lead input */}
           <div className='mb-3 col-md-6'>
             <label className='mb-2 text-dark text-capitalize'>Sales Lead</label>
-            <Select title='Sales Lead' placeholder='Sales Lead' />
+            <Select
+              title='Sales Lead'
+              placeholder='Sales Lead'
+              name='sales_lead'
+            />
           </div>
 
           {/* add sub org input */}
           <div className='mb-3 col-md-6'>
             <label className='mb-2 text-dark text-capitalize'>Sub org</label>
-            <Select placeholder='Select Sub Org' />
+            <Select placeholder='Select Sub Org' name='sub_org' />
           </div>
 
           {/* Rof PO NO input */}
           <div className='mb-3 col-md-6'>
-            <InputText title='Rof PO No' type='text' />
+            <InputText title='Ref PO No' type='text' name='ref_po_no' />
           </div>
 
           {/* Rof PO Date input */}
           <div className='mb-3 col-md-6'>
-            <InputText title='Rof PO Date' type='date' />
+            <InputText title='Rof PO Date' type='date' name='ref_po_date' />
           </div>
 
           {/* add invoice date input */}
           <div className='mb-3 col-md-6'>
-            <InputText title='Expected Invoice Date*' type='date' />
+            <InputText
+              title='Expected Invoice Date*'
+              type='date'
+              name='expected_invoice_date'
+            />
           </div>
 
           {/* Select Payment Term */}
@@ -65,7 +47,7 @@ const UpdateOrderDataForm = () => {
             <label className='mb-2 text-dark text-capitalize'>
               Select Payment Term
             </label>
-            <Select placeholder='Select Payment Term' />
+            <Select placeholder='Select Payment Term' name='payment_term' />
           </div>
 
           {/* Select Delivery Term */}
@@ -73,7 +55,7 @@ const UpdateOrderDataForm = () => {
             <label className='mb-2 text-dark text-capitalize'>
               Select Delivery Term
             </label>
-            <Select placeholder='Select Delivery Term' />
+            <Select placeholder='Select Delivery Term' name='delivery_term' />
           </div>
 
           {/* Select Client */}
@@ -81,7 +63,7 @@ const UpdateOrderDataForm = () => {
             <label className='mb-2 text-dark text-capitalize'>
               Select Client
             </label>
-            <Select placeholder='Select Client' />
+            <Select placeholder='Select Client' name='client' />
           </div>
 
           {/* Select Client Contact */}
@@ -89,7 +71,7 @@ const UpdateOrderDataForm = () => {
             <label className='mb-2 text-dark text-capitalize'>
               Select Client Contact
             </label>
-            <Select placeholder='Select Client Contact' />
+            <Select placeholder='Select Client Contact' name='contact' />
           </div>
 
           {/* Select Billing Address */}
@@ -97,7 +79,10 @@ const UpdateOrderDataForm = () => {
             <label className='mb-2 text-dark text-capitalize'>
               Select Billing Address
             </label>
-            <Select placeholder='Select Billing Address' />
+            <Select
+              placeholder='Select Billing Address'
+              name='billing_address'
+            />
           </div>
 
           {/* Select Shipping Address */}
@@ -105,7 +90,10 @@ const UpdateOrderDataForm = () => {
             <label className='mb-2 text-dark text-capitalize'>
               Select Shipping Address
             </label>
-            <Select placeholder='Select Shipping Address' />
+            <Select
+              placeholder='Select Shipping Address'
+              name='shipping_address'
+            />
           </div>
 
           {/* description input */}
@@ -114,6 +102,7 @@ const UpdateOrderDataForm = () => {
               title='Description*'
               className='w-100'
               placeholder='Description'
+              name='description'
             />
             <br />
           </div>
@@ -124,91 +113,208 @@ const UpdateOrderDataForm = () => {
               title='Comment*'
               className='w-100'
               placeholder='Comment'
+              name='comment'
             />
             <br />
           </div>
         </div>
         {/* Table Part */}
-        {/* Table Row Add Button */}
-        <div className='d-flex justify-content-end my-4'>
-          <button className='btn btn-primary rounded' onClick={handleTable}>
-            Add Table Row
-          </button>
-        </div>
         {/* Table */}
-        <div className='table-responsive'>
-          <table className='table table-bordered table-responsive'>
+        <div className='row'>
+          <div className='col-lg-12'>
+            <div className='card'>
+              <div className='table-responsive111'>
+                <table className='table header-border table-responsive-sm111'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>Part No</th>
+                      <th scope='col'>Short Description</th>
+                      <th scope='col'>Quantity</th>
+                      <th scope='col'>Unit Cost</th>
+                      <th scope='col'>Status</th>
+                      <th scope='col'>GST</th>
+                      <th scope='col'>Net Price</th>
+                      <th scope='col'>Extd Gross Price</th>
+                      <th scope='col'>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div className='select-port'>
+                          <Select
+                            className='select'
+                            placeholder='Select Part No'
+                            isSearchable
+                            isClearable
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='text'
+                          placeholder='Short Description'
+                          name='short_description'
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Total Quantity'
+                          name='quantity'
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Unit Cost'
+                          name='unit_cost'
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='text'
+                          placeholder='Status'
+                          name='status'
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='GST'
+                          name='gst'
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Net Price'
+                          name='net_price'
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Extd Gross Price'
+                          name='extd_gross_price'
+                        />
+                      </td>
+                      <td>
+                        <button className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'>
+                          Add
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* dynamic table */}
+        <div className='table-responsive111'>
+          <table className='table table-bordered table-responsive-sm111'>
             <thead>
               <tr>
-                <th scope='col'>Port No</th>
+                <th scope='col'>Part No</th>
+                <th scope='col'>Short Description</th>
+                <th scope='col'>Quantity</th>
                 <th scope='col'>Unit Cost</th>
-                <th scope='col'>Total Quantity</th>
-                <th scope='col'>Extd Net Cost</th>
-                <th scope='col'>Extd Gross Cost</th>
+                <th scope='col'>Status</th>
+                <th scope='col'>GST</th>
+                <th scope='col'>Net Price</th>
+                <th scope='col'>Extd Gross Price</th>
                 <th scope='col'>Action</th>
               </tr>
             </thead>
             <tbody>
-              {tableLength.map(table => {
-                return (
-                  <tr key={table.id}>
-                    <td>
-                      <div className='select-port'>
-                        <Select
-                          className='select'
-                          options={options}
-                          placeholder='Select Port No'
-                          menuPortalTarget={document.querySelector("body")}
-                        />
-                      </div>
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Unit Cost'
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Total Quntity'
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Extd Net Cost'
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Extd Gross Cost'
-                      />
-                    </td>
-                    <td>
-                      <button
-                        className='btn btn-danger btn-sm'
-                        onClick={() => handleRemove(table.id)}>
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+              <tr>
+                <td>
+                  <div className='select-port'>
+                    <Select
+                      className='select'
+                      placeholder='Select Port No'
+                      name='part_id'
+                      isSearchable
+                      isClearable
+                    />
+                  </div>
+                </td>
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='text'
+                    placeholder='Short Description'
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Total Quantity'
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Unit Cost'
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='text'
+                    placeholder='Status'
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Extd Net Cost'
+                  />
+                </td>
+
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Extd Net Cost'
+                  />
+                </td>
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Extd Gross Cost'
+                  />
+                </td>
+                <td>
+                  <button className='btn btn-danger btn-sm'>Remove</button>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
         {/* Submit Button */}
         <div className='d-flex justify-content-end my-4'>
           <input
-            className='btn btn-primary'
+            className='btn btn-primary btn-common rounded-1'
             type='submit'
-            value='Add Sales Lead'
+            value='Update Sales Order'
           />
         </div>
       </form>

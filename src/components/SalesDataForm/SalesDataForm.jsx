@@ -692,7 +692,7 @@ export default function SalesDataForm({ salesData }) {
           <input
             className='btn btn-primary rounded-1'
             type='submit'
-            value='Add Sales Lead'
+            value='Update Sales Lead'
           />
         </div>
       </form>
