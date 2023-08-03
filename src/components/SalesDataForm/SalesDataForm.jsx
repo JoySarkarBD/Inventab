@@ -425,7 +425,7 @@ export default function SalesDataForm({ salesData }) {
                         </td>
                         <td>
                           <button
-                            className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
+                            className='btn btn-primary text-white border-0 rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
                             disabled={
                               !(
                                 net_price ||
@@ -513,7 +513,7 @@ export default function SalesDataForm({ salesData }) {
                       </td>
                       <td>
                         <button
-                          className='btn btn-danger btn-sm'
+                          className='btn btn-danger btn-sm text-white border-0 rounded-1'
                           onClick={() => handleRemove(table.id)}>
                           Remove
                         </button>
@@ -529,7 +529,7 @@ export default function SalesDataForm({ salesData }) {
         {/* Submit Button */}
         <div className='d-flex justify-content-end my-4'>
           <input
-            className='btn btn-primary rounded-1'
+            className='btn btn-primary text-white border-0 rounded-1'
             type='submit'
             value='Add Sales Lead'
           />
