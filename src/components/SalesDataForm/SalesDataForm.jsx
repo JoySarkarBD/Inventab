@@ -2,7 +2,6 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import { v4 } from "uuid";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
@@ -229,7 +228,7 @@ export default function SalesDataForm({ salesData }) {
       let parts = [];
       partArr.forEach((p) => {
         const partObj = {
-          lead_part_id: p?.lead_part_id || v4(),
+          lead_part_id: p?.lead_part_id,
           part_id: p?.part_id?.id,
           short_description: p?.short_description,
           quantity: p?.quantity,
@@ -239,6 +238,11 @@ export default function SalesDataForm({ salesData }) {
           net_price: p?.net_price,
           extd_gross_price: p?.extd_gross_price,
         };
+
+        if (p?.lead_part_id == undefined) {
+          delete partObj.lead_part_id;
+        }
+
         parts?.push(partObj);
       });
 
