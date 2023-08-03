@@ -20,7 +20,7 @@ export default function SalesDataForm({ salesData }) {
   const [allParts, setParts] = useState([]);
   const [addAllParts, setAddAllParts] = useState([]);
   const [partsLoading, setPartsLoading] = useState(false);
-  const [selectPart, setSelectPart] = useState([]);
+  const [selectPart, setSelectPart] = useState("");
 
   // table lowerpart data
   const [short_description, setshort_description] = useState("");
@@ -167,19 +167,19 @@ export default function SalesDataForm({ salesData }) {
       short_description,
       quantity: totalQuantity,
       unit_cost: unitCost,
-      status,
+      status: status?.value,
       gst,
       net_price,
       extd_gross_price,
     };
-
+    console.log(newPart);
     setFieldValue("parts", [...values.parts, newPart]);
     // clear input field
-    setSelectPart("");
+    setSelectPart(null);
     setshort_description("");
     setTotalQuantity(0);
     setUnitCost(0);
-    setstatus("");
+    setstatus(null);
     setgst(0);
     setNet_price(0);
     setExtd_gross_price(0);
@@ -267,11 +267,24 @@ export default function SalesDataForm({ salesData }) {
     { label: "Lost Deal", value: "Lost Deal" },
   ];
 
+  // parts status
+  const partsStatus = [
+    { label: "Active", value: "Active" },
+    { label: "Inactive", value: "Inactive" },
+  ];
+
   //update && change select options
   const handlePartSelectChange = (selectedOption, index) => {
     const updatedParts = [...values.parts];
     updatedParts[index].part_id.id = selectedOption.value;
     updatedParts[index].part_id.part_number = selectedOption.label;
+    setFieldValue("parts", updatedParts);
+  };
+
+  // update && change parts status options
+  const handlePartStatusChange = (selectedOption, index) => {
+    const updatedParts = [...values.parts];
+    updatedParts[index].status = selectedOption?.value;
     setFieldValue("parts", updatedParts);
   };
 
@@ -488,13 +501,13 @@ export default function SalesDataForm({ salesData }) {
                         />
                       </td>
                       <td>
-                        <input
-                          className='new_input_class'
-                          type='text'
-                          placeholder='Status'
-                          name='status'
-                          value={status}
-                          onChange={(e) => setstatus(e.target.value)}
+                        <Select
+                          className='select'
+                          placeholder='Select Part No'
+                          isSearchable
+                          isClearable
+                          options={partsStatus}
+                          onChange={setstatus}
                         />
                       </td>
                       <td>
@@ -629,13 +642,20 @@ export default function SalesDataForm({ salesData }) {
                       </td>
 
                       <td>
-                        <input
-                          className='new_input_class'
-                          type='text'
-                          placeholder='Status'
+                        <Select
+                          className='select'
+                          placeholder='Select Part No'
+                          isSearchable
+                          isClearable
                           name={`parts[${index}].status`}
-                          value={part?.status}
-                          onChange={handleChange}
+                          value={{
+                            label: part?.status,
+                            value: part?.status,
+                          }}
+                          options={partsStatus}
+                          onChange={(selectedOption) =>
+                            handlePartStatusChange(selectedOption, index)
+                          }
                         />
                       </td>
 
@@ -692,7 +712,7 @@ export default function SalesDataForm({ salesData }) {
           <input
             className='btn btn-primary rounded-1'
             type='submit'
-            value='Update Sales Lead'
+            value='Add Sales Lead'
           />
         </div>
       </form>
