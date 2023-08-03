@@ -17,168 +17,170 @@ const SalesInvoices = () => {
   const [csv, setCsv] = useState([]);
   const [selectedEl, setSelectedEL] = useState(null);
 
-// fetch table
-const getInvoiceList = async () => {
-  try {
-    setLoading(true);
-    const response = (
-      await axios.get(
-        "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-      )
-    ).data;
-    setLoading(false);
-    setInvoice(response?.results);
-    setSearchData(response?.results);
-  } catch (error) {
-    setLoading(true);
-    console.log(error);
-  }
-};
+  // fetch table
+  const getInvoiceList = async () => {
+    try {
+      setLoading(true);
+      const response = (
+        await axios.get(
+          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+        )
+      ).data;
+      setLoading(false);
+      setInvoice(response?.results);
+      setSearchData(response?.results);
+    } catch (error) {
+      setLoading(true);
+      console.log(error);
+    }
+  };
 
-// load leads
-useEffect(() => {
-  getInvoiceList();
-}, []);
+  // load leads
+  useEffect(() => {
+    getInvoiceList();
+  }, []);
 
-// columns
-const columns = [
-  {
-    name: "Inv No",
-    cell: (row) => {
-      return (
-        <Link
-          className='text-center text-info dk_theme_text'
-          to={`${row?.invoice_number}`}>
-          {row?.invoice_number}
-        </Link>
-      );
+  // columns
+  const columns = [
+    {
+      name: "Inv No",
+      cell: (row) => {
+        return (
+          <Link
+            className='text-center text-info dk_theme_text'
+            to={`${row?.invoice_number}`}>
+            {row?.invoice_number}
+          </Link>
+        );
+      },
     },
-  },
 
-  {
-    name: "Sub Org",
-    selector: (row) => row?.sub_org || "No data found",
-    sortable: true,
-  },
+    {
+      name: "Sub Org",
+      selector: (row) => row?.sub_org || "No data found",
+      sortable: true,
+    },
 
-  {
-    name: "Client",
-    selector: (row) => row?.org?.company_name || "No data found",
-    sortable: true,
-  },
+    {
+      name: "Client",
+      selector: (row) => row?.org?.company_name || "No data found",
+      sortable: true,
+    },
 
-  {
-    name: "Sales Order",
-    selector: (row) => row?.sale_order || "No data found",
-    sortable: true,
-  },
+    {
+      name: "Sales Order",
+      selector: (row) => row?.sale_order || "No data found",
+      sortable: true,
+    },
 
-  // Ref PO No - which field is this in API?
-  {
-    name: "Ref PO No",
-    selector: (row) => row?.po_no || "No data found",
-    sortable: true,
-  },
+    // Ref PO No - which field is this in API?
+    {
+      name: "Ref PO No",
+      selector: (row) => row?.po_no || "No data found",
+      sortable: true,
+    },
 
-  // Value - which field is this in API?
-  {
-    name: "Value",
-    selector: () => "No data found",
-    sortable: true,
-  },
+    // Value - which field is this in API?
+    {
+      name: "Value",
+      selector: () => "No data found",
+      sortable: true,
+    },
 
-  {
-    name: "Dept",
-    selector: (row) => row?.dept || "No data found",
-    sortable: true,
-  },
+    {
+      name: "Dept",
+      selector: (row) => row?.dept?.name || "No data found",
+      sortable: true,
+    },
 
-  {
-    name: "Status",
-    selector: (row) => row?.status || "No data found",
-    sortable: true,
-  },
-];
+    {
+      name: "Status",
+      selector: (row) => row?.status || "No data found",
+      sortable: true,
+    },
+  ];
 
-// search function
-useEffect(() => {
-  let result;
-  if (selectedEl?.value) {
-    result = invoices.filter((invoice) => {
-      switch (selectedEl?.value) {
-        case "invoice_number":
-          return invoice?.invoice_number
-            ?.toLowerCase()
-            ?.match(search.toLowerCase());
+  // search function
+  useEffect(() => {
+    let result;
+    if (selectedEl?.value) {
+      result = invoices.filter((invoice) => {
+        switch (selectedEl?.value) {
+          case "invoice_number":
+            return invoice?.invoice_number
+              ?.toLowerCase()
+              ?.match(search.toLowerCase());
 
-        case "client":
-          return invoice?.org?.company_name
-            ?.toLowerCase()
-            ?.match(search.toLowerCase());
+          case "client":
+            return invoice?.org?.company_name
+              ?.toLowerCase()
+              ?.match(search.toLowerCase());
 
-        case "sale_order":
-          return invoice?.sale_order
-            ?.toLowerCase()
-            ?.match(search.toLowerCase());
+          case "sale_order":
+            return invoice?.sale_order
+              ?.toLowerCase()
+              ?.match(search.toLowerCase());
 
-        case "ref_po": //this property was not found
-          return invoice?.po_no?.toLowerCase()?.match(search.toLowerCase());
+          case "ref_po": //this property was not found
+            return invoice?.po_no?.toLowerCase()?.match(search.toLowerCase());
 
-        case "dept":
-          return invoice?.dept?.toLowerCase()?.match(search.toLowerCase());
-        case "status":
-          return invoice?.status?.toLowerCase()?.match(search.toLowerCase());
+          case "dept":
+            return invoice?.dept?.name
+              ?.toLowerCase()
+              ?.match(search.toLowerCase());
+          case "status":
+            return invoice?.status?.toLowerCase()?.match(search.toLowerCase());
 
-        default:
-          return invoices;
-      }
+          default:
+            return invoices;
+        }
+      });
+      setSearchData(result);
+    } else {
+      // if somehow failed the sorting
+      setSearchData(invoices);
+    }
+  }, [search, invoices, selectedEl?.value]);
+
+  // export as csv
+  const exportAsCsv = () => {
+    let data = [];
+    searchData.forEach((salesData) => {
+      const csvObj = {
+        "Inv No": salesData?.invoice_number || "No data found",
+        "Sub Org": salesData?.sub_org || "No data found",
+        Client: salesData?.org?.company_name || "No data found",
+        "Sales Order": salesData?.sale_order || "No data found",
+        "Ref PO No": salesData?.po_no || "No data found", // Ref PO No - which field is this in API?
+        Value: salesData?.value || "No data found", // Value - which field is this in API?
+        Dept: salesData?.dept || "no data found",
+        Status: salesData?.status || "No data found",
+      };
+
+      data.push(csvObj);
     });
-    setSearchData(result);
-  } else {
-    // if somehow failed the sorting
-    setSearchData(invoices);
-  }
-}, [search, invoices, selectedEl?.value]);
 
-// export as csv
-const exportAsCsv = () => {
-  let data = [];
-  searchData.forEach((salesData) => {
-    const csvObj = {
-      "Inv No": salesData?.invoice_number || "No data found",
-      "Sub Org": salesData?.sub_org || "No data found",
-      Client: salesData?.org?.company_name || "No data found",
-      "Sales Order": salesData?.sale_order || "No data found",
-      "Ref PO No": salesData?.po_no || "No data found", // Ref PO No - which field is this in API?
-      Value: salesData?.value || "No data found", // Value - which field is this in API?
-      Dept: salesData?.dept || "no data found",
-      Status: salesData?.status || "No data found",
-    };
+    setCsv((prev) => [...prev, ...data]);
+  };
 
-    data.push(csvObj);
-  });
-
-  setCsv((prev) => [...prev, ...data]);
-};
-
-// react select options
-const options = [
-  { value: "invoice_number", label: "Invoice No" },
-  { value: "client", label: "Client" },
-  { value: "sale_order", label: "Sale Order" },
-  { value: "ref_po", label: "Ref PO" },
-  { value: "dept", label: "Department" },
-  { value: "status", label: "Status" },
-];
+  // react select options
+  const options = [
+    { value: "invoice_number", label: "Invoice No" },
+    { value: "client", label: "Client" },
+    { value: "sale_order", label: "Sale Order" },
+    { value: "ref_po", label: "Ref PO" },
+    { value: "dept", label: "Department" },
+    { value: "status", label: "Status" },
+  ];
 
   return (
     <div>
-      <PageTitle title="Invoices" />
-      <SectionTitle title="Invoices" />
-      <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-body">
+      <PageTitle title='Invoices' />
+      <SectionTitle title='Invoices' />
+      <div className='row'>
+        <div className='col-12'>
+          <div className='card'>
+            <div className='card-body'>
               <DataTable
                 title={<h2>Invoices</h2>}
                 columns={columns}
@@ -192,13 +194,13 @@ const options = [
                   headCells: {
                     style: {
                       fontSize: "19px",
-                      width:"170px"
+                      width: "170px",
                     },
                   },
                 }}
                 noContextMenu
                 fixedHeader
-                fixedHeaderScrollHeight="550px"
+                fixedHeaderScrollHeight='550px'
                 pagination
                 striped
                 highlightOnHover
@@ -211,10 +213,9 @@ const options = [
                     filename={`Invoices-${new Date(
                       Date.now()
                     ).toLocaleDateString("en-IN")}`}
-                    className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1"
-                    onClick={exportAsCsv}
-                  >
-                    <FiDownload className="fs-4 me-2" />
+                    className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
+                    onClick={exportAsCsv}>
+                    <FiDownload className='fs-4 me-2' />
                     Export as CSV
                   </CSVLink>
                 }
@@ -239,7 +240,7 @@ const options = [
                     />
                   </div>
                 }
-                subHeaderAlign="left"
+                subHeaderAlign='left'
               />
             </div>
           </div>
