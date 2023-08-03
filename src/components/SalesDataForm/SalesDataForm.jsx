@@ -522,7 +522,7 @@ export default function SalesDataForm({ salesData }) {
                           type='number'
                           placeholder='GST'
                           name='gst'
-                          value={gst}
+                          value={gst || ""}
                           onChange={(e) => setgst(e.target.value)}
                         />
                       </td>
