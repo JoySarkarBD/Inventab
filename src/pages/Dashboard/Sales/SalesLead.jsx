@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
@@ -25,7 +26,7 @@ const SalesLead = () => {
       const { data } = await axios.get(
         "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
       );
-console.log(data);
+      console.log(data);
       setLoading(false);
       setSalesLeads(data?.results);
       setSearchData(data?.results);
@@ -178,76 +179,80 @@ console.log(data);
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
-              <DataTable
-                title={<h2>Sales Leads</h2>}
-                columns={columns}
-                data={searchData}
-                customStyles={{
-                  rows: {
-                    style: {
-                      fontSize: "16px",
+              {loading ? (
+                <Loader />
+              ) : (
+                <DataTable
+                  title={<h2>Sales Leads</h2>}
+                  columns={columns}
+                  data={searchData}
+                  customStyles={{
+                    rows: {
+                      style: {
+                        fontSize: "16px",
+                      },
                     },
-                  },
-                  headCells: {
-                    style: {
-                      fontSize: "19px",
-                      width: "170px",
+                    headCells: {
+                      style: {
+                        fontSize: "19px",
+                        width: "170px",
+                      },
                     },
-                  },
-                }}
-                noContextMenu
-                fixedHeader
-                fixedHeaderScrollHeight='550px'
-                pagination
-                striped
-                highlightOnHover
-                subHeader
-                progressPending={loading}
-                //Search & select area start
-                subHeaderComponent={
-                  <div className='searchBox-salesLead rounded my-4'>
-                    {/* Select Area */}
-                    <Select
-                      className='select text-start'
-                      options={options}
-                      onChange={setSelectedEL}
-                      isClearable
-                      isSearchable
-                      placeholder='Search'
-                    />
-                    {/* Input Search Area */}
-                    <input
-                      type='search'
-                      placeholder='Search here'
-                      className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
-                      value={search}
-                      onChange={e => setSearch(e.target.value)}
-                    />
-                  </div>
-                }
-                // Search & select area start
-                actions={
-                  <>
-                    <CSVLink
-                      enclosingCharacter={` `}
-                      data={csv}
-                      filename={`Sales-Leads -${new Date(
-                        Date.now()
-                      ).toLocaleDateString("en-IN")}`}
-                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
-                      onClick={exportAsCsv}>
-                      <FiDownload className='fs-4 me-2' />
-                      Export as CSV
-                    </CSVLink>
-                    {/* Add Sale Order */}
-                    <Link to='/dashboard/sales/add-sales-leads'>
-                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
-                        Add Sales Lead
-                      </button>
-                    </Link>
-                  </>
-                }
-              />
+                  }}
+                  noContextMenu
+                  fixedHeader
+                  fixedHeaderScrollHeight='550px'
+                  pagination
+                  striped
+                  highlightOnHover
+                  subHeader
+                  // progressPending={loading}
+                  //Search & select area start
+                  subHeaderComponent={
+                    <div className='searchBox-salesLead rounded my-4'>
+                      {/* Select Area */}
+                      <Select
+                        className='select text-start'
+                        options={options}
+                        onChange={setSelectedEL}
+                        isClearable
+                        isSearchable
+                        placeholder='Search'
+                      />
+                      {/* Input Search Area */}
+                      <input
+                        type='search'
+                        placeholder='Search here'
+                        className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                      />
+                    </div>
+                  }
+                  // Search & select area start
+                  actions={
+                    <>
+                      <CSVLink
+                        enclosingCharacter={` `}
+                        data={csv}
+                        filename={`Sales-Leads -${new Date(
+                          Date.now()
+                        ).toLocaleDateString("en-IN")}`}
+                        className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
+                        onClick={exportAsCsv}>
+                        <FiDownload className='fs-4 me-2' />
+                        Export as CSV
+                      </CSVLink>
+                      {/* Add Sale Order */}
+                      <Link to='/dashboard/sales/add-sales-leads'>
+                        <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
+                          Add Sales Lead
+                        </button>
+                      </Link>
+                    </>
+                  }
+                />
+              )}
             </div>
           </div>
         </div>

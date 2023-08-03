@@ -2,6 +2,7 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
@@ -547,7 +548,7 @@ export default function SalesDataForm({ salesData }) {
 
         {/*========================= dynamic table=============== */}
 
-        {(addAllParts?.length && allParts.length) > 0 && (
+        {(addAllParts?.length && allParts.length) > 0 ? (
           <div className='table-responsive'>
             <table className='table table-bordered table-responsive'>
               <thead>
@@ -674,6 +675,8 @@ export default function SalesDataForm({ salesData }) {
               </tbody>
             </table>
           </div>
+        ) : (
+          <Loader width={70} height={70} />
         )}
 
         {/* Submit Button */}

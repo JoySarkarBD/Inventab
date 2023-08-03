@@ -5,6 +5,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import SalesDataForm from "../../components/SalesDataForm/SalesDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
+import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import "./AddSalesLeads.css";
 
@@ -130,7 +131,8 @@ const UpdateSalesLeads = () => {
               {!loading ? (
                 <SalesDataForm salesData={selectedData} />
               ) : (
-                <h1 className='custom-loading'>Loading...</h1>
+                // <h1 className='custom-loading'>Loading...</h1>
+                <Loader />
               )}
             </div>
           </div>
