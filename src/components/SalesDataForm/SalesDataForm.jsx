@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import Loader from "../../ui/Loader";
+import { v4 } from "uuid";
 import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
@@ -13,7 +13,6 @@ import TextArea from "../Form/TextArea";
 import "./SalesDataForm.css";
 
 export default function SalesDataForm({ salesData }) {
-  const [tableLength, setTableLength] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
@@ -34,17 +33,18 @@ export default function SalesDataForm({ salesData }) {
 
   // extract data from props
   const {
+    lead_no,
+    org,
     department,
+    total,
     sub_org,
     probability,
     status: st,
     client: cl,
     expected_date,
     expected_invoice_date,
-    company_name,
     mobile,
     description,
-    lead_id,
     contact_name,
     parts,
   } = salesData;
@@ -60,7 +60,7 @@ export default function SalesDataForm({ salesData }) {
         );
         setLoading(false);
         const deptArr = [];
-        data?.results?.forEach(dept => {
+        data?.results?.forEach((dept) => {
           const deptObj = {
             label: dept?.name,
             value: dept?.id,
@@ -82,7 +82,7 @@ export default function SalesDataForm({ salesData }) {
         const { data } = await axios.get(`organizations/fetch/org/`);
         setLoading(false);
         const clientArr = [];
-        data?.results?.forEach(client => {
+        data?.results?.forEach((client) => {
           const clientObj = {
             label: client?.company_name,
             value: client?.id,
@@ -108,7 +108,7 @@ export default function SalesDataForm({ salesData }) {
         );
         setLoading(false);
         const subOrgArr = [];
-        data?.results?.forEach(sub => {
+        data?.results?.forEach((sub) => {
           const clientObj = {
             label: sub?.sub_company_name,
             value: sub?.id,
@@ -124,34 +124,30 @@ export default function SalesDataForm({ salesData }) {
         console.log(error);
       }
     })();
-  }, []);
 
-  useEffect(() => {
     // parts
-    if (parts?.length > 0) {
-      (async function () {
-        try {
-          setPartsLoading(true);
-          const { data } = await axios.get("parts/parts");
-          setPartsLoading(false);
-          const partArr = [];
-          data?.results?.forEach(data => {
-            const partObj = {
-              label: data?.part_number,
-              value: data?.id,
-            };
-            partArr.push(partObj);
-          });
-          const removeUndefinedData = removeUndefinedObj(partArr);
-          const uniqueArr = removeDuplicateObjects(removeUndefinedData);
-          setParts(uniqueArr);
-        } catch (error) {
-          setPartsLoading(false);
-          console.log(error);
-        }
-      })();
-    }
-  }, [parts]);
+    (async function () {
+      try {
+        setPartsLoading(true);
+        const { data } = await axios.get("parts/parts");
+        setPartsLoading(false);
+        const partArr = [];
+        data?.results?.forEach((data) => {
+          const partObj = {
+            label: data?.part_number,
+            value: data?.id,
+          };
+          partArr.push(partObj);
+        });
+        const removeUndefinedData = removeUndefinedObj(partArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setParts(uniqueArr);
+      } catch (error) {
+        setPartsLoading(false);
+        console.log(error);
+      }
+    })();
+  }, []);
 
   // load all existing and created
   useEffect(() => {
@@ -190,7 +186,7 @@ export default function SalesDataForm({ salesData }) {
   };
 
   // remove row
-  const handleRemovePart = index => {
+  const handleRemovePart = (index) => {
     const updatedParts = [...values.parts];
     updatedParts.splice(index, 1); // Remove the object at the specified index
     setFieldValue("parts", updatedParts);
@@ -198,46 +194,41 @@ export default function SalesDataForm({ salesData }) {
 
   // ==============================table stuff end==============
 
-  // dept
-  const deptDefaultSelect = {
-    label: department?.name,
-    value: department?.id,
-  };
-
-  // status
-  const statusDefaultSelect = {
-    label: st,
-    value: st,
-  };
-
-  // client
-  const clientDefaultSelect = {
-    label: cl?.company_name,
-    value: cl?.id,
-  };
-
   // handle update form
   const { values, handleSubmit, handleChange, setFieldValue } = useFormik({
     initialValues: {
-      department: "" || deptDefaultSelect,
-      sub_org: "" || null,
+      lead_no,
+      org: org?.id,
+      department: {
+        label: department?.name,
+        value: department?.id,
+      },
+      sub_org: sub_org || null,
       probability,
-      status: "" || statusDefaultSelect,
-      client: "" || clientDefaultSelect,
+      status: {
+        label: st,
+        value: st,
+      },
+      client: {
+        label: cl?.company_name,
+        value: cl?.id,
+      },
       expected_date: expected_date,
       expected_invoice_date,
       contact_name,
       mobile,
       description,
+      total,
       parts,
     },
 
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       const { department, status, client, parts: partArr } = values;
       // sort part obj data
       let parts = [];
-      partArr.forEach(p => {
+      partArr.forEach((p) => {
         const partObj = {
+          lead_part_id: p?.lead_part_id || v4(),
           part_id: p?.part_id?.id,
           short_description: p?.short_description,
           quantity: p?.quantity,
@@ -294,9 +285,9 @@ export default function SalesDataForm({ salesData }) {
               name='department'
               options={dept}
               isLoading={loading}
-              value={deptDefaultSelect}
+              value={values.department}
               // defaultValue={deptDefaultSelect}
-              onChange={option => setFieldValue("department", option)}
+              onChange={(option) => setFieldValue("department", option)}
             />
           </div>
 
@@ -309,7 +300,7 @@ export default function SalesDataForm({ salesData }) {
               isSearchable
               options={subOrg}
               isLoading={loading}
-              onChange={option => setFieldValue("sub_org", option?.value)}
+              onChange={(option) => setFieldValue("sub_org", option?.value)}
             />
           </div>
 
@@ -326,6 +317,17 @@ export default function SalesDataForm({ salesData }) {
             />
           </div>
 
+          {/* total */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Total</label>
+            <InputText
+              type='number'
+              name='probability'
+              value={values?.total}
+              onChange={handleChange}
+            />
+          </div>
+
           {/* add status input */}
           <div className='mb-3 col-md-6'>
             <label className='mb-2 text-dark text-capitalize'>Status*</label>
@@ -336,8 +338,8 @@ export default function SalesDataForm({ salesData }) {
               name='status'
               options={statusOptions}
               isLoading={loading}
-              value={statusDefaultSelect}
-              onChange={option => setFieldValue("status", option)}
+              value={values?.status}
+              onChange={(option) => setFieldValue("status", option)}
             />
           </div>
 
@@ -350,8 +352,8 @@ export default function SalesDataForm({ salesData }) {
               isClearable
               name='client'
               options={client}
-              value={clientDefaultSelect}
-              onChange={option => setFieldValue("client", option)}
+              value={values?.client}
+              onChange={(option) => setFieldValue("client", option)}
             />
           </div>
 
@@ -394,7 +396,7 @@ export default function SalesDataForm({ salesData }) {
           <div className='mb-3 col-md-6'>
             <InputText
               title='Mobile Number*'
-              type='Phone'
+              type='text'
               name='mobile'
               value={values.mobile}
               onChange={handleChange}
@@ -402,7 +404,7 @@ export default function SalesDataForm({ salesData }) {
           </div>
 
           {/* add description input */}
-          <div className='mb-3 col-md-6'>
+          <div className='mb-3 col-12'>
             <TextArea
               title='Description*'
               className='w-100'
@@ -420,126 +422,127 @@ export default function SalesDataForm({ salesData }) {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='card'>
-              <div className='card-body'>
-                <div className='table-responsive111'>
-                  <table className='table header-border table-responsive-sm111'>
-                    <thead>
-                      <tr>
-                        <th scope='col'>Part No</th>
-                        <th scope='col'>Short Description</th>
-                        <th scope='col'>Quantity</th>
-                        <th scope='col'>Unit Cost</th>
-                        <th scope='col'>Status</th>
-                        <th scope='col'>GST</th>
-                        <th scope='col'>Net Price</th>
-                        <th scope='col'>Extd Gross Price</th>
-                        <th scope='col'>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div className='select-port'>
-                            <Select
-                              className='select'
-                              placeholder='Select Part No'
-                              isSearchable
-                              isClearable
-                              isLoading={partsLoading && parts?.length > 0}
-                              options={allParts}
-                              onChange={setSelectPart}
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='text'
-                            placeholder='Short Description'
-                            name='short_description'
-                            value={short_description || ""}
-                            onChange={e => setshort_description(e.target.value)}
+              <div className='table-responsive111'>
+                <table className='table header-border table-responsive-sm111'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>Part No</th>
+                      <th scope='col'>Short Description</th>
+                      <th scope='col'>Quantity</th>
+                      <th scope='col'>Unit Cost</th>
+                      <th scope='col'>Status</th>
+                      <th scope='col'>GST</th>
+                      <th scope='col'>Net Price</th>
+                      <th scope='col'>Extd Gross Price</th>
+                      <th scope='col'>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div className='select-port'>
+                          <Select
+                            className='select'
+                            placeholder='Select Part No'
+                            isSearchable
+                            isClearable
+                            isLoading={partsLoading && parts?.length > 0}
+                            options={allParts}
+                            onChange={setSelectPart}
                           />
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Total Quantity'
-                            name='quantity'
-                            value={totalQuantity || ""}
-                            onChange={e => setTotalQuantity(e.target.value)}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Unit Cost'
-                            name='unit_cost'
-                            value={unitCost || ""}
-                            onChange={e => setUnitCost(e.target.value)}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='text'
-                            placeholder='Status'
-                            name='status'
-                            value={status}
-                            onChange={e => setstatus(e.target.value)}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='GST'
-                            name='gst'
-                            value={gst}
-                            onChange={e => setgst(e.target.value)}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Net Price'
-                            name='net_price'
-                            value={net_price || ""}
-                            onChange={e => setNet_price(e.target.value)}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Extd Gross Price'
-                            name='extd_gross_price'
-                            value={extd_gross_price || ""}
-                            onChange={e => setExtd_gross_price(e.target.value)}
-                          />
-                        </td>
-                        <td>
-                          <button
-                            className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
-                            /* disabled={
-                              !(
-                                net_price ||
-                                unitCost ||
-                                extd_gross_price ||
-                                net_price
-                              )
-                            } */
-                            onClick={handleTable}>
-                            Add
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='text'
+                          placeholder='Short Description'
+                          name='short_description'
+                          value={short_description || ""}
+                          onChange={(e) => setshort_description(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Total Quantity'
+                          name='quantity'
+                          value={totalQuantity || ""}
+                          onChange={(e) => setTotalQuantity(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Unit Cost'
+                          name='unit_cost'
+                          value={unitCost || ""}
+                          onChange={(e) => setUnitCost(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='text'
+                          placeholder='Status'
+                          name='status'
+                          value={status}
+                          onChange={(e) => setstatus(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='GST'
+                          name='gst'
+                          value={gst}
+                          onChange={(e) => setgst(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Net Price'
+                          name='net_price'
+                          value={net_price || ""}
+                          onChange={(e) => setNet_price(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Extd Gross Price'
+                          name='extd_gross_price'
+                          value={extd_gross_price || ""}
+                          onChange={(e) => setExtd_gross_price(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <button
+                          className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
+                          disabled={
+                            !(
+                              short_description ||
+                              totalQuantity ||
+                              unitCost ||
+                              status ||
+                              gst ||
+                              net_price ||
+                              extd_gross_price
+                            )
+                          }
+                          onClick={handleTable}>
+                          Add
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -548,7 +551,7 @@ export default function SalesDataForm({ salesData }) {
 
         {/*========================= dynamic table=============== */}
 
-        {(addAllParts?.length && allParts.length) > 0 ? (
+        {(addAllParts?.length && allParts.length) > 0 && (
           <div className='table-responsive'>
             <table className='table table-bordered table-responsive'>
               <thead>
@@ -581,7 +584,7 @@ export default function SalesDataForm({ salesData }) {
                             name='part_id'
                             isSearchable
                             isClearable
-                            onChange={selectedOption =>
+                            onChange={(selectedOption) =>
                               handlePartSelectChange(selectedOption, index)
                             }
                           />
@@ -675,14 +678,12 @@ export default function SalesDataForm({ salesData }) {
               </tbody>
             </table>
           </div>
-        ) : (
-          <Loader width={70} height={70} />
         )}
 
         {/* Submit Button */}
         <div className='d-flex justify-content-end my-4'>
           <input
-            className='btn btn-primary text-white border-0 rounded-1'
+            className='btn btn-primary rounded-1'
             type='submit'
             value='Add Sales Lead'
           />
