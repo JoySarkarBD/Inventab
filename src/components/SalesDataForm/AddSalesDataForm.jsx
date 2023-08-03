@@ -12,11 +12,11 @@ const AddSalesDataForm = () => {
     const obj = {
       id: v4(),
     };
-    setTableLength(prev => [...prev, obj]);
+    setTableLength((prev) => [...prev, obj]);
   };
 
-  const handleRemove = id => {
-    const modifiedArray = tableLength.filter(table => table.id !== id);
+  const handleRemove = (id) => {
+    const modifiedArray = tableLength.filter((table) => table.id !== id);
     setTableLength(modifiedArray);
   };
 
@@ -35,8 +35,8 @@ const AddSalesDataForm = () => {
         <div className='row'>
           {/* Sales Lead input */}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>Sales Lead</label>
-            <Select title='Sales Lead' placeholder='Sales Lead' />
+            <label className='mb-2 text-dark text-capitalize'>Department</label>
+            <Select title='Department' placeholder='Select Department' />
           </div>
 
           {/* add sub org input */}
@@ -47,73 +47,89 @@ const AddSalesDataForm = () => {
 
           {/* Rof PO NO input */}
           <div className='mb-3 col-md-6'>
-            <InputText title='Rof PO No' type='text' />
+            <InputText
+              title='Probability'
+              type='text'
+              name='probability'
+              placeholder='Probability'
+            />
           </div>
 
-          {/* Rof PO Date input */}
+          {/* total */}
           <div className='mb-3 col-md-6'>
-            <InputText title='Rof PO Date' type='date' />
+            <label className='mb-2 text-dark text-capitalize'>Total</label>
+            <InputText type='number' name='total' placeholder='total' />
+          </div>
+
+          {/* add status input */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Status*</label>
+            <Select
+              placeholder='Select Status'
+              isClearable
+              isSearchable
+              name='status'
+            />
+          </div>
+
+          {/* add client input */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Client*</label>
+            <Select
+              placeholder='Select Client'
+              isSearchable
+              isClearable
+              name='client'
+            />
+          </div>
+
+          {/* add po date input */}
+          <div className='mb-3 col-md-6'>
+            <InputText
+              title='Expected PO Date*'
+              type='date'
+              name='expected_date'
+            />
           </div>
 
           {/* add invoice date input */}
           <div className='mb-3 col-md-6'>
-            <InputText title='Expected Invoice Date*' type='date' />
+            <InputText
+              title='Expected Invoice Date*'
+              type='date'
+              name='expected_invoice_date'
+            />
           </div>
 
-          {/* Select Payment Term */}
+          {/* add contact name input */}
           <div className='mb-3 col-md-6'>
             <label className='mb-2 text-dark text-capitalize'>
-              Select Payment Term
+              Contact Name
             </label>
-            <Select placeholder='Select Payment Term' />
+            <InputText
+              name='contact_name'
+              type='text'
+              placeholder='Contact Name'
+            />
           </div>
 
-          {/* Select Delivery Term */}
+          {/* add mobile number input */}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Delivery Term
-            </label>
-            <Select placeholder='Select Delivery Term' />
-          </div>
-
-          {/* Select Client */}
-          <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Client
-            </label>
-            <Select placeholder='Select Client' />
-          </div>
-
-          {/* Select Client Contact */}
-          <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Client Contact
-            </label>
-            <Select placeholder='Select Client Contact' />
-          </div>
-
-          {/* Select Billing Address */}
-          <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Billing Address
-            </label>
-            <Select placeholder='Select Billing Address' />
-          </div>
-
-          {/* Select Shipping Address */}
-          <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Shipping Address
-            </label>
-            <Select placeholder='Select Shipping Address' />
+            <InputText
+              title='Mobile Number*'
+              type='text'
+              name='mobile'
+              placeholder='Mobile Number'
+            />
           </div>
 
           {/* description input */}
-          <div className='mb-3 col-md-6'>
+          <div className='mb-3 col-12'>
             <TextArea
               title='Description*'
               className='w-100'
               placeholder='Description'
+              name='description'
             />
             <br />
           </div>
@@ -121,7 +137,9 @@ const AddSalesDataForm = () => {
         {/* Table Part */}
         {/* Table Row Add Button */}
         <div className='d-flex justify-content-end my-4'>
-          <button className='btn btn-primary btn-common rounded-1' onClick={handleTable}>
+          <button
+            className='btn btn-primary btn-common rounded-1'
+            onClick={handleTable}>
             Add Table Row
           </button>
         </div>
@@ -139,7 +157,7 @@ const AddSalesDataForm = () => {
               </tr>
             </thead>
             <tbody>
-              {tableLength.map(table => {
+              {tableLength.map((table) => {
                 return (
                   <tr key={table.id}>
                     <td>

@@ -327,7 +327,7 @@ export default function SalesDataForm({ salesData }) {
             <label className='mb-2 text-dark text-capitalize'>Total</label>
             <InputText
               type='number'
-              name='probability'
+              name='total'
               value={values?.total}
               onChange={handleChange}
             />
@@ -557,8 +557,8 @@ export default function SalesDataForm({ salesData }) {
         {/*========================= dynamic table=============== */}
 
         {(addAllParts?.length && allParts.length) > 0 ? (
-          <div className='table-responsive'>
-            <table className='table table-bordered table-responsive'>
+          <div className='table-responsive111'>
+            <table className='table table-bordered table-responsive-sm111'>
               <thead>
                 <tr>
                   <th scope='col'>Part No</th>
