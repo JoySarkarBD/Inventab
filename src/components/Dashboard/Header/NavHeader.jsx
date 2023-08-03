@@ -1,6 +1,8 @@
 import tabLogo from "../../../assets/images/tab-logo.png";
 
-const NavHeader = () => {
+// eslint-disable-next-line react/prop-types
+const NavHeader = ({handleSidebarToggle,isSidebarOpen}) => {
+
   return (
     <>
       <div className="nav-header">
@@ -10,7 +12,7 @@ const NavHeader = () => {
         </a>
         {/* burger menu */}
         <div className="nav-control">
-          <div className="hamburger">
+          <div className={`hamburger ${isSidebarOpen ? "is-active" : ""}`} onClick={handleSidebarToggle}>
             <span className="line"></span>
             <span className="line"></span>
             <span className="line"></span>
