@@ -327,7 +327,7 @@ export default function SalesDataForm({ salesData }) {
             <label className='mb-2 text-dark text-capitalize'>Total</label>
             <InputText
               type='number'
-              name='probability'
+              name='total'
               value={values?.total}
               onChange={handleChange}
             />
