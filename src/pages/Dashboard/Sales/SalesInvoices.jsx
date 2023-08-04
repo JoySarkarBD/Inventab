@@ -48,7 +48,7 @@ const SalesInvoices = () => {
         return (
           <Link
             className='text-center text-info dk_theme_text'
-            to={`${row?.invoice_number}`}>
+            to={`/dashboard/sales-invoices/sales-invoices-details/${row?.invoice_number}`}>
             {row?.invoice_number}
           </Link>
         );

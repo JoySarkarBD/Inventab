@@ -46,7 +46,9 @@ const SalesOrders = () => {
       name: "Order No",
       cell: (row) => {
         return (
-          <Link className='text-center text-info dark_theme_text' to={`${row?.so_id}`}>
+          <Link
+            className='text-center text-info dark_theme_text'
+            to={`/dashboard/sales-orders/update-sales-order/${row?.so_id}`}>
             {row?.so_id}
           </Link>
         );
@@ -176,13 +178,13 @@ const SalesOrders = () => {
   ];
 
   return (
-    <div className="position-relative">
-      <PageTitle title="Sales Orders" />
-      <SectionTitle title="Sales Orders" />
-      <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-body">
+    <div className='position-relative'>
+      <PageTitle title='Sales Orders' />
+      <SectionTitle title='Sales Orders' />
+      <div className='row'>
+        <div className='col-12'>
+          <div className='card'>
+            <div className='card-body'>
               <DataTable
                 title={<h2>Sales Orders</h2>}
                 columns={columns}
@@ -195,13 +197,14 @@ const SalesOrders = () => {
                   },
                   headCells: {
                     style: {
-                      fontSize: "19px",width:"170px"
+                      fontSize: "19px",
+                      width: "170px",
                     },
                   },
                 }}
                 noContextMenu
                 fixedHeader
-                fixedHeaderScrollHeight="550px"
+                fixedHeaderScrollHeight='550px'
                 pagination
                 striped
                 highlightOnHover
@@ -215,16 +218,15 @@ const SalesOrders = () => {
                       filename={`Sales-Orders-${new Date(
                         Date.now()
                       ).toLocaleDateString("en-IN")}`}
-                      className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1"
-                      onClick={exportAsCsv}
-                    >
-                      <FiDownload className="fs-4 me-2" />
+                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
+                      onClick={exportAsCsv}>
+                      <FiDownload className='fs-4 me-2' />
                       Export as CSV
                     </CSVLink>
 
                     {/* Add Sale Order */}
-                    <Link to="/dashboard/sales-orders/add-sales-order">
-                      <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1">
+                    <Link to='/dashboard/sales-orders/add-sales-order'>
+                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
                         Add Sales Order
                       </button>
                     </Link>
@@ -251,7 +253,7 @@ const SalesOrders = () => {
                     />
                   </div>
                 }
-                subHeaderAlign="left"
+                subHeaderAlign='left'
               />
             </div>
           </div>

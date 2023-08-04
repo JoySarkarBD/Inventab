@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "sales-orders/update-sales-order",
+        path: "sales-orders/update-sales-order/:order_id",
         element: <UpdateSalesOrder />,
       },
       /* invoice */
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
         element: <SalesInvoices />,
       },
       {
-        path: "sales-invoices/sales-invoices-details",
+        path: "sales-invoices/sales-invoices-details/:invoice_id",
         element: <SalesInvoiceDetails />,
       },
       /* ar */
