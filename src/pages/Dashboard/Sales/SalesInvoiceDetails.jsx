@@ -13,24 +13,15 @@ const SalesInvoiceDetails = () => {
   const [invoiceDetails, setInvoiceDetails] = useState();
   const [loading, setLoading] = useState(false);
 
-  /* destructuring */
-  const {
-    billing_address,
-    shipping_address,
-    payment_term,
-    payment_date,
-    delivery_term,
-  } = invoiceDetails;
-
   // fetch invoiceDetails table data
   const leads = async () => {
     try {
       setLoading(true);
-      const response = (
-        await axios.get(`invoices/fetch/all/invoices/?id=${invoice_id}`)
-      ).data;
+      const { data } = await axios.get(
+        `invoices/fetch/all/invoices/?id=${invoice_id}`
+      );
       setLoading(false);
-      setInvoiceDetails(response?.results[0]);
+      setInvoiceDetails(data?.results[0]);
     } catch (error) {
       setLoading(true);
       console.log(error);
@@ -93,34 +84,28 @@ const SalesInvoiceDetails = () => {
                   Address:
                   <span className='fs-5'>
                     {" "}
-                    {!billing_address?.address ? "" : billing_address?.address}
+                    {invoiceDetails?.billing_address?.address}
                   </span>
                 </p>
                 <p className='text-dark fs-4 my-2'>
                   Country:
                   <span className='fs-5'>
                     {" "}
-                    {!billing_address?.country?.name
-                      ? ""
-                      : billing_address?.country?.name}
+                    {invoiceDetails?.billing_address?.country?.name}
                   </span>
                 </p>
                 <p className='text-dark fs-4 my-2'>
-                  Country:
+                  Company:
                   <span className='fs-5'>
                     {" "}
-                    {!billing_address?.org?.company_name
-                      ? ""
-                      : billing_address?.org?.company_name}
+                    {invoiceDetails?.billing_address?.org?.company_name}
                   </span>
                 </p>
                 <p className='text-dark fs-4 my-2'>
                   Pin-Code:
                   <span className='fs-5'>
                     {" "}
-                    {!billing_address?.pincode?.pin_code
-                      ? ""
-                      : billing_address?.pincode?.pin_code}
+                    {invoiceDetails?.billing_address?.pincode?.pin_code}
                   </span>
                 </p>
               </div>
@@ -139,32 +124,28 @@ const SalesInvoiceDetails = () => {
                 Address:
                 <span className='fs-5'>
                   {" "}
-                  {!shipping_address?.address ? "" : shipping_address?.address}
+                  {invoiceDetails?.shipping_address?.address}
                 </span>
               </p>
               <p className='text-dark fs-4 my-2'>
                 Country:
                 <span className='fs-5'>
                   {" "}
-                  {!shipping_address?.country?.name
-                    ? ""
-                    : shipping_address?.country?.name}
+                  {invoiceDetails?.shipping_address?.country?.name}
                 </span>
               </p>
               <p className='text-dark fs-4 my-2'>
-                Country:
+                Company:
                 <span className='fs-5'>
                   {" "}
-                  {!shipping_address?.org?.company_name
-                    ? ""
-                    : shipping_address?.country?.name}
+                  {invoiceDetails?.shipping_address?.org?.company_name}
                 </span>
               </p>
               <p className='text-dark fs-4 my-2'>
                 Pin-Code:
                 <span className='fs-5'>
                   {" "}
-                  {!shipping_address?.pincode?.pin_code ? "" : shipping_address}
+                  {invoiceDetails?.shipping_address?.pincode?.pin_code}
                 </span>
               </p>
             </div>
@@ -176,16 +157,16 @@ const SalesInvoiceDetails = () => {
             {/* Payment Terms */}
             <div className='d-flex align-items-center column-gap-3 mb-2'>
               <p className='m-0 title'>
-                Payment Terms{" "}
+                Payment Terms
                 <span className='ms-1'>
-                  :{!payment_term?.term ? "" : payment_term?.term}
+                  : {invoiceDetails?.payment_term?.term}
                 </span>
               </p>
+            </div>
+            <div className='d-flex align-items-center column-gap-3 mb-2'>
               <p className='m-0 title'>
                 Payment Date{" "}
-                <span className='ms-1'>
-                  :{!payment_date ? "" : payment_date}
-                </span>
+                <span className='ms-1'>: {invoiceDetails?.payment_date}</span>
               </p>
             </div>
 
@@ -193,17 +174,20 @@ const SalesInvoiceDetails = () => {
             <div className='d-flex align-items-center column-gap-3 mb-2'>
               <p className='m-0 title'>
                 Delivery Terms{" "}
-                <span className='ms-1'>
-                  :{!delivery_term ? "" : delivery_term}
-                </span>
+                <span className='ms-1'>: {invoiceDetails?.delivery_term}</span>
               </p>
-              <p className='m-0'>XXX</p>
             </div>
 
             {/* Status */}
             <div className='d-flex align-items-center column-gap-3 mb-2'>
               <p className='m-0 title'>
-                Status <span className='ms-1'>: {!status ? "" : status}</span>
+                Status{" "}
+                <span className='ms-1'>
+                  :{" "}
+                  {invoiceDetails?.status === null
+                    ? "------------"
+                    : invoiceDetails?.status}
+                </span>
               </p>
             </div>
           </div>
