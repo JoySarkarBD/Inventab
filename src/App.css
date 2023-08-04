@@ -9968,6 +9968,7 @@ textarea.form-control {
 @media only screen and (max-width: 767px) {
   [data-header-position="fixed"] .nav-header {
     left: 0;
+    z-index: 5;
   }
 }
 
@@ -10009,6 +10010,7 @@ textarea.form-control {
   .nav-header {
     height: 5.5rem;
     width: 17rem;
+    z-index: 5;
   }
 }
 
@@ -11915,7 +11917,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .nav-header {
   width: 6.5rem;
-  z-index: 999;
+  z-index: 5;
 }
 
 [data-sidebar-style="full"][data-layout="vertical"]

@@ -21,7 +21,7 @@ export default function SalesFunnel() {
       // Create an object to store the counts for each status
       const statusData = {};
 
-      data?.results.forEach((lead) => {
+      data?.results.forEach(lead => {
         if (!statusData[lead.status]) {
           statusData[lead.status] = {
             count: 0,
@@ -33,7 +33,7 @@ export default function SalesFunnel() {
       });
 
       // Create the data array as per the desired format
-      const finalData = Object.keys(statusData).map((status) => ({
+      const finalData = Object.keys(statusData).map(status => ({
         status,
         count: statusData[status].count,
         value: numDifferentiation(statusData[status].value),
@@ -84,7 +84,7 @@ export default function SalesFunnel() {
   ];
 
   // Handle selection change in react-select
-  const handleSelectChange = (selected) => {
+  const handleSelectChange = selected => {
     setSelectedOption(selected);
   };
 
@@ -92,7 +92,7 @@ export default function SalesFunnel() {
   const filteredData =
     selectedOption && selectedOption.value
       ? salesFunnel.filter(
-          (item) =>
+          item =>
             item.status === selectedOption.value || selectedOption.value === ""
         )
       : salesFunnel;
@@ -115,6 +115,7 @@ export default function SalesFunnel() {
               onChange={handleSelectChange}
               placeholder='Select a status...'
               isSearchable
+              className='text-start w-25'
             />
           }
           customStyles={{
