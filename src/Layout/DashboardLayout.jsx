@@ -10,27 +10,32 @@ const DashboardLayout = () => {
 
   useEffect(() => {
     // Check local storage for the previous state on page reload
-    const storedSidebarState = localStorage.getItem('dashboardSidebarState');
+    const storedSidebarState = localStorage.getItem("dashboardSidebarState");
     if (storedSidebarState) {
       setIsSidebarOpen(JSON.parse(storedSidebarState));
     }
   }, []);
-  
 
   useEffect(() => {
     // Save the sidebar state in local storage on every state change
-    localStorage.setItem('dashboardSidebarState', JSON.stringify(isSidebarOpen));
+    localStorage.setItem(
+      "dashboardSidebarState",
+      JSON.stringify(isSidebarOpen)
+    );
   }, [isSidebarOpen]);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-
-  
   return (
-    <div id='main-wrapper' className={`show ${isSidebarOpen ? "menu-toggle":""}`}>
-      <NavHeader handleSidebarToggle={handleSidebarToggle} isSidebarOpen={isSidebarOpen}/>
+    <div
+      id='main-wrapper'
+      className={`show ${isSidebarOpen ? "menu-toggle" : ""}`}>
+      <NavHeader
+        handleSidebarToggle={handleSidebarToggle}
+        isSidebarOpen={isSidebarOpen}
+      />
       <Header />
       <Sidebar />
       <main className='content-body'>
