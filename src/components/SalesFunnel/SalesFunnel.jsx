@@ -1,12 +1,16 @@
+/* eslint-disable no-prototype-builtins */
 import { useEffect, useState } from "react";
-import { Funnel, FunnelChart, LabelList, Tooltip } from "recharts";
+import DataTable from "react-data-table-component";
+import Select from "react-select";
 import axios from "../../utils/axios/axios";
 
 export default function SalesFunnel() {
   const [loading, setLoading] = useState(false);
   const [salesFunnel, setSalesFunnel] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   // Create an object to store the counts for each status
+  const statusCounts = {};
 
   const getSalesFunnelData = async () => {
     try {
@@ -16,7 +20,6 @@ export default function SalesFunnel() {
       );
       // console.log(data);
 
-      const statusCounts = {};
       data?.results.forEach((lead) => {
         const status = lead.status;
         if (statusCounts.hasOwnProperty(status)) {
@@ -50,54 +53,86 @@ export default function SalesFunnel() {
     }
   };
 
-  console.log(salesFunnel);
-
   // load leads
   useEffect(() => {
     getSalesFunnelData();
   }, []);
 
-  const data = [
+  // Define the columns for the DataTable
+  const columns = [
     {
-      value: 100,
-      name: "展现",
-      fill: "#8884d8",
+      name: "Status",
+      selector: "status",
+      sortable: true,
     },
     {
-      value: 80,
-      name: "点击",
-      fill: "#83a6ed",
-    },
-    {
-      value: 50,
-      name: "访问",
-      fill: "#8dd1e1",
-    },
-    {
-      value: 40,
-      name: "咨询",
-      fill: "#82ca9d",
-    },
-    {
-      value: 26,
-      name: "订单",
-      fill: "#a4de6c",
+      name: "Count",
+      selector: "count",
+      sortable: true,
     },
   ];
 
+  // Options for react-select
+  const options = [
+    { value: "", label: "Show All" },
+    { value: "Prospect", label: "Prospect" },
+    { value: "Approach", label: "Approach" },
+    { value: "Qualify", label: "Qualify" },
+    { value: "Pitch", label: "Pitch" },
+    { value: "Handle Objections", label: "Handle Objections" },
+    { value: "Close the Deal", label: "Close the Deal" },
+    { value: "Lost Deal", label: "Lost Deal" },
+  ];
+
+  // Handle selection change in react-select
+  const handleSelectChange = (selected) => {
+    setSelectedOption(selected);
+  };
+
+  // Filter the data based on the selected option
+  const filteredData =
+    selectedOption && selectedOption.value
+      ? salesFunnel.filter(
+          (item) =>
+            item.status === selectedOption.value || selectedOption.value === ""
+        )
+      : salesFunnel;
+
   return (
     <div>
-      <FunnelChart width={730} height={250}>
-        <Tooltip />
-        <Funnel dataKey='value' data={data} isAnimationActive>
-          <LabelList
-            position='right'
-            fill='#000'
-            stroke='none'
-            dataKey='name'
-          />
-        </Funnel>
-      </FunnelChart>
+      <Select
+        options={options}
+        value={selectedOption}
+        onChange={handleSelectChange}
+        placeholder='Select a status...'
+        isSearchable
+      />
+      <DataTable
+        title={<h2>Sales Funnel Data</h2>}
+        columns={columns}
+        data={filteredData}
+        progressPending={loading}
+        pagination
+        customStyles={{
+          rows: {
+            style: {
+              fontSize: "16px",
+            },
+          },
+          headCells: {
+            style: {
+              fontSize: "19px",
+              width: "170px",
+            },
+          },
+        }}
+        noContextMenu
+        fixedHeader
+        fixedHeaderScrollHeight='550px'
+        striped
+        highlightOnHover
+        subHeader
+      />
     </div>
   );
 }
