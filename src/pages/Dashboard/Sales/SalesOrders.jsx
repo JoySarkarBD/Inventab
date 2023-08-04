@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
@@ -44,7 +45,7 @@ const SalesOrders = () => {
   const columns = [
     {
       name: "Order No",
-      cell: (row) => {
+      cell: row => {
         return (
           <Link
             className='text-center text-info dark_theme_text'
@@ -57,32 +58,32 @@ const SalesOrders = () => {
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
+      selector: row => row?.sub_org || "No data found",
       sortable: true,
     },
     {
       name: "Client",
-      selector: (row) => row?.client?.company_name || "No data found",
+      selector: row => row?.client?.company_name || "No data found",
       sortable: true,
     },
     {
       name: "Desc",
-      selector: (row) => row?.description || "No data found",
+      selector: row => row?.description || "No data found",
       sortable: true,
     },
     {
       name: "Ref PO No",
-      selector: (row) => row?.ref_po || "No data found",
+      selector: row => row?.ref_po || "No data found",
       sortable: true,
     },
     {
       name: "PO Date",
-      selector: (row) => row?.po_date || "No data found",
+      selector: row => row?.po_date || "No data found",
       sortable: true,
     },
     {
       name: "Expected Inv Date",
-      selector: (row) => row?.expected_inv_date || "No data found",
+      selector: row => row?.expected_inv_date || "No data found",
       sortable: true,
     },
     {
@@ -93,12 +94,12 @@ const SalesOrders = () => {
 
     {
       name: "Dept",
-      selector: (row) => row?.department?.name || "No data found",
+      selector: row => row?.department?.name || "No data found",
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row?.so_status || "No data found",
+      selector: row => row?.so_status || "No data found",
       sortable: true,
     },
   ];
@@ -108,7 +109,7 @@ const SalesOrders = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach((salesData) => {
+    searchData.forEach(salesData => {
       const csvObj = {
         SO: salesData?.so_id || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -125,14 +126,14 @@ const SalesOrders = () => {
       data.push(csvObj);
     });
 
-    setCsv((prev) => [...prev, ...data]);
+    setCsv(prev => [...prev, ...data]);
   };
 
   // search items sorting
   useEffect(() => {
     let result;
     if (selectedEl?.value) {
-      result = salesOrders.filter((order) => {
+      result = salesOrders.filter(order => {
         switch (selectedEl?.value) {
           case "so_id":
             return order?.so_id?.toLowerCase().match(search.toLowerCase());
@@ -185,76 +186,79 @@ const SalesOrders = () => {
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
-              <DataTable
-                title={<h2>Sales Orders</h2>}
-                columns={columns}
-                data={searchData}
-                customStyles={{
-                  rows: {
-                    style: {
-                      fontSize: "16px",
+              {loading ? (
+                <Loader />
+              ) : (
+                <DataTable
+                  title={<h2>Sales Orders</h2>}
+                  columns={columns}
+                  data={searchData}
+                  customStyles={{
+                    rows: {
+                      style: {
+                        fontSize: "16px",
+                      },
                     },
-                  },
-                  headCells: {
-                    style: {
-                      fontSize: "19px",
-                      width: "170px",
+                    headCells: {
+                      style: {
+                        fontSize: "19px",
+                        width: "170px",
+                      },
                     },
-                  },
-                }}
-                noContextMenu
-                fixedHeader
-                fixedHeaderScrollHeight='550px'
-                pagination
-                striped
-                highlightOnHover
-                subHeader
-                progressPending={loading}
-                actions={
-                  <>
-                    <CSVLink
-                      enclosingCharacter={` `}
-                      data={csv}
-                      filename={`Sales-Orders-${new Date(
-                        Date.now()
-                      ).toLocaleDateString("en-IN")}`}
-                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
-                      onClick={exportAsCsv}>
-                      <FiDownload className='fs-4 me-2' />
-                      Export as CSV
-                    </CSVLink>
+                  }}
+                  noContextMenu
+                  fixedHeader
+                  fixedHeaderScrollHeight='550px'
+                  pagination
+                  striped
+                  highlightOnHover
+                  subHeader
+                  actions={
+                    <>
+                      <CSVLink
+                        enclosingCharacter={` `}
+                        data={csv}
+                        filename={`Sales-Orders-${new Date(
+                          Date.now()
+                        ).toLocaleDateString("en-IN")}`}
+                        className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
+                        onClick={exportAsCsv}>
+                        <FiDownload className='fs-4 me-2' />
+                        Export as CSV
+                      </CSVLink>
 
-                    {/* Add Sale Order */}
-                    <Link to='/dashboard/sales-orders/add-sales-order'>
-                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
-                        Add Sales Order
-                      </button>
-                    </Link>
-                  </>
-                }
-                subHeaderComponent={
-                  <div className='searchBox-salesLead rounded my-4'>
-                    {/* Select Area */}
-                    <Select
-                      className='select text-start'
-                      options={options}
-                      onChange={setSelectedEL}
-                      isClearable
-                      isSearchable
-                      placeholder='Search'
-                    />
-                    {/* Input Search Area */}
-                    <input
-                      type='search'
-                      placeholder='Search here'
-                      className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </div>
-                }
-                subHeaderAlign='left'
-              />
+                      {/* Add Sale Order */}
+                      <Link to='/dashboard/sales-orders/add-sales-order'>
+                        <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
+                          Add Sales Order
+                        </button>
+                      </Link>
+                    </>
+                  }
+                  subHeaderComponent={
+                    <div className='searchBox-salesLead rounded my-4'>
+                      {/* Select Area */}
+                      <Select
+                        className='select text-start'
+                        options={options}
+                        onChange={setSelectedEL}
+                        isClearable
+                        isSearchable
+                        placeholder='Search'
+                      />
+                      {/* Input Search Area */}
+                      <input
+                        type='search'
+                        placeholder='Search here'
+                        className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                      />
+                    </div>
+                  }
+                  subHeaderAlign='left'
+                />
+              )}
             </div>
           </div>
         </div>
