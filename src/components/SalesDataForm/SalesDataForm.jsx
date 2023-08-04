@@ -109,15 +109,16 @@ export default function SalesDataForm({ salesData }) {
         setLoading(false);
         const subOrgArr = [];
         data?.results?.forEach((sub) => {
-          const clientObj = {
+          const subObj = {
             label: sub?.sub_company_name,
             value: sub?.id,
           };
-          subOrgArr.push(clientObj);
+          subOrgArr.push(subObj);
         });
 
         const removeUndefinedData = removeUndefinedObj(subOrgArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+
         setsubOrg(uniqueArr);
       } catch (error) {
         setLoading(false);
@@ -156,7 +157,7 @@ export default function SalesDataForm({ salesData }) {
 
   // ==============================table stuff start==============
 
-  const handleTable = () => {
+  const handleTable = (event) => {
     event.preventDefault();
 
     const newPart = {
@@ -203,7 +204,10 @@ export default function SalesDataForm({ salesData }) {
         label: department?.name,
         value: department?.id,
       },
-      sub_org: sub_org || null,
+      sub_org: {
+        label: sub_org?.sub_company_name,
+        value: sub_org?.id,
+      },
       probability,
       status: {
         label: st,
@@ -223,7 +227,7 @@ export default function SalesDataForm({ salesData }) {
     },
 
     onSubmit: async (values) => {
-      const { department, status, client, parts: partArr } = values;
+      const { department, status, client, parts: partArr, sub_org } = values;
       // sort part obj data
       let parts = [];
       partArr.forEach((p) => {
@@ -252,6 +256,7 @@ export default function SalesDataForm({ salesData }) {
         status: status?.value,
         client: client?.value,
         parts,
+        sub_org: sub_org?.value,
       });
     },
   });
@@ -318,7 +323,8 @@ export default function SalesDataForm({ salesData }) {
               isSearchable
               options={subOrg}
               isLoading={loading}
-              onChange={(option) => setFieldValue("sub_org", option?.value)}
+              value={values?.sub_org}
+              onChange={(option) => setFieldValue("sub_org", option)}
             />
           </div>
 
@@ -516,7 +522,7 @@ export default function SalesDataForm({ salesData }) {
                           type='number'
                           placeholder='GST'
                           name='gst'
-                          value={gst}
+                          value={gst || ""}
                           onChange={(e) => setgst(e.target.value)}
                         />
                       </td>
