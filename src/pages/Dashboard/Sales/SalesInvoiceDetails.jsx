@@ -4,6 +4,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
@@ -168,29 +169,32 @@ const SalesInvoiceDetails = () => {
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
-              <DataTable
-                columns={columns}
-                data={searchData}
-                customStyles={{
-                  rows: {
-                    style: {
-                      fontSize: "16px",
+              {loading ? (
+                <Loader />
+              ) : (
+                <DataTable
+                  columns={columns}
+                  data={searchData}
+                  customStyles={{
+                    rows: {
+                      style: {
+                        fontSize: "16px",
+                      },
                     },
-                  },
-                  headCells: {
-                    style: {
-                      fontSize: "19px",
+                    headCells: {
+                      style: {
+                        fontSize: "19px",
+                      },
                     },
-                  },
-                }}
-                noContextMenu
-                fixedHeader
-                fixedHeaderScrollHeight='550px'
-                pagination
-                striped
-                highlightOnHover
-                progressPending={loading}
-              />
+                  }}
+                  noContextMenu
+                  fixedHeader
+                  fixedHeaderScrollHeight='550px'
+                  pagination
+                  striped
+                  highlightOnHover
+                />
+              )}
             </div>
           </div>
         </div>

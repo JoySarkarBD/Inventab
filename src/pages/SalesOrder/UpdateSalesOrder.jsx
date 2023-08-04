@@ -10,7 +10,9 @@ export default function UpdateSalesOrder() {
       <PageTitle title='Update Sales Order' />
       {/* back button */}
       <div className='d-flex justify-content-end me-5 mb-4'>
-        <Link to='/dashboard/sales-orders' className='btn btn-primary'>
+        <Link
+          to='/dashboard/sales-orders'
+          className='btn btn-primary rounded-1 border-0 text-white'>
           <BsArrowLeft className='me-2' />
           Back
         </Link>
