@@ -452,8 +452,8 @@ export default function SalesDataForm({ salesData }) {
                     <tr>
                       <th scope='col'>Part No</th>
                       <th scope='col'>Short Description</th>
-                      <th scope='col'>Quantity</th>
                       <th scope='col'>Unit Cost</th>
+                      <th scope='col'>Quantity</th>
                       <th scope='col'>Status</th>
                       <th scope='col'>GST</th>
                       <th scope='col'>Net Price</th>
@@ -490,20 +490,20 @@ export default function SalesDataForm({ salesData }) {
                         <input
                           className='new_input_class'
                           type='number'
-                          placeholder='Total Quantity'
-                          name='quantity'
-                          value={totalQuantity || ""}
-                          onChange={(e) => setTotalQuantity(e.target.value)}
+                          placeholder='Unit Cost'
+                          name='unit_cost'
+                          value={unitCost || ""}
+                          onChange={(e) => setUnitCost(e.target.value)}
                         />
                       </td>
                       <td>
                         <input
                           className='new_input_class'
                           type='number'
-                          placeholder='Unit Cost'
-                          name='unit_cost'
-                          value={unitCost || ""}
-                          onChange={(e) => setUnitCost(e.target.value)}
+                          placeholder='Total Quantity'
+                          name='quantity'
+                          value={totalQuantity || ""}
+                          onChange={(e) => setTotalQuantity(e.target.value)}
                         />
                       </td>
                       <td>
@@ -582,8 +582,8 @@ export default function SalesDataForm({ salesData }) {
                 <tr>
                   <th scope='col'>Part No</th>
                   <th scope='col'>Short Description</th>
-                  <th scope='col'>Quantity</th>
                   <th scope='col'>Unit Cost</th>
+                  <th scope='col'>Quantity</th>
                   <th scope='col'>Status</th>
                   <th scope='col'>GST</th>
                   <th scope='col'>Net Price</th>
@@ -629,9 +629,9 @@ export default function SalesDataForm({ salesData }) {
                         <input
                           className='new_input_class'
                           type='number'
-                          placeholder='Total Quntity'
-                          name={`parts[${index}].quantity`}
-                          value={part.quantity}
+                          placeholder='Unit Cost'
+                          name={`parts[${index}].unit_cost`}
+                          value={part?.unit_cost}
                           onChange={handleChange}
                         />
                       </td>
@@ -640,9 +640,9 @@ export default function SalesDataForm({ salesData }) {
                         <input
                           className='new_input_class'
                           type='number'
-                          placeholder='Unit Cost'
-                          name={`parts[${index}].unit_cost`}
-                          value={part?.unit_cost}
+                          placeholder='Total Quntity'
+                          name={`parts[${index}].quantity`}
+                          value={part.quantity}
                           onChange={handleChange}
                         />
                       </td>
