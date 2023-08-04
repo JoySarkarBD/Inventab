@@ -14,20 +14,20 @@ import "./AddSalesLeads.css";
 function SalesLeadHistoryModal(props) {
   // console.log(props.salesData?.sales_lead_history);
 
-  // const sales_lead_history = [
-  //   {
-  //     id: "3fe9baea-f95a-4560-a736-105b4eab1248",
-  //     created_by: "44dbaf21-9946-46ae-ad07-17fa3c1995e5",
-  //     date: "2023-08-04",
-  //     comment: "Testing",
-  //   },
-  //   {
-  //     id: "3fe9baea-f95a-4560-a736-105b4eab1247",
-  //     created_by: "44dbaf21-9946-46ae-ad07-17fa3c1995e5",
-  //     date: "2023-08-04",
-  //     comment: "Testing",
-  //   },
-  // ];
+  const sales_lead_history = [
+    {
+      id: "3fe9baea-f95a-4560-a736-105b4eab1248",
+      created_by: "44dbaf21-9946-46ae-ad07-17fa3c1995e5",
+      date: "2023-08-04",
+      comment: "Testing",
+    },
+    {
+      id: "3fe9baea-f95a-4560-a736-105b4eab1247",
+      created_by: "44dbaf21-9946-46ae-ad07-17fa3c1995e5",
+      date: "2023-08-04",
+      comment: "Testing",
+    },
+  ];
 
   return (
     <Modal
@@ -41,7 +41,7 @@ function SalesLeadHistoryModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {props.salesData?.sales_lead_history.map((s) => (
+        {sales_lead_history.map((s) => (
           <div className='card border' key={s?.id}>
             <div className='card-header text-dark fs-5'>Date: {s?.date}</div>
             <div className='card-body'>
@@ -139,7 +139,6 @@ const UpdateSalesLeads = () => {
               {!loading ? (
                 <SalesDataForm salesData={selectedData} />
               ) : (
-                // <h1 className='custom-loading'>Loading...</h1>
                 <Loader />
               )}
             </div>
