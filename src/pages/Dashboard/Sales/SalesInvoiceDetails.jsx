@@ -11,11 +11,17 @@ const SalesInvoiceDetails = () => {
   const { invoice_id } = useParams();
 
   const [invoiceDetails, setInvoiceDetails] = useState();
-  const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log(invoiceDetails.billing_address);
-  const { billing_address } = invoiceDetails;
+  /* destructuring */
+  const {
+    billing_address,
+    shipping_address,
+    payment_term,
+    payment_date,
+    delivery_term,
+  } = invoiceDetails;
+
   // fetch invoiceDetails table data
   const leads = async () => {
     try {
@@ -85,27 +91,36 @@ const SalesInvoiceDetails = () => {
                 <h4 className='card-title'>Billing Address Detail</h4>
                 <p className='text-dark fs-4 my-2'>
                   Address:
-                  <span className='fs-5'> {billing_address?.address}</span>
-                </p>
-                <p className='text-dark fs-4 my-2'>
-                  Country:
                   <span className='fs-5'>
                     {" "}
-                    {billing_address?.country?.name}
+                    {!billing_address?.address ? "" : billing_address?.address}
                   </span>
                 </p>
                 <p className='text-dark fs-4 my-2'>
                   Country:
                   <span className='fs-5'>
                     {" "}
-                    {billing_address?.org?.company_name}
+                    {!billing_address?.country?.name
+                      ? ""
+                      : billing_address?.country?.name}
+                  </span>
+                </p>
+                <p className='text-dark fs-4 my-2'>
+                  Country:
+                  <span className='fs-5'>
+                    {" "}
+                    {!billing_address?.org?.company_name
+                      ? ""
+                      : billing_address?.org?.company_name}
                   </span>
                 </p>
                 <p className='text-dark fs-4 my-2'>
                   Pin-Code:
                   <span className='fs-5'>
                     {" "}
-                    {billing_address?.pincode?.pin_code}
+                    {!billing_address?.pincode?.pin_code
+                      ? ""
+                      : billing_address?.pincode?.pin_code}
                   </span>
                 </p>
               </div>
@@ -120,11 +135,37 @@ const SalesInvoiceDetails = () => {
               <h4 className='card-title'>
                 Shipping address Detail including GST
               </h4>
-              <p className='mt-3'>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Obcaecati qui fuga placeat beatae porro. Molestias voluptas
-                adipisci asperiores vel. Fuga aliquam ullam quod rerum facilis
-                autem accusantium est amet veniam!
+              <p className='text-dark fs-4 my-2'>
+                Address:
+                <span className='fs-5'>
+                  {" "}
+                  {!shipping_address?.address ? "" : shipping_address?.address}
+                </span>
+              </p>
+              <p className='text-dark fs-4 my-2'>
+                Country:
+                <span className='fs-5'>
+                  {" "}
+                  {!shipping_address?.country?.name
+                    ? ""
+                    : shipping_address?.country?.name}
+                </span>
+              </p>
+              <p className='text-dark fs-4 my-2'>
+                Country:
+                <span className='fs-5'>
+                  {" "}
+                  {!shipping_address?.org?.company_name
+                    ? ""
+                    : shipping_address?.country?.name}
+                </span>
+              </p>
+              <p className='text-dark fs-4 my-2'>
+                Pin-Code:
+                <span className='fs-5'>
+                  {" "}
+                  {!shipping_address?.pincode?.pin_code ? "" : shipping_address}
+                </span>
               </p>
             </div>
           </div>
@@ -135,23 +176,26 @@ const SalesInvoiceDetails = () => {
             {/* Payment Terms */}
             <div className='d-flex align-items-center column-gap-3 mb-2'>
               <p className='m-0 title'>
-                Payment Terms <span className='ms-1'>:</span>
+                Payment Terms{" "}
+                <span className='ms-1'>
+                  :{!payment_term?.term ? "" : payment_term?.term}
+                </span>
               </p>
-              <p className='m-0'>XXX</p>
+              <p className='m-0 title'>
+                Payment Date{" "}
+                <span className='ms-1'>
+                  :{!payment_date ? "" : payment_date}
+                </span>
+              </p>
             </div>
 
             {/* Delivery Terms */}
             <div className='d-flex align-items-center column-gap-3 mb-2'>
               <p className='m-0 title'>
-                Delivery Terms <span className='ms-1'>:</span>
-              </p>
-              <p className='m-0'>XXX</p>
-            </div>
-
-            {/* Payment */}
-            <div className='d-flex align-items-center column-gap-3 mb-2'>
-              <p className='m-0 title'>
-                Delivery Terms <span className='ms-1'>:</span>
+                Delivery Terms{" "}
+                <span className='ms-1'>
+                  :{!delivery_term ? "" : delivery_term}
+                </span>
               </p>
               <p className='m-0'>XXX</p>
             </div>
@@ -159,9 +203,8 @@ const SalesInvoiceDetails = () => {
             {/* Status */}
             <div className='d-flex align-items-center column-gap-3 mb-2'>
               <p className='m-0 title'>
-                Status <span className='ms-1'>:</span>
+                Status <span className='ms-1'>: {!status ? "" : status}</span>
               </p>
-              <p className='m-0'>XXX</p>
             </div>
           </div>
         </div>
