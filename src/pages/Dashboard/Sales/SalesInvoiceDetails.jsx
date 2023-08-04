@@ -17,25 +17,24 @@ const SalesInvoiceDetails = () => {
 
   const printRef = useRef();
 
-  // fetch invoiceDetails table data
-  const leads = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `invoices/fetch/all/invoices/?id=${invoice_id}`
-      );
-      setLoading(false);
-      setInvoiceDetails(data?.results[0]);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
-
   // load leads
   useEffect(() => {
+    // fetch invoiceDetails table data
+    const leads = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          `invoices/fetch/all/invoices/?id=${invoice_id}`
+        );
+        setLoading(false);
+        setInvoiceDetails(data?.results[0]);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
     leads();
-  }, []);
+  }, [invoice_id]);
 
   // columns
   const columns = [
@@ -84,8 +83,6 @@ const SalesInvoiceDetails = () => {
             </button>
           )}
           content={() => printRef.current}
-          documentTitle='Sales Invoice'
-          pageStyle
         />
       </div>
       <div ref={printRef} className='mx-2'>
