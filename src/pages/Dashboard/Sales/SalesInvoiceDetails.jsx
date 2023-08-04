@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { AiOutlinePrinter } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import PageTitle from "../../../components/Shared/PageTitle";
@@ -65,12 +66,18 @@ const SalesInvoiceDetails = () => {
       <PageTitle title='Invoices-Details' />
       <SectionTitle heading='Sales Invoice xxx' />
       <div className='d-flex justify-content-end me-5 mb-4'>
+        {/* back btn */}
         <Link
           to='/dashboard/sales-invoices'
-          className='btn btn-primary btn-common rounded-1'>
+          className='btn btn-primary btn-common rounded-1 me-2'>
           <BsArrowLeft className='me-2' />
           Back
         </Link>
+        {/* print btn */}
+        <button className='btn btn-primary text-white rounded-1 border-0 me-2 d-flex justify-content-center align-items-center'>
+          <AiOutlinePrinter className='fs-4 me-2' />
+          Print
+        </button>
       </div>
       {/* Billing Address Detail & Shipping address Detail including GST*/}
       <div className='row my-5 row-gap-2'>
