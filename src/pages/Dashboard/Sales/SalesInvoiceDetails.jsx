@@ -4,30 +4,27 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
-import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
 const SalesInvoiceDetails = () => {
   const { invoice_id } = useParams();
-  console.log(invoice_id);
 
-  const [invoiceDetails, setInvoiceDetails] = useState([]);
+  const [invoiceDetails, setInvoiceDetails] = useState();
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  console.log(invoiceDetails.billing_address);
+  const { billing_address } = invoiceDetails;
   // fetch invoiceDetails table data
   const leads = async () => {
     try {
       setLoading(true);
       const response = (
-        await axios.get(
-          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-        )
+        await axios.get(`invoices/fetch/all/invoices/?id=${invoice_id}`)
       ).data;
       setLoading(false);
-      setInvoiceDetails(response?.results);
-      setSearchData(response?.results);
+      setInvoiceDetails(response?.results[0]);
     } catch (error) {
       setLoading(true);
       console.log(error);
@@ -86,11 +83,30 @@ const SalesInvoiceDetails = () => {
             <div className='card-body d-flex'>
               <div className='me-auto'>
                 <h4 className='card-title'>Billing Address Detail</h4>
-                <p className='mt-3'>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Obcaecati qui fuga placeat beatae porro. Molestias voluptas
-                  adipisci asperiores vel. Fuga aliquam ullam quod rerum facilis
-                  autem accusantium est amet veniam!
+                <p className='text-dark fs-4 my-2'>
+                  Address:
+                  <span className='fs-5'> {billing_address?.address}</span>
+                </p>
+                <p className='text-dark fs-4 my-2'>
+                  Country:
+                  <span className='fs-5'>
+                    {" "}
+                    {billing_address?.country?.name}
+                  </span>
+                </p>
+                <p className='text-dark fs-4 my-2'>
+                  Country:
+                  <span className='fs-5'>
+                    {" "}
+                    {billing_address?.org?.company_name}
+                  </span>
+                </p>
+                <p className='text-dark fs-4 my-2'>
+                  Pin-Code:
+                  <span className='fs-5'>
+                    {" "}
+                    {billing_address?.pincode?.pin_code}
+                  </span>
                 </p>
               </div>
             </div>
@@ -169,32 +185,28 @@ const SalesInvoiceDetails = () => {
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
-              {loading ? (
-                <Loader />
-              ) : (
-                <DataTable
-                  columns={columns}
-                  data={searchData}
-                  customStyles={{
-                    rows: {
-                      style: {
-                        fontSize: "16px",
-                      },
+              <DataTable
+                columns={columns}
+                customStyles={{
+                  rows: {
+                    style: {
+                      fontSize: "16px",
                     },
-                    headCells: {
-                      style: {
-                        fontSize: "19px",
-                      },
+                  },
+                  headCells: {
+                    style: {
+                      fontSize: "19px",
                     },
-                  }}
-                  noContextMenu
-                  fixedHeader
-                  fixedHeaderScrollHeight='550px'
-                  pagination
-                  striped
-                  highlightOnHover
-                />
-              )}
+                  },
+                }}
+                noContextMenu
+                fixedHeader
+                fixedHeaderScrollHeight='550px'
+                pagination
+                striped
+                highlightOnHover
+                progressPending={loading}
+              />
             </div>
           </div>
         </div>
