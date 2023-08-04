@@ -20,7 +20,7 @@ export default function SalesFunnel() {
       );
       // console.log(data);
 
-      data?.results.forEach((lead) => {
+      data?.results.forEach(lead => {
         const status = lead.status;
         if (statusCounts.hasOwnProperty(status)) {
           statusCounts[status]++;
@@ -85,7 +85,7 @@ export default function SalesFunnel() {
   ];
 
   // Handle selection change in react-select
-  const handleSelectChange = (selected) => {
+  const handleSelectChange = selected => {
     setSelectedOption(selected);
   };
 
@@ -93,13 +93,14 @@ export default function SalesFunnel() {
   const filteredData =
     selectedOption && selectedOption.value
       ? salesFunnel.filter(
-          (item) =>
+          item =>
             item.status === selectedOption.value || selectedOption.value === ""
         )
       : salesFunnel;
 
   return (
     <div>
+      <h2>Sales Funnel Data</h2>
       <Select
         options={options}
         value={selectedOption}
@@ -108,7 +109,7 @@ export default function SalesFunnel() {
         isSearchable
       />
       <DataTable
-        title={<h2>Sales Funnel Data</h2>}
+        // title={}
         columns={columns}
         data={filteredData}
         progressPending={loading}
