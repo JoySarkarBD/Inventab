@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import {
   kpiEachTotal,
@@ -35,7 +36,7 @@ export default function KPIInvoice() {
   useEffect(() => {
     let total = 0;
     if (!loading && kipInvoice?.length && kipInvoice?.length > 0) {
-      kipInvoice.forEach((invoice) => {
+      kipInvoice.forEach(invoice => {
         let res = kpiEachTotal(invoice);
         // added total property in existing invoice obj
         invoice["total"] = res;
@@ -50,112 +51,115 @@ export default function KPIInvoice() {
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.department,
+      selector: row => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: (row) => numDifferentiation(row?.apr) || 0,
+      selector: row => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: (row) => numDifferentiation(row?.may) || 0,
+      selector: row => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: (row) => numDifferentiation(row?.jun) || 0,
+      selector: row => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: (row) => numDifferentiation(row?.jul) || 0,
+      selector: row => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: (row) => numDifferentiation(row?.aug) || 0,
+      selector: row => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: (row) => numDifferentiation(row?.sep) || 0,
+      selector: row => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: (row) => numDifferentiation(row?.oct) || 0,
+      selector: row => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: (row) => numDifferentiation(row?.nov) || 0,
+      selector: row => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: (row) => numDifferentiation(row?.dec) || 0,
+      selector: row => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: (row) => numDifferentiation(row?.jan) || 0,
+      selector: row => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: (row) => numDifferentiation(row?.feb) || 0,
+      selector: row => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: (row) => numDifferentiation(row?.mar) || 0,
+      selector: row => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
     {
       name: "Total",
-      selector: (row) => numDifferentiation(row?.total) || 0,
+      selector: row => numDifferentiation(row?.total) || 0,
       sortable: true,
     },
   ];
 
   return (
     <>
-      <DataTable
-        title={<h2 className='text-start'>KPI Invoice</h2>}
-        data={kipInvoice}
-        columns={columns}
-        customStyles={{
-          rows: {
-            style: {
-              fontSize: "16px",
+      {loading ? (
+        <Loader />
+      ) : (
+        <DataTable
+          title={<h2 className='text-start'>KPI Invoice</h2>}
+          data={kipInvoice}
+          columns={columns}
+          customStyles={{
+            rows: {
+              style: {
+                fontSize: "16px",
+              },
             },
-          },
-          headCells: {
-            style: {
-              fontSize: "19px",
-              width: "170px",
+            headCells: {
+              style: {
+                fontSize: "19px",
+                width: "170px",
+              },
             },
-          },
-        }}
-        progressPending={loading}
-        noContextMenu
-        fixedHeader
-        fixedHeaderScrollHeight='550px'
-        pagination
-        striped
-        highlightOnHover
-        subHeader
-        // total KPI Invoice amount
-        actions={
-          <>
-            <h3 className='bg-primary text-white rounded-0 p-3'>
-              Total:{numDifferentiation(total)}
-            </h3>
-          </>
-        }
-      />
+          }}
+          noContextMenu
+          fixedHeader
+          fixedHeaderScrollHeight='550px'
+          pagination
+          striped
+          highlightOnHover
+          subHeader
+          // total KPI Invoice amount
+          actions={
+            <>
+              <h3 className='bg-primary text-white rounded-0 p-3'>
+                Total:{numDifferentiation(total)}
+              </h3>
+            </>
+          }
+        />
+      )}
     </>
   );
 }

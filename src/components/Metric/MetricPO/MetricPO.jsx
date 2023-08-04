@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import {
   getMonthName,
@@ -43,13 +44,13 @@ export default function MetricPO() {
       const result = [];
 
       // sales order total
-      salesOrders?.forEach((item) => {
+      salesOrders?.forEach(item => {
         // Get the month name from the expected_date property
         const month = getMonthName(item.po_date);
 
         // Find the department in the result array or add it if not found
         let departmentEntry = result?.find(
-          (entry) => entry?.department === item?.department?.name
+          entry => entry?.department === item?.department?.name
         );
         if (!departmentEntry) {
           departmentEntry = {
@@ -70,7 +71,7 @@ export default function MetricPO() {
         departmentEntry.total += parseFloat(item?.total);
       });
 
-      let res = result.filter((res) => res.department !== undefined);
+      let res = result.filter(res => res.department !== undefined);
       setSalesData(res);
     }
   }, [salesOrders?.length, salesOrders, loading]);
@@ -78,104 +79,108 @@ export default function MetricPO() {
   const columns = [
     {
       name: "Department",
-      selector: (row) => row?.department,
+      selector: row => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: (row) => numDifferentiation(row?.apr) || 0,
+      selector: row => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: (row) => numDifferentiation(row?.may) || 0,
+      selector: row => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: (row) => numDifferentiation(row?.jun) || 0,
+      selector: row => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: (row) => numDifferentiation(row?.jul) || 0,
+      selector: row => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: (row) => numDifferentiation(row?.aug) || 0,
+      selector: row => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: (row) => numDifferentiation(row?.sep) || 0,
+      selector: row => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: (row) => numDifferentiation(row?.oct) || 0,
+      selector: row => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: (row) => numDifferentiation(row?.nov) || 0,
+      selector: row => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: (row) => numDifferentiation(row?.dec) || 0,
+      selector: row => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: (row) => numDifferentiation(row?.jan) || 0,
+      selector: row => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: (row) => numDifferentiation(row?.feb) || 0,
+      selector: row => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: (row) => numDifferentiation(row?.mar) || 0,
+      selector: row => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
     {
       name: "Total",
-      selector: (row) => numDifferentiation(row?.total) || 0,
+      selector: row => numDifferentiation(row?.total) || 0,
       sortable: true,
     },
   ];
   return (
     <>
-      <DataTable
-        title={<h2 className='text-start'>Actual-PO</h2>}
-        columns={columns}
-        data={salesdata}
-        progressPending={loading}
-        customStyles={{
-          rows: {
-            style: {
-              fontSize: "16px",
+      {loading ? (
+        <Loader />
+      ) : (
+        <DataTable
+          title={<h2 className='text-start'>Actual-PO</h2>}
+          columns={columns}
+          data={salesdata}
+          pagination
+          customStyles={{
+            rows: {
+              style: {
+                fontSize: "16px",
+              },
             },
-          },
-          headCells: {
-            style: {
-              fontSize: "19px",
-              width: "170px",
+            headCells: {
+              style: {
+                fontSize: "19px",
+                width: "170px",
+              },
             },
-          },
-        }}
-        // total KPI Invoice amount
-        actions={
-          <>
-            <h3 className='bg-primary text-white rounded-0 p-3'>
-              Total: {numDifferentiation(allTotal)}
-            </h3>
-          </>
-        }
-      />
+          }}
+          // total KPI Invoice amount
+          actions={
+            <>
+              <h3 className='bg-primary text-white rounded-0 p-3'>
+                Total: {numDifferentiation(allTotal)}
+              </h3>
+            </>
+          }
+        />
+      )}
     </>
   );
 }

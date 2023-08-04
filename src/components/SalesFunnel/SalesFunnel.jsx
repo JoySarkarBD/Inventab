@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
+import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import { numDifferentiation } from "../../utils/utilityFunc/utilityFunc";
 
@@ -98,41 +99,45 @@ export default function SalesFunnel() {
 
   return (
     <div>
-      <DataTable
-        title={<h2>Sales Funnel Data</h2>}
-        columns={columns}
-        data={filteredData}
-        progressPending={loading}
-        pagination
-        subHeaderComponent={
-          <Select
-            options={options}
-            value={selectedOption}
-            onChange={handleSelectChange}
-            placeholder='Select a status...'
-            isSearchable
-          />
-        }
-        customStyles={{
-          rows: {
-            style: {
-              fontSize: "16px",
+      {loading ? (
+        <Loader />
+      ) : (
+        <DataTable
+          title={<h2>Sales Funnel Data</h2>}
+          columns={columns}
+          data={filteredData}
+          progressPending={loading}
+          pagination
+          subHeaderComponent={
+            <Select
+              options={options}
+              value={selectedOption}
+              onChange={handleSelectChange}
+              placeholder='Select a status...'
+              isSearchable
+            />
+          }
+          customStyles={{
+            rows: {
+              style: {
+                fontSize: "16px",
+              },
             },
-          },
-          headCells: {
-            style: {
-              fontSize: "19px",
-              width: "170px",
+            headCells: {
+              style: {
+                fontSize: "19px",
+                width: "170px",
+              },
             },
-          },
-        }}
-        noContextMenu
-        fixedHeader
-        fixedHeaderScrollHeight='550px'
-        striped
-        highlightOnHover
-        subHeader
-      />
+          }}
+          noContextMenu
+          fixedHeader
+          fixedHeaderScrollHeight='550px'
+          striped
+          highlightOnHover
+          subHeader
+        />
+      )}
     </div>
   );
 }
