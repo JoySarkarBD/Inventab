@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
 import axios from "../../utils/axios/axios";
+import { numDifferentiation } from "../../utils/utilityFunc/utilityFunc";
 
 export default function SalesFunnel() {
   const [loading, setLoading] = useState(false);
   const [salesFunnel, setSalesFunnel] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
-
-  // Create an object to store the counts for each status
-  const statusCounts = {};
 
   const getSalesFunnelData = async () => {
     try {
@@ -18,33 +16,28 @@ export default function SalesFunnel() {
       const { data } = await axios.get(
         "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
       );
-      // console.log(data);
+
+      // Create an object to store the counts for each status
+      const statusData = {};
 
       data?.results.forEach((lead) => {
-        const status = lead.status;
-        if (statusCounts.hasOwnProperty(status)) {
-          statusCounts[status]++;
-        } else {
-          statusCounts[status] = 1;
+        if (!statusData[lead.status]) {
+          statusData[lead.status] = {
+            count: 0,
+            value: 0,
+          };
         }
+        statusData[lead.status].count++;
+        statusData[lead.status].value += parseFloat(lead.total);
       });
 
-      // Create the final data array
-      const finalData = [
-        { status: "Prospect", count: statusCounts["Prospect"] || 0 },
-        { status: "Approach", count: statusCounts["Approach"] || 0 },
-        { status: "Qualify", count: statusCounts["Qualify"] || 0 },
-        { status: "Pitch", count: statusCounts["Pitch"] || 0 },
-        {
-          status: "Handle Objections",
-          count: statusCounts["Handle Objections"] || 0,
-        },
-        {
-          status: "Close the Deal",
-          count: statusCounts["Close the Deal"] || 0,
-        },
-        { status: "Lost Deal", count: statusCounts["Lost Deal"] || 0 },
-      ];
+      // Create the data array as per the desired format
+      const finalData = Object.keys(statusData).map((status) => ({
+        status,
+        count: statusData[status].count,
+        value: numDifferentiation(statusData[status].value),
+      }));
+
       setLoading(false);
       setSalesFunnel(finalData);
     } catch (error) {
@@ -68,6 +61,11 @@ export default function SalesFunnel() {
     {
       name: "Count",
       selector: "count",
+      sortable: true,
+    },
+    {
+      name: "Value",
+      selector: "value",
       sortable: true,
     },
   ];
@@ -100,19 +98,21 @@ export default function SalesFunnel() {
 
   return (
     <div>
-      <Select
-        options={options}
-        value={selectedOption}
-        onChange={handleSelectChange}
-        placeholder='Select a status...'
-        isSearchable
-      />
       <DataTable
         title={<h2>Sales Funnel Data</h2>}
         columns={columns}
         data={filteredData}
         progressPending={loading}
         pagination
+        subHeaderComponent={
+          <Select
+            options={options}
+            value={selectedOption}
+            onChange={handleSelectChange}
+            placeholder='Select a status...'
+            isSearchable
+          />
+        }
         customStyles={{
           rows: {
             style: {
