@@ -135,7 +135,7 @@ const Attendance = () => {
                 tabIndex='-1'
                 aria-labelledby='exampleModalLabel'
                 aria-hidden='true'>
-                <div className='modal-dialog modal-dialog-centered'>
+                <div className='modal-dialog modal-lg modal-dialog-centered'>
                   <div className='modal-content'>
                     <div className='modal-header'>
                       <h1 className='modal-title fs-4' id='exampleModalLabel'>
@@ -147,61 +147,128 @@ const Attendance = () => {
                         data-bs-dismiss='modal'
                         aria-label='Close'></button>
                     </div>
-                    <div className='modal-body'>
-                      <div className='mb-3'>
-                        <p className='text-dark fs-5'>
-                          Total Leaves: Taken / Available
-                        </p>
-                        <p className='text-dark fs-5'>
-                          Casual Leaves: Taken / Available
-                        </p>
-                        <p className='text-dark fs-5'>
-                          Sick: Taken / Available
-                        </p>
+                    <form>
+                      <div className='modal-body'>
+                        <div className='row'>
+                          {/* left */}
+                          <div className='col-md-6 col-sm-12 mb-3'>
+                            <p className='text-dark fs-5'>
+                              Total Leaves: Taken / Available
+                            </p>
+                            <p className='text-dark fs-5'>
+                              Casual Leaves: Taken / Available
+                            </p>
+                            <p className='text-dark fs-5'>
+                              Sick: Taken / Available
+                            </p>
+                          </div>
+                          {/* right */}
+                          <div className='col-md-6 col-sm-12 mb-3'>
+                            <select className='w-100 h-25' name='appln-status'>
+                              <option
+                                disabled
+                                value='Select Appln Status'
+                                selected>
+                                Select Appln Status
+                              </option>
+                              <option value='1'>1</option>
+                              <option value='2'>2</option>
+                              <option value='3'>3</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className='row'>
+                          {/* form date input */}
+                          <div className='col-md-4 col-sm-12 '>
+                            <input
+                              type=''
+                              name='from'
+                              id='from'
+                              className='w-100 h-75 m-2 rounded-1'
+                            />
+                          </div>
+
+                          {/* Half or Full Day select */}
+                          <div className='col-md-4 col-sm-12 '>
+                            <select
+                              name='day'
+                              className='w-100 h-75 m-2 rounded-1'>
+                              <option disabled value='Select Day' selected>
+                                Select Day
+                              </option>
+                              <option value='First Half'>First Half</option>
+                              <option value='Second Half'>Second Half</option>
+                              <option value='Full Day'>Full Day</option>
+                            </select>
+                          </div>
+
+                          {/* select status */}
+                          <div className='col-md-4 col-sm-12 '>
+                            <select
+                              className='w-100 h-75 m-2 rounded-1'
+                              name='status'>
+                              <option disabled value='Select Status' selected>
+                                Select Status
+                              </option>
+                              <option value='1'>1</option>
+                              <option value='2'>2</option>
+                              <option value='3'>3</option>
+                            </select>
+                          </div>
+
+                          {/* To Date button */}
+                          <div className='col-md-4 col-sm-12 '>
+                            <input
+                              type=''
+                              name='to'
+                              id='to'
+                              className='w-100 h-75 m-2 rounded-1'
+                            />
+                          </div>
+
+                          {/* Half/Full Day select */}
+                          <div className='col-md-4 col-sm-12 '>
+                            <select
+                              name='day'
+                              className='w-100 h-75 m-2 rounded-1'>
+                              <option disabled value='Select Day' selected>
+                                Select Day
+                              </option>
+                              <option value='First Half'>First Half</option>
+                              <option value='Second Half'>Second Half</option>
+                              <option value='Full Day'>Full Day</option>
+                            </select>
+                          </div>
+
+                          {/* select status */}
+                          <div className='col-md-4 col-sm-12 '>
+                            <select
+                              className='w-100 h-75 m-2 rounded-1'
+                              name='status'>
+                              <option disabled value='Select Status' selected>
+                                Select Status
+                              </option>
+                              <option value='1'>1</option>
+                              <option value='2'>2</option>
+                              <option value='3'>3</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div className='row'>
-                        {/* form date button */}
-                        <div className='col-md-6 col-sm-12 text-center'>
-                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
-                            Form Date
-                          </button>
-                        </div>
-
-                        {/* Half or Full Day button */}
-                        <div className='col-md-6 col-sm-12 text-center'>
-                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
-                            Half/Full Day
-                          </button>
-                        </div>
-
-                        {/* To Date button */}
-                        <div className='col-md-6 col-sm-12 text-center'>
-                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
-                            To Date
-                          </button>
-                        </div>
-
-                        {/* Half/Full Day button */}
-                        <div className='col-md-6 col-sm-12 text-center'>
-                          <button className=' btn btn-primary w-100 m-2 rounded-1'>
-                            Half/Full Day
-                          </button>
-                        </div>
+                      <div className='modal-footer'>
+                        <button
+                          type='button'
+                          className='btn btn-secondary rounded-1'
+                          data-bs-dismiss='modal'>
+                          Close
+                        </button>
+                        <input
+                          type='submit'
+                          value='Submit'
+                          className='btn btn-primary rounded-1'
+                        />
                       </div>
-                    </div>
-                    <div className='modal-footer'>
-                      <button
-                        type='button'
-                        className='btn btn-secondary rounded-1 w-25'
-                        data-bs-dismiss='modal'>
-                        Close
-                      </button>
-                      <button
-                        type='button'
-                        className='btn btn-primary rounded-1'>
-                        Save changes
-                      </button>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
