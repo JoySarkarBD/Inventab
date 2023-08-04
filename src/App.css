@@ -26218,3 +26218,11 @@ body > * {
   height: 40px;
 }
 /* custom common button css */
+
+[data-theme-version="dark"] .invoice-details-card{
+  background-color: #2e2e42 !important;
+}
+
+[data-theme-version="dark"] .invoice-details .title{
+  color: white!important;
+}

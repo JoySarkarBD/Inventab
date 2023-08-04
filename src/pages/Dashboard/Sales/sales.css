@@ -64,11 +64,11 @@
 .invoice-details .title {
   color: black;
 }
-
 .invoice-details-card,
 .invoice-details,
 .userInfo-invoice-details {
   border-radius: 8px !important;
+  background: white;
 }
 
 /* Responsive css start*/

@@ -68,7 +68,7 @@ const SalesInvoiceDetails = () => {
       <div className="row my-5 row-gap-2">
         {/* Billing Address Detail */}
         <div className="col-12 col-md-6 col-lg-6">
-          <div className="invoice-details-card bg-white">
+          <div className="invoice-details-card">
             <div className="card-body d-flex">
               <div className="me-auto">
                 <h4 className="card-title">Billing Address Detail</h4>
@@ -85,7 +85,7 @@ const SalesInvoiceDetails = () => {
 
         {/* Shipping address Detail including GST */}
         <div className="col-12 col-md-6 col-lg-6">
-          <div className="invoice-details-card bg-white">
+          <div className="invoice-details-card">
             <div className="card-body">
               <h4 className="card-title">
                 Shipping address Detail including GST
@@ -100,8 +100,8 @@ const SalesInvoiceDetails = () => {
           </div>
         </div>
 
-        <div className="col-12 invoice-details-card">
-          <div className="invoice-details bg-white mt-3 card-body">
+        <div className="col-12">
+          <div className="invoice-details invoice-details-card mt-3 card-body">
             {/* Payment Terms */}
             <div className="d-flex align-items-center column-gap-3 mb-2">
               <p className="m-0 title">
