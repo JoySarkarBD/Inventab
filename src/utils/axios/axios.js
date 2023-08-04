@@ -3,6 +3,6 @@ export default axios.create({
   baseURL: "http://inventab.io/api/v1/",
   headers: {
     "Content-Type": "application/json",
-    Authorization: `JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMTQzODM4LCJqdGkiOiJjNjNlZDY2NDkwMTk0OTgzYWY2NTY4ZWQ4MjJiZDRmMCIsInVzZXJfaWQiOiI4N2NmNTQ2My04YjNiLTQwZmMtOWFlZS01ZDdkYzk2Y2EzMmQifQ.jkglTPTgn3N2Y3CR7ieL2i4lTDQ2DWdIMN__C3JXSnw`,
+    Authorization: `JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxMTY1Njg3LCJqdGkiOiJkOWI0ZDA2OTI3MjU0Zjg0OTM2MjMzMjkzNTNhNDc4ZSIsInVzZXJfaWQiOiJjMGE2ZmE2MC1hNWFmLTQzYWYtOTE4Yi05OTNlZjAxYmQ1NmUifQ.1JkJp8LuDdOZGsU7-264OBvIE8BeV3dX6jlP8CVMz1A`,
   },
 });
