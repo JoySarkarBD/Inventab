@@ -15,6 +15,7 @@ import "./AddSalesLeads.css";
 
 function SalesLeadHistoryModal(props) {
   const [histories, setHistories] = useState([]);
+
   const {
     modalState,
     onHide,
@@ -49,6 +50,15 @@ function SalesLeadHistoryModal(props) {
       if (res.status === 201) {
         setToggleForm(false);
         toast.success("History created successfully");
+        const historyObj = {
+          created_by: {
+            first_name: "Test",
+            last_name: "Test",
+          },
+          date: newHistoryData.date,
+          comment: commentValue,
+        };
+        setHistories((prev) => [historyObj, ...prev]);
       } else {
         toast.error("Something wrong", { duration: 2000 });
       }
@@ -149,8 +159,8 @@ function SalesLeadHistoryModal(props) {
 
             <>
               <div className='modal-body'>
-                {histories?.map((s) => (
-                  <div className='card border' key={s?.id}>
+                {histories?.map((s, i) => (
+                  <div className='card border' key={i}>
                     <div className='card-header text-dark fs-5'>
                       Date: {s?.date}
                     </div>
@@ -198,9 +208,6 @@ const UpdateSalesLeads = () => {
         const { data } = await axios.get(
           `http://inventab.io/api/v1/pipo/sales/lead/?lead_no=${lead_no}`
         );
-        // const { data } = await axios.get(
-        //   "http://inventab.io/api/v1/pipo/sales/lead/?lead_no=62176817-cce6-48ae-94a0-ffeb0663305d"
-        // );
         setLoading(false);
         setSelectedData(data?.results[0]);
       } catch (error) {
