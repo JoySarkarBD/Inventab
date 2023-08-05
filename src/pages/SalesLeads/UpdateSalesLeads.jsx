@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
@@ -14,8 +15,8 @@ import "./AddSalesLeads.css";
 
 function SalesLeadHistoryModal(props) {
   // console.log(props.salesData?.sales_lead_history);
+  const { toggleForm, setToggleForm } = props?.modalState;
 
-  const [toggleForm, setToggleForm] = useState(false);
   const [commentValue, setCommentValue] = useState("");
 
   const sales_lead_history = [
@@ -56,73 +57,81 @@ function SalesLeadHistoryModal(props) {
     closeModal(props);
   };
 
+  console.log(toggleForm);
+
   return (
-    <Modal
-      {...props}
-      size='lg'
-      aria-labelledby='contained-modal-title-vcenter'
-      centered>
-      <Modal.Header>
-        <Modal.Title id='contained-modal-title-vcenter'>
-          History for Lead - xxx
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {!toggleForm ? (
-          sales_lead_history.map((s) => (
-            <div className='card border' key={s?.id}>
-              <div className='card-header text-dark fs-5'>Date: {s?.date}</div>
-              <div className='card-body'>
-                <blockquote className='blockquote mb-0'>
-                  <p className='text-dark fs-5 mb-0'>
-                    Comment:
-                    <span className='fs-6'> {s?.comment}</span>
-                  </p>
-                  <p className='text-dark fs-5 mb-0'>
-                    Created By:
-                    <span className='fs-6'> {s?.created_by}</span>
-                  </p>
-                </blockquote>
+    <>
+      <Modal
+        {...props}
+        size='lg'
+        aria-labelledby='contained-modal-title-vcenter'
+        centered>
+        <Modal.Header>
+          <Modal.Title id='contained-modal-title-vcenter'>
+            History for Lead - xxx
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {!toggleForm ? (
+            sales_lead_history.map((s) => (
+              <div className='card border' key={s?.id}>
+                <div className='card-header text-dark fs-5'>
+                  Date: {s?.date}
+                </div>
+                <div className='card-body'>
+                  <blockquote className='blockquote mb-0'>
+                    <p className='text-dark fs-5 mb-0'>
+                      Comment:
+                      <span className='fs-6'> {s?.comment}</span>
+                    </p>
+                    <p className='text-dark fs-5 mb-0'>
+                      Created By:
+                      <span className='fs-6'> {s?.created_by}</span>
+                    </p>
+                  </blockquote>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <TextArea
-            title='Comment'
-            name='comment'
-            placeHolder='Type your comment.......'
-            value={commentValue}
-            onChange={(e) => setCommentValue(e.target.value)}
-          />
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          onClick={() => closeModal(props)}
-          className='rounded-1 px-5 py-3 outline-none border-0'>
-          Cancel
-        </Button>
-        {toggleForm ? (
+            ))
+          ) : (
+            <TextArea
+              title='Comment'
+              name='comment'
+              placeHolder='Type your comment.......'
+              value={commentValue}
+              onChange={(e) => setCommentValue(e.target.value)}
+            />
+          )}
+        </Modal.Body>
+        <Modal.Footer>
           <Button
-            className='rounded-1 px-5 py-3 outline-none border-0'
-            type='submit'
-            form='salesLeadHistoryForm'
-            onClick={(e) => submitData(e, props)}>
-            Submit
+            onClick={() => closeModal(props)}
+            className='rounded-1 px-5 py-3 outline-none border-0'>
+            Cancel
           </Button>
-        ) : (
-          <Button
-            className='rounded-1 px-5 py-3 outline-none border-0'
-            onClick={() => setToggleForm(!toggleForm)}>
-            Add
-          </Button>
-        )}
-      </Modal.Footer>
-    </Modal>
+          {toggleForm ? (
+            <Button
+              className='rounded-1 px-5 py-3 outline-none border-0'
+              type='submit'
+              form='salesLeadHistoryForm'
+              onClick={(e) => submitData(e, props)}>
+              Submit
+            </Button>
+          ) : (
+            <Button
+              className='rounded-1 px-5 py-3 outline-none border-0'
+              onClick={() => setToggleForm(!toggleForm)}>
+              Add
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 
 const UpdateSalesLeads = () => {
+  const [toggleForm, setToggleForm] = useState(false);
+
   const { lead_no } = useParams();
 
   const [selectedData, setSelectedData] = useState({});
@@ -180,12 +189,16 @@ const UpdateSalesLeads = () => {
               show={modalShow}
               onHide={() => setModalShow(false)}
               salesData={selectedData}
+              modalState={{ toggleForm, setToggleForm }}
             />
             {/* -------modal hidden------- */}
 
             <div className='card-body'>
               {!loading ? (
-                <SalesDataForm salesData={selectedData} />
+                <SalesDataForm
+                  salesData={selectedData}
+                  modalState={{ toggleForm, setToggleForm }}
+                />
               ) : (
                 <Loader />
               )}

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
@@ -12,7 +13,9 @@ import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 import "./SalesDataForm.css";
 
-export default function SalesDataForm({ salesData }) {
+export default function SalesDataForm(props) {
+  const { setToggleForm } = props.modalState;
+
   const [loading, setLoading] = useState(false);
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
@@ -48,7 +51,7 @@ export default function SalesDataForm({ salesData }) {
     description,
     contact_name,
     parts,
-  } = salesData;
+  } = props.salesData;
 
   // load dept, sub org, client, status all
   useEffect(() => {
@@ -236,7 +239,7 @@ export default function SalesDataForm({ salesData }) {
         partArr.forEach((p) => {
           const partObj = {
             lead_part_id: p?.lead_part_id,
-            part_id: p?.part_id,
+            part_id: p?.part_id?.id,
             short_description: p?.short_description,
             quantity: p?.quantity,
             unit_cost: p?.unit_cost,
@@ -268,8 +271,12 @@ export default function SalesDataForm({ salesData }) {
           `pipo/update/sales/lead/${lead_no}/`,
           JSON.stringify(updateObj)
         );
-        console.log(response);
+        if (response?.status === 200) {
+          toast.success("Lead updated successfully");
+          setToggleForm(true);
+        }
       } catch (error) {
+        toast.error(error?.message, { duration: 2000 });
         console.log(error);
       }
     },
@@ -328,6 +335,7 @@ export default function SalesDataForm({ salesData }) {
 
   return (
     <>
+      <Toaster />
       <form onSubmit={handleSubmit}>
         <div className='row'>
           {/* add department input */}

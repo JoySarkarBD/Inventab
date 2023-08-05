@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Select from "react-select";
@@ -168,7 +169,7 @@ const AddSalesDataForm = () => {
         partArr.forEach((p) => {
           const partObj = {
             lead_part_id: p?.lead_part_id,
-            part_id: p?.part_id,
+            part_id: p?.part_id?.id,
             short_description: p?.short_description,
             quantity: p?.quantity,
             unit_cost: p?.unit_cost,
@@ -195,15 +196,17 @@ const AddSalesDataForm = () => {
           client: client?.value,
           parts,
         };
-        return console.log(createLeadObj);
-        // resetForm({ values: "" });
-
+        // return console.log(createLeadObj);
         const res = await axios.post(
           `pipo/create/sales/lead/`,
           JSON.stringify(createLeadObj)
         );
-        console.log(res);
+        if (res?.status === 201) {
+          resetForm({ values: "" });
+          toast.success("Lead created successfully");
+        }
       } catch (error) {
+        toast.error(error?.message, { duration: 2000 });
         console.log(error);
       }
     },
@@ -275,6 +278,7 @@ const AddSalesDataForm = () => {
 
   return (
     <>
+      <Toaster />
       <PageTitle title='Add Sales Leads' />
       {/* back button */}
       <div className='d-flex justify-content-end me-5 mb-4 '>
@@ -671,6 +675,7 @@ const AddSalesDataForm = () => {
                         </td>
                         <td>
                           <button
+                            type='button'
                             className='btn btn-danger btn-sm'
                             onClick={() => handleRemovePart(index)}>
                             Remove
