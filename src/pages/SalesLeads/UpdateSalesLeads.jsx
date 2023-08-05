@@ -118,6 +118,7 @@ function SalesLeadHistoryModal(props) {
                   className='rounded-1 px-5 py-3 outline-none border-0 btn btn-primary'
                   type='submit'
                   form='salesLeadHistoryForm'
+                  data-bs-dismiss='modal'
                   onClick={(e) => submitData(e, props)}>
                   Submit
                 </button>
