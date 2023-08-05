@@ -20921,7 +20921,7 @@ button:focus {
   border: 0;
   z-index: 2;
   overflow: hidden;
-  border-radius: 1rem;
+  border-radius: 4px;
   box-shadow: 0 0 50px 0 rgba(82, 63, 105, 0.15);
   margin-top: 0;
 }
