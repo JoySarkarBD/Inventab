@@ -179,10 +179,13 @@ const Attendance = () => {
                         </div>
                         <div className='row'>
                           {/* form date input */}
+
+                          <label>From:</label>
                           <div className='col-md-4 col-sm-12 '>
                             <input
-                              type=''
+                              type='date'
                               name='from'
+                              placeholder='Select date'
                               id='from'
                               className='w-100 h-75 m-2 rounded-1'
                             />
@@ -217,9 +220,10 @@ const Attendance = () => {
                           </div>
 
                           {/* To Date button */}
+                          <label>To:</label>
                           <div className='col-md-4 col-sm-12 '>
                             <input
-                              type=''
+                              type='date'
                               name='to'
                               id='to'
                               className='w-100 h-75 m-2 rounded-1'
