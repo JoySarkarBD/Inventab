@@ -229,37 +229,49 @@ export default function SalesDataForm({ salesData }) {
     },
 
     onSubmit: async (values) => {
-      const { department, status, client, parts: partArr, sub_org } = values;
-      // sort part obj data
-      let parts = [];
-      partArr.forEach((p) => {
-        const partObj = {
-          lead_part_id: p?.lead_part_id,
-          part_id: p?.part_id,
-          short_description: p?.short_description,
-          quantity: p?.quantity,
-          unit_cost: p?.unit_cost,
-          status: p?.status,
-          gst: p?.gst,
-          net_price: p?.net_price,
-          extd_gross_price: p?.extd_gross_price,
+      try {
+        const { department, status, client, parts: partArr, sub_org } = values;
+        // sort part obj data
+        let parts = [];
+        partArr.forEach((p) => {
+          const partObj = {
+            lead_part_id: p?.lead_part_id,
+            part_id: p?.part_id,
+            short_description: p?.short_description,
+            quantity: p?.quantity,
+            unit_cost: p?.unit_cost,
+            status: p?.status,
+            gst: p?.gst,
+            net_price: p?.net_price,
+            extd_gross_price: p?.extd_gross_price,
+          };
+
+          if (p?.lead_part_id == undefined) {
+            delete partObj.lead_part_id;
+          }
+
+          parts?.push(partObj);
+        });
+
+        const updateObj = {
+          ...values,
+          department: department?.value,
+          status: status?.value,
+          client: client?.value,
+          parts,
+          sub_org: sub_org?.value,
         };
 
-        if (p?.lead_part_id == undefined) {
-          delete partObj.lead_part_id;
-        }
+        // return console.log(updateObj);
 
-        parts?.push(partObj);
-      });
-
-      console.log({
-        ...values,
-        department: department?.value,
-        status: status?.value,
-        client: client?.value,
-        parts,
-        sub_org: sub_org?.value,
-      });
+        const response = await axios.put(
+          `pipo/update/sales/lead/${lead_no}/`,
+          JSON.stringify(updateObj)
+        );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
@@ -491,7 +503,7 @@ export default function SalesDataForm({ salesData }) {
                             placeholder='Select Part No'
                             isSearchable
                             isClearable
-                            isLoading={partsLoading && parts?.length > 0}
+                            isLoading={partsLoading}
                             options={allParts}
                             onChange={(option) => handleSelectPart(option)}
                           />
@@ -596,142 +608,149 @@ export default function SalesDataForm({ salesData }) {
 
         {/*========================= dynamic table=============== */}
 
-        {(addAllParts?.length && allParts.length) > 0 ? (
-          <div className='table-responsive111'>
-            <table className='table table-bordered table-responsive-sm111'>
-              <thead>
-                <tr>
-                  <th scope='col'>Part No</th>
-                  <th scope='col'>Short Description</th>
-                  <th scope='col'>Unit Cost</th>
-                  <th scope='col'>Quantity</th>
-                  <th scope='col'>Status</th>
-                  <th scope='col'>GST</th>
-                  <th scope='col'>Net Price</th>
-                  <th scope='col'>Extd Gross Price</th>
-                  <th scope='col'>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {values?.parts?.map((part, index) => {
-                  return (
-                    <tr key={index + 1}>
-                      <td>
-                        <div className='select-port'>
-                          <Select
-                            className='select'
-                            placeholder='Select Port No'
-                            value={{
-                              label: part?.part_id?.part_number,
-                              value: part?.part_id?.id,
-                            }}
-                            options={allParts}
-                            name='part_id'
-                            isSearchable
-                            isClearable
-                            onChange={(selectedOption) =>
-                              handlePartSelectChange(selectedOption, index)
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='text'
-                          placeholder='Short Description'
-                          name={`parts[${index}].short_description`}
-                          value={part.short_description}
-                          onChange={handleChange}
-                        />
-                      </td>
-
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Unit Cost'
-                          name={`parts[${index}].unit_cost`}
-                          value={part?.unit_cost}
-                          onChange={handleChange}
-                        />
-                      </td>
-
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Total Quntity'
-                          name={`parts[${index}].quantity`}
-                          value={part.quantity}
-                          onChange={handleChange}
-                        />
-                      </td>
-
-                      <td>
-                        <Select
-                          className='select'
-                          placeholder='Select Part No'
-                          isSearchable
-                          isClearable
-                          name={`parts[${index}].status`}
-                          value={{
-                            label: part?.status,
-                            value: part?.status,
-                          }}
-                          options={partsStatus}
-                          onChange={(selectedOption) =>
-                            handlePartStatusChange(selectedOption, index)
-                          }
-                        />
-                      </td>
-
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Extd Net Cost'
-                          name={`parts[${index}].gst`}
-                          value={part?.gst}
-                          onChange={handleChange}
-                        />
-                      </td>
-
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Extd Net Cost'
-                          name={`parts[${index}].net_price`}
-                          value={part?.net_price}
-                          onChange={handleChange}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Extd Gross Cost'
-                          name={`parts[${index}].extd_gross_price`}
-                          value={part?.extd_gross_price}
-                          onChange={handleChange}
-                        />
-                      </td>
-                      <td>
-                        <button
-                          className='btn btn-danger btn-sm'
-                          onClick={() => handleRemovePart(index)}>
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
+        {partsLoading ? (
           <Loader />
+        ) : (
+          <>
+            {values.parts?.length ? (
+              <div className='table-responsive111'>
+                <table className='table table-bordered table-responsive-sm111'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>Part No</th>
+                      <th scope='col'>Short Description</th>
+                      <th scope='col'>Unit Cost</th>
+                      <th scope='col'>Quantity</th>
+                      <th scope='col'>Status</th>
+                      <th scope='col'>GST</th>
+                      <th scope='col'>Net Price</th>
+                      <th scope='col'>Extd Gross Price</th>
+                      <th scope='col'>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {values?.parts?.map((part, index) => {
+                      return (
+                        <tr key={index + 1}>
+                          <td>
+                            <div className='select-port'>
+                              <Select
+                                className='select'
+                                placeholder='Select Port No'
+                                value={{
+                                  label: part?.part_id?.part_number || "",
+                                  value: part?.part_id?.id || "",
+                                }}
+                                options={allParts}
+                                name='part_id'
+                                isSearchable
+                                isClearable
+                                isLoading={partsLoading}
+                                onChange={(selectedOption) =>
+                                  handlePartSelectChange(selectedOption, index)
+                                }
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='text'
+                              placeholder='Short Description'
+                              name={`parts[${index}].short_description`}
+                              value={part.short_description}
+                              onChange={handleChange}
+                            />
+                          </td>
+
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Unit Cost'
+                              name={`parts[${index}].unit_cost`}
+                              value={part?.unit_cost}
+                              onChange={handleChange}
+                            />
+                          </td>
+
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Total Quntity'
+                              name={`parts[${index}].quantity`}
+                              value={part.quantity}
+                              onChange={handleChange}
+                            />
+                          </td>
+
+                          <td>
+                            <Select
+                              className='select'
+                              placeholder='Select Part No'
+                              isSearchable
+                              isClearable
+                              name={`parts[${index}].status`}
+                              value={{
+                                label: part?.status,
+                                value: part?.status,
+                              }}
+                              options={partsStatus}
+                              onChange={(selectedOption) =>
+                                handlePartStatusChange(selectedOption, index)
+                              }
+                            />
+                          </td>
+
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Extd Net Cost'
+                              name={`parts[${index}].gst`}
+                              value={part?.gst}
+                              onChange={handleChange}
+                            />
+                          </td>
+
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Extd Net Cost'
+                              name={`parts[${index}].net_price`}
+                              value={part?.net_price}
+                              onChange={handleChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Extd Gross Cost'
+                              name={`parts[${index}].extd_gross_price`}
+                              value={part?.extd_gross_price}
+                              onChange={handleChange}
+                            />
+                          </td>
+                          <td>
+                            <button
+                              className='btn btn-danger btn-sm'
+                              onClick={() => handleRemovePart(index)}>
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <h4 className='text-center'>Parts Not Available</h4>
+            )}
+          </>
         )}
 
         {/* Submit Button */}

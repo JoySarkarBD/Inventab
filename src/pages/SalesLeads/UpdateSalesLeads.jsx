@@ -135,12 +135,12 @@ const UpdateSalesLeads = () => {
     const leads = async () => {
       try {
         setLoading(true);
-        // const { data } = await axios.get(
-        //   `http://inventab.io/api/v1/pipo/sales/lead/?lead_no=${lead_no}`
-        // );
         const { data } = await axios.get(
-          "http://inventab.io/api/v1/pipo/sales/lead/?lead_no=62176817-cce6-48ae-94a0-ffeb0663305d"
+          `http://inventab.io/api/v1/pipo/sales/lead/?lead_no=${lead_no}`
         );
+        // const { data } = await axios.get(
+        //   "http://inventab.io/api/v1/pipo/sales/lead/?lead_no=62176817-cce6-48ae-94a0-ffeb0663305d"
+        // );
         setLoading(false);
         setSelectedData(data?.results[0]);
       } catch (error) {

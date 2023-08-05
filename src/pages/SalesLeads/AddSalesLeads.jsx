@@ -199,7 +199,7 @@ const AddSalesDataForm = () => {
         // resetForm({ values: "" });
 
         const res = await axios.post(
-          `http://inventab.io/api/v1/pipo/create/sales/lead/`,
+          `pipo/create/sales/lead/`,
           JSON.stringify(createLeadObj)
         );
         console.log(res);
