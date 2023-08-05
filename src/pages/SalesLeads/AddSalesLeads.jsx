@@ -18,7 +18,8 @@ const AddSalesDataForm = () => {
   const [client, setClient] = useState([]);
   const [subOrg, setsubOrg] = useState([]);
   const [parts, setParts] = useState([]);
-  const [selectPart, setSelectPart] = useState([]);
+  const [partFullObj, setPartFullObj] = useState([]);
+  const [selectPart, setSelectPart] = useState(null);
   const [partsLoading, setPartsLoading] = useState(false);
 
   // table lowerpart data
@@ -112,6 +113,7 @@ const AddSalesDataForm = () => {
         setPartsLoading(true);
         const { data } = await axios.get("parts/parts");
         setPartsLoading(false);
+        setPartFullObj(data?.results);
         const partArr = [];
         data?.results?.forEach((data) => {
           const partObj = {
@@ -139,12 +141,6 @@ const AddSalesDataForm = () => {
     { label: "Handle Objections", value: "Handle Objections" },
     { label: "Close the Deal", value: "Close the Deal" },
     { label: "Lost Deal", value: "Lost Deal" },
-  ];
-
-  // parts status
-  const partsStatus = [
-    { label: "Active", value: "Active" },
-    { label: "Inactive", value: "Inactive" },
   ];
 
   // form submit
@@ -176,7 +172,7 @@ const AddSalesDataForm = () => {
             short_description: p?.short_description,
             quantity: p?.quantity,
             unit_cost: p?.unit_cost,
-            status: p?.status,
+            status: "Active",
             gst: p?.gst,
             net_price: p?.net_price,
             extd_gross_price: p?.extd_gross_price,
@@ -245,17 +241,29 @@ const AddSalesDataForm = () => {
 
   //update && change select options
   const handlePartSelectChange = (selectedOption, index) => {
+    const { value, label } = selectedOption;
     const updatedParts = [...values.parts];
-    updatedParts[index].part_id.id = selectedOption.value;
-    updatedParts[index].part_id.part_number = selectedOption.label;
+
+    if (value) {
+      updatedParts[index].part_id.id = value;
+      updatedParts[index].part_id.part_number = label;
+      let s = partFullObj.find((part) => part?.id === value);
+      updatedParts[index].short_description = s?.short_description || "";
+    }
+
     setFieldValue("parts", updatedParts);
   };
 
-  // update && change parts status options
-  const handlePartStatusChange = (selectedOption, index) => {
-    const updatedParts = [...values.parts];
-    updatedParts[index].status = selectedOption?.value;
-    setFieldValue("parts", updatedParts);
+  // select part
+  const handleSelectPart = (option) => {
+    let { value } = option;
+    if (value) {
+      let s = partFullObj.find((part) => part?.id === value);
+      setSelectPart(option);
+      setshort_description(s?.short_description || "");
+    } else {
+      setshort_description("");
+    }
   };
 
   return (
@@ -439,7 +447,6 @@ const AddSalesDataForm = () => {
                           <th scope='col'>Short Description</th>
                           <th scope='col'>Quantity</th>
                           <th scope='col'>Unit Cost</th>
-                          {/* <th scope='col'>Status</th> */}
                           <th scope='col'>GST</th>
                           <th scope='col'>Net Price</th>
                           <th scope='col'>Extd Gross Price</th>
@@ -457,7 +464,7 @@ const AddSalesDataForm = () => {
                                 isClearable
                                 isLoading={partsLoading && parts?.length > 0}
                                 options={parts}
-                                onChange={setSelectPart}
+                                onChange={(option) => handleSelectPart(option)}
                               />
                             </div>
                           </td>
@@ -493,16 +500,6 @@ const AddSalesDataForm = () => {
                               onChange={(e) => setUnitCost(e.target.value)}
                             />
                           </td>
-                          {/* <td>
-                            <Select
-                              className='select'
-                              placeholder='Select Part No'
-                              isSearchable
-                              isClearable
-                              options={partsStatus}
-                              onChange={setstatus}
-                            />
-                          </td> */}
                           <td>
                             <input
                               className='new_input_class'
@@ -581,7 +578,7 @@ const AddSalesDataForm = () => {
                 <tbody>
                   {values?.parts?.map((part, index) => {
                     return (
-                      <tr key={part?.part_id?.id}>
+                      <tr key={part?.part_id?.id + new Date()}>
                         <td>
                           <div className='select-port'>
                             <Select
@@ -634,31 +631,13 @@ const AddSalesDataForm = () => {
                           />
                         </td>
 
-                        {/* <td>
-                          <Select
-                            className='select'
-                            placeholder='Select Part No'
-                            isSearchable
-                            isClearable
-                            name={`parts[${index}].status`}
-                            value={{
-                              label: part?.status,
-                              value: part?.status,
-                            }}
-                            options={partsStatus}
-                            onChange={(selectedOption) =>
-                              handlePartStatusChange(selectedOption, index)
-                            }
-                          />
-                        </td> */}
-
                         <td>
                           <input
                             className='new_input_class'
                             type='number'
                             placeholder='Extd Net Cost'
                             name={`parts[${index}].gst`}
-                            value={part?.gst}
+                            value={part?.gst || ""}
                             onChange={handleChange}
                           />
                         </td>

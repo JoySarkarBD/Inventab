@@ -19,6 +19,7 @@ export default function SalesDataForm({ salesData }) {
   const [subOrg, setsubOrg] = useState([]);
   const [allParts, setParts] = useState([]);
   const [addAllParts, setAddAllParts] = useState([]);
+  const [partFullObj, setPartFullObj] = useState([]);
   const [partsLoading, setPartsLoading] = useState(false);
   const [selectPart, setSelectPart] = useState("");
 
@@ -132,6 +133,7 @@ export default function SalesDataForm({ salesData }) {
         setPartsLoading(true);
         const { data } = await axios.get("parts/parts");
         setPartsLoading(false);
+        setPartFullObj(data?.results);
         const partArr = [];
         data?.results?.forEach((data) => {
           const partObj = {
@@ -173,7 +175,7 @@ export default function SalesDataForm({ salesData }) {
       net_price,
       extd_gross_price,
     };
-    console.log(newPart);
+
     setFieldValue("parts", [...values.parts, newPart]);
     // clear input field
     setSelectPart(null);
@@ -280,9 +282,16 @@ export default function SalesDataForm({ salesData }) {
 
   //update && change select options
   const handlePartSelectChange = (selectedOption, index) => {
+    const { value, label } = selectedOption;
     const updatedParts = [...values.parts];
-    updatedParts[index].part_id.id = selectedOption.value;
-    updatedParts[index].part_id.part_number = selectedOption.label;
+
+    if (value) {
+      updatedParts[index].part_id.id = value;
+      updatedParts[index].part_id.part_number = label;
+      let s = partFullObj.find((part) => part?.id === value);
+      updatedParts[index].short_description = s?.short_description || "";
+    }
+
     setFieldValue("parts", updatedParts);
   };
 
@@ -291,6 +300,18 @@ export default function SalesDataForm({ salesData }) {
     const updatedParts = [...values.parts];
     updatedParts[index].status = selectedOption?.value;
     setFieldValue("parts", updatedParts);
+  };
+
+  // select part
+  const handleSelectPart = (option) => {
+    let { value } = option;
+    if (value) {
+      let s = partFullObj.find((part) => part?.id === value);
+      setSelectPart(option);
+      setshort_description(s?.short_description || "");
+    } else {
+      setshort_description("");
+    }
   };
 
   return (
@@ -472,7 +493,7 @@ export default function SalesDataForm({ salesData }) {
                             isClearable
                             isLoading={partsLoading && parts?.length > 0}
                             options={allParts}
-                            onChange={setSelectPart}
+                            onChange={(option) => handleSelectPart(option)}
                           />
                         </div>
                       </td>
@@ -594,7 +615,7 @@ export default function SalesDataForm({ salesData }) {
               <tbody>
                 {values?.parts?.map((part, index) => {
                   return (
-                    <tr key={part?.part_id?.id}>
+                    <tr key={part?.part_id?.id + index + new Date()}>
                       <td>
                         <div className='select-port'>
                           <Select
