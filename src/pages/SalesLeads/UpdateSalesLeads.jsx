@@ -17,7 +17,6 @@ function SalesLeadHistoryModal(props) {
 
   const [toggleForm, setToggleForm] = useState(false);
   const [commentValue, setCommentValue] = useState("");
-  const [historyDataObj, setHistoryDataObj] = useState({});
 
   const sales_lead_history = [
     {
@@ -34,29 +33,31 @@ function SalesLeadHistoryModal(props) {
     },
   ];
 
+  // modal close btn
   const closeModal = (props) => {
     if (toggleForm) {
       setToggleForm(false);
+      setCommentValue("");
     }
     props.onHide();
   };
 
-  const submitData = () => {
-    if (toggleForm) {
-      setToggleForm(false);
-    }
+  // submit modal
+  const submitData = (e, props) => {
+    console.log(e);
+    e.preventDefault();
 
     const newHistoryData = {
-      date: "",
+      date: new Date(Date.now()).toLocaleDateString(),
       created_by: "",
       comment: commentValue,
     };
 
-    setHistoryDataObj(newHistoryData);
+    console.log(newHistoryData);
 
-    console.log(historyDataObj);
-    setCommentValue("");
-    props.onHide();
+    setTimeout(() => {
+      closeModal(props);
+    }, 2000);
   };
 
   return (
@@ -90,15 +91,13 @@ function SalesLeadHistoryModal(props) {
             </div>
           ))
         ) : (
-          <form>
-            <TextArea
-              title='Comment'
-              name='comment'
-              placeHolder='Type your comment.......'
-              value={commentValue}
-              onChange={(e) => setCommentValue(e.target.value)}
-            />
-          </form>
+          <TextArea
+            title='Comment'
+            name='comment'
+            placeHolder='Type your comment.......'
+            value={commentValue}
+            onChange={(e) => setCommentValue(e.target.value)}
+          />
         )}
       </Modal.Body>
       <Modal.Footer>
@@ -112,7 +111,7 @@ function SalesLeadHistoryModal(props) {
             className='rounded-1 px-5 py-3 outline-none border-0'
             type='submit'
             form='salesLeadHistoryForm'
-            onClick={() => submitData(props)}>
+            onClick={(e) => submitData(e, props)}>
             Submit
           </Button>
         ) : (
@@ -149,7 +148,7 @@ const UpdateSalesLeads = () => {
         setLoading(false);
         setSelectedData(data?.results[0]);
       } catch (error) {
-        setLoading(true);
+        setLoading(false);
         console.log(error);
       }
     };
