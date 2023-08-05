@@ -22,7 +22,6 @@ function SalesLeadHistoryModal(props) {
     show: { modalShow, setModalShow },
   } = props;
 
-  // console.log(props.salesData?.sales_lead_history);
   const { toggleForm, setToggleForm } = props?.modalState;
 
   const [commentValue, setCommentValue] = useState("");
@@ -59,6 +58,7 @@ function SalesLeadHistoryModal(props) {
     }
   };
 
+  // this one for submitting the form of add history
   useEffect(() => {
     if (toggleForm) {
       var myModal = new bootstrap.Modal(document.getElementById("myModal1"), {
@@ -69,6 +69,7 @@ function SalesLeadHistoryModal(props) {
     }
   }, [toggleForm]);
 
+  // this one for show the history update data list
   useEffect(() => {
     if (modalShow) {
       var myModal = new bootstrap.Modal(document.getElementById("myModal2"), {
@@ -78,6 +79,7 @@ function SalesLeadHistoryModal(props) {
     }
   }, [modalShow]);
 
+  // sorting the results to show perfectly
   useEffect(() => {
     if (salesData?.sales_lead_history) {
       setHistories(salesData?.sales_lead_history.reverse());
