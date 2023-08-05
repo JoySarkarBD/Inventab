@@ -22,13 +22,27 @@ function SalesLeadHistoryModal(props) {
   const sales_lead_history = [
     {
       id: "3fe9baea-f95a-4560-a736-105b4eab1248",
-      created_by: "44dbaf21-9946-46ae-ad07-17fa3c1995e5",
+      created_by: {
+        first_name: "Test",
+        last_name: "User",
+        org: {
+          company_name: "Krishna Smart Technology",
+        },
+      },
       date: "2023-08-04",
       comment: "Testing",
     },
     {
       id: "3fe9baea-f95a-4560-a736-105b4eab1247",
-      created_by: "44dbaf21-9946-46ae-ad07-17fa3c1995e5",
+      email: "testuser@autopeepal.com",
+      mobile: "6666666666",
+      created_by: {
+        first_name: "Test",
+        last_name: "User",
+        org: {
+          company_name: "Krishna Smart Technology",
+        },
+      },
       date: "2023-08-04",
       comment: "Testing",
     },
@@ -86,7 +100,12 @@ function SalesLeadHistoryModal(props) {
                     </p>
                     <p className='text-dark fs-5 mb-0'>
                       Created By:
-                      <span className='fs-6'> {s?.created_by}</span>
+                      <span className='fs-6'>
+                        {" "}
+                        {s?.created_by.first_name +
+                          " " +
+                          s?.created_by.last_name}
+                      </span>
                     </p>
                   </blockquote>
                 </div>
