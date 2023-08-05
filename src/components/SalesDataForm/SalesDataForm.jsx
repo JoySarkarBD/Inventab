@@ -267,13 +267,20 @@ export default function SalesDataForm(props) {
 
         // return console.log(updateObj);
 
+        /*    toast.success("Lead updated successfully, Please update history");
+        setTimeout(() => {
+          setToggleForm(true);
+        }, 2000);
+        return; */
         const response = await axios.put(
           `pipo/update/sales/lead/${lead_no}/`,
           JSON.stringify(updateObj)
         );
         if (response?.status === 200) {
-          toast.success("Lead updated successfully");
-          setToggleForm(true);
+          toast.success("Lead updated successfully, Please update history");
+          setTimeout(() => {
+            setToggleForm(true);
+          }, 2000);
         }
       } catch (error) {
         toast.error(error?.message, { duration: 2000 });
@@ -766,7 +773,7 @@ export default function SalesDataForm(props) {
           <input
             className='btn btn-primary rounded-1'
             type='submit'
-            value='Add Sales Lead'
+            value='Update Sales Lead'
           />
         </div>
       </form>

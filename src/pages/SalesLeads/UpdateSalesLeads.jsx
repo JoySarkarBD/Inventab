@@ -1,9 +1,8 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-hot-toast";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import TextArea from "../../components/Form/TextArea";
@@ -11,148 +10,178 @@ import SalesDataForm from "../../components/SalesDataForm/SalesDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
+import { formatDateToIndianVersion } from "../../utils/utilityFunc/utilityFunc";
 import "./AddSalesLeads.css";
 
 function SalesLeadHistoryModal(props) {
+  const [histories, setHistories] = useState([]);
+  const {
+    modalState,
+    onHide,
+    salesData,
+    show: { modalShow, setModalShow },
+  } = props;
+
   // console.log(props.salesData?.sales_lead_history);
   const { toggleForm, setToggleForm } = props?.modalState;
 
   const [commentValue, setCommentValue] = useState("");
 
-  const sales_lead_history = [
-    {
-      id: "3fe9baea-f95a-4560-a736-105b4eab1248",
-      created_by: {
-        first_name: "Test",
-        last_name: "User",
-        org: {
-          company_name: "Krishna Smart Technology",
-        },
-      },
-      date: "2023-08-04",
-      comment: "Testing",
-    },
-    {
-      id: "3fe9baea-f95a-4560-a736-105b4eab1247",
-      email: "testuser@autopeepal.com",
-      mobile: "6666666666",
-      created_by: {
-        first_name: "Test",
-        last_name: "User",
-        org: {
-          company_name: "Krishna Smart Technology",
-        },
-      },
-      date: "2023-08-04",
-      comment: "Testing",
-    },
-  ];
-
-  // modal close btn
-  const closeModal = (props) => {
-    if (toggleForm) {
-      setToggleForm(false);
-      setCommentValue("");
-    }
-    props.onHide();
-  };
-
   // submit modal
-  const submitData = (e, props) => {
-    e.preventDefault();
+  const submitData = async (e) => {
+    try {
+      const { lead_no } = salesData;
+      e.preventDefault();
 
-    const newHistoryData = {
-      date: new Date(Date.now()).toLocaleDateString(),
-      created_by: "",
-      comment: commentValue,
-    };
+      const date = formatDateToIndianVersion(new Date());
 
-    console.log(newHistoryData);
-    closeModal(props);
+      const newHistoryData = {
+        saleslead: lead_no,
+        date,
+        created_by: "87cf5463-8b3b-40fc-9aee-5d7dc96ca32d",
+        comment: commentValue,
+      };
+
+      // return console.log(newHistoryData);
+      const res = await axios.post(
+        `pipo/create/lead/history/`,
+        JSON.stringify(newHistoryData)
+      );
+      if (res.status === 201) {
+        setToggleForm(false);
+        toast.success("History created successfully");
+      } else {
+        toast.error("Something wrong", { duration: 2000 });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.message, { duration: 2000 });
+    }
   };
 
-  console.log(toggleForm);
+  useEffect(() => {
+    if (toggleForm) {
+      var myModal = new bootstrap.Modal(document.getElementById("myModal1"), {
+        backdrop: "static",
+      });
+
+      myModal.show();
+    }
+  }, [toggleForm]);
+
+  useEffect(() => {
+    if (modalShow) {
+      var myModal = new bootstrap.Modal(document.getElementById("myModal2"), {
+        backdrop: "static",
+      });
+      myModal.show();
+    }
+  }, [modalShow]);
+
+  useEffect(() => {
+    if (salesData?.sales_lead_history) {
+      setHistories(salesData?.sales_lead_history.reverse());
+    }
+  }, [salesData?.sales_lead_history]);
 
   return (
     <>
-      <Modal
-        {...props}
-        size='lg'
-        aria-labelledby='contained-modal-title-vcenter'
-        centered>
-        <Modal.Header>
-          <Modal.Title id='contained-modal-title-vcenter'>
-            History for Lead - xxx
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {!toggleForm ? (
-            sales_lead_history.map((s) => (
-              <div className='card border' key={s?.id}>
-                <div className='card-header text-dark fs-5'>
-                  Date: {s?.date}
-                </div>
-                <div className='card-body'>
-                  <blockquote className='blockquote mb-0'>
-                    <p className='text-dark fs-5 mb-0'>
-                      Comment:
-                      <span className='fs-6'> {s?.comment}</span>
-                    </p>
-                    <p className='text-dark fs-5 mb-0'>
-                      Created By:
-                      <span className='fs-6'>
-                        {" "}
-                        {s?.created_by.first_name +
-                          " " +
-                          s?.created_by.last_name}
-                      </span>
-                    </p>
-                  </blockquote>
-                </div>
+      {/* add history modal */}
+      {toggleForm && (
+        <div className='modal fade' id='myModal1'>
+          <div className='modal-dialog modal-dialog-centered'>
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <h5 className='modal-title'>Modal Title</h5>
+                <button
+                  type='button'
+                  className='btn-close'
+                  data-bs-dismiss='modal'
+                  aria-label='Close'
+                  onClick={() => {
+                    setToggleForm(false);
+                  }}
+                />
               </div>
-            ))
-          ) : (
-            <TextArea
-              title='Comment'
-              name='comment'
-              placeHolder='Type your comment.......'
-              value={commentValue}
-              onChange={(e) => setCommentValue(e.target.value)}
-            />
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            onClick={() => closeModal(props)}
-            className='rounded-1 px-5 py-3 outline-none border-0'>
-            Cancel
-          </Button>
-          {toggleForm ? (
-            <Button
-              className='rounded-1 px-5 py-3 outline-none border-0'
-              type='submit'
-              form='salesLeadHistoryForm'
-              onClick={(e) => submitData(e, props)}>
-              Submit
-            </Button>
-          ) : (
-            <Button
-              className='rounded-1 px-5 py-3 outline-none border-0'
-              onClick={() => setToggleForm(!toggleForm)}>
-              Add
-            </Button>
-          )}
-        </Modal.Footer>
-      </Modal>
+
+              <>
+                <div className='modal-body'>
+                  <TextArea
+                    title='Comment'
+                    name='comment'
+                    placeHolder='Type your comment.......'
+                    value={commentValue}
+                    onChange={(e) => setCommentValue(e.target.value)}
+                  />
+                </div>
+                <button
+                  className='rounded-1 px-5 py-3 outline-none border-0 btn btn-primary'
+                  type='submit'
+                  form='salesLeadHistoryForm'
+                  onClick={(e) => submitData(e, props)}>
+                  Submit
+                </button>
+              </>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* see history modal */}
+      <div className='modal fade' id='myModal2'>
+        <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h5 className='modal-title'>See History</h5>
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+                onClick={() => {
+                  setModalShow(false);
+                }}
+              />
+            </div>
+
+            <>
+              <div className='modal-body'>
+                {histories?.map((s) => (
+                  <div className='card border' key={s?.id}>
+                    <div className='card-header text-dark fs-5'>
+                      Date: {s?.date}
+                    </div>
+                    <div className='card-body'>
+                      <blockquote className='blockquote mb-0'>
+                        <p className='text-dark fs-5 mb-0'>
+                          Comment:
+                          <span className='fs-6'> {s?.comment}</span>
+                        </p>
+                        <p className='text-dark fs-5 mb-0'>
+                          Created By:
+                          <span className='fs-6'>
+                            {" "}
+                            {s?.created_by.first_name +
+                              " " +
+                              s?.created_by.last_name}
+                          </span>
+                        </p>
+                      </blockquote>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
 
 const UpdateSalesLeads = () => {
   const [toggleForm, setToggleForm] = useState(false);
-
   const { lead_no } = useParams();
-
   const [selectedData, setSelectedData] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -201,11 +230,16 @@ const UpdateSalesLeads = () => {
                 onClick={() => setModalShow(true)}>
                 See History
               </button>
+              <button
+                className='btn btn-primary text-white rounded-1 border-0 py-3 px-4'
+                onClick={() => setToggleForm(true)}>
+                Add History
+              </button>
             </div>
 
             {/* -------modal hidden ------ */}
             <SalesLeadHistoryModal
-              show={modalShow}
+              show={{ modalShow, setModalShow }}
               onHide={() => setModalShow(false)}
               salesData={selectedData}
               modalState={{ toggleForm, setToggleForm }}

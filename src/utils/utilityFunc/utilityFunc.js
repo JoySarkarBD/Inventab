@@ -78,6 +78,15 @@ utils.monthTotalValue = (arr) => {
   return t;
 };
 
+// indian date format
+utils.formatDateToIndianVersion = (date) => {
+  if (!(date instanceof Date) || isNaN(date))
+    throw new Error("Invalid date object.");
+  return `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+};
+
 export const {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -85,4 +94,5 @@ export const {
   kpiEachTotal,
   monthTotalValue,
   getMonthName,
+  formatDateToIndianVersion,
 } = utils;
