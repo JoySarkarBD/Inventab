@@ -44,7 +44,6 @@ function SalesLeadHistoryModal(props) {
 
   // submit modal
   const submitData = (e, props) => {
-    console.log(e);
     e.preventDefault();
 
     const newHistoryData = {
@@ -54,10 +53,7 @@ function SalesLeadHistoryModal(props) {
     };
 
     console.log(newHistoryData);
-
-    setTimeout(() => {
-      closeModal(props);
-    }, 2000);
+    closeModal(props);
   };
 
   return (
