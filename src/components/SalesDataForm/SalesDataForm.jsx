@@ -235,7 +235,7 @@ export default function SalesDataForm({ salesData }) {
       partArr.forEach((p) => {
         const partObj = {
           lead_part_id: p?.lead_part_id,
-          part_id: p?.part_id?.id,
+          part_id: p?.part_id,
           short_description: p?.short_description,
           quantity: p?.quantity,
           unit_cost: p?.unit_cost,
@@ -615,7 +615,7 @@ export default function SalesDataForm({ salesData }) {
               <tbody>
                 {values?.parts?.map((part, index) => {
                   return (
-                    <tr key={part?.part_id?.id + index + new Date()}>
+                    <tr key={index + 1}>
                       <td>
                         <div className='select-port'>
                           <Select

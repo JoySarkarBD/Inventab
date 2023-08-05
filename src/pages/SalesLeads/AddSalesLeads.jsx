@@ -168,7 +168,7 @@ const AddSalesDataForm = () => {
         partArr.forEach((p) => {
           const partObj = {
             lead_part_id: p?.lead_part_id,
-            part_id: p?.part_id?.id,
+            part_id: p?.part_id,
             short_description: p?.short_description,
             quantity: p?.quantity,
             unit_cost: p?.unit_cost,
@@ -185,6 +185,7 @@ const AddSalesDataForm = () => {
           parts?.push(partObj);
         });
 
+        // created lead obj
         const createLeadObj = {
           ...values,
           org: "0a055b26-ae15-40a9-8291-25427b94ebb3",
@@ -194,8 +195,14 @@ const AddSalesDataForm = () => {
           client: client?.value,
           parts,
         };
-        console.log(createLeadObj);
-        resetForm({ values: "" });
+        return console.log(createLeadObj);
+        // resetForm({ values: "" });
+
+        const res = await axios.post(
+          `http://inventab.io/api/v1/pipo/create/sales/lead/`,
+          JSON.stringify(createLeadObj)
+        );
+        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -578,7 +585,7 @@ const AddSalesDataForm = () => {
                 <tbody>
                   {values?.parts?.map((part, index) => {
                     return (
-                      <tr key={part?.part_id?.id + new Date()}>
+                      <tr key={index + 1}>
                         <td>
                           <div className='select-port'>
                             <Select
