@@ -41,7 +41,7 @@ const AddSalesDataForm = () => {
         );
         setLoading(false);
         const deptArr = [];
-        data?.results?.forEach(dept => {
+        data?.results?.forEach((dept) => {
           const deptObj = {
             label: dept?.name,
             value: dept?.id,
@@ -63,7 +63,7 @@ const AddSalesDataForm = () => {
         const { data } = await axios.get(`organizations/fetch/org/`);
         setLoading(false);
         const clientArr = [];
-        data?.results?.forEach(client => {
+        data?.results?.forEach((client) => {
           const clientObj = {
             label: client?.company_name,
             value: client?.id,
@@ -89,7 +89,7 @@ const AddSalesDataForm = () => {
         );
         setLoading(false);
         const subOrgArr = [];
-        data?.results?.forEach(sub => {
+        data?.results?.forEach((sub) => {
           const clientObj = {
             label: sub?.sub_company_name,
             value: sub?.id,
@@ -113,7 +113,7 @@ const AddSalesDataForm = () => {
         const { data } = await axios.get("parts/parts");
         setPartsLoading(false);
         const partArr = [];
-        data?.results?.forEach(data => {
+        data?.results?.forEach((data) => {
           const partObj = {
             label: data?.part_number,
             value: data?.id,
@@ -169,7 +169,7 @@ const AddSalesDataForm = () => {
         const { department, sub_org, client, status, parts: partArr } = values;
         // sort part obj data
         let parts = [];
-        partArr.forEach(p => {
+        partArr.forEach((p) => {
           const partObj = {
             lead_part_id: p?.lead_part_id,
             part_id: p?.part_id?.id,
@@ -237,7 +237,7 @@ const AddSalesDataForm = () => {
   };
 
   // remove row
-  const handleRemovePart = index => {
+  const handleRemovePart = (index) => {
     const updatedParts = [...values.parts];
     updatedParts.splice(index, 1); // Remove the object at the specified index
     setFieldValue("parts", updatedParts);
@@ -288,7 +288,7 @@ const AddSalesDataForm = () => {
                   name='department'
                   options={dept}
                   value={values.department}
-                  onChange={option => setFieldValue("department", option)}
+                  onChange={(option) => setFieldValue("department", option)}
                 />
               </div>
 
@@ -304,7 +304,7 @@ const AddSalesDataForm = () => {
                   isSearchable
                   options={subOrg}
                   value={values?.sub_org}
-                  onChange={option => setFieldValue("sub_org", option)}
+                  onChange={(option) => setFieldValue("sub_org", option)}
                 />
               </div>
 
@@ -344,7 +344,7 @@ const AddSalesDataForm = () => {
                   isSearchable
                   name='status'
                   options={statusOptions}
-                  onChange={option => setFieldValue("status", option)}
+                  onChange={(option) => setFieldValue("status", option)}
                 />
               </div>
 
@@ -360,7 +360,7 @@ const AddSalesDataForm = () => {
                   isClearable
                   name='client'
                   options={client}
-                  onChange={option => setFieldValue("client", option)}
+                  onChange={(option) => setFieldValue("client", option)}
                 />
               </div>
 
@@ -439,7 +439,7 @@ const AddSalesDataForm = () => {
                           <th scope='col'>Short Description</th>
                           <th scope='col'>Quantity</th>
                           <th scope='col'>Unit Cost</th>
-                          <th scope='col'>Status</th>
+                          {/* <th scope='col'>Status</th> */}
                           <th scope='col'>GST</th>
                           <th scope='col'>Net Price</th>
                           <th scope='col'>Extd Gross Price</th>
@@ -468,7 +468,7 @@ const AddSalesDataForm = () => {
                               placeholder='Short Description'
                               name='short_description'
                               value={short_description || ""}
-                              onChange={e =>
+                              onChange={(e) =>
                                 setshort_description(e.target.value)
                               }
                             />
@@ -480,7 +480,7 @@ const AddSalesDataForm = () => {
                               placeholder='Total Quantity'
                               name='quantity'
                               value={totalQuantity || ""}
-                              onChange={e => setTotalQuantity(e.target.value)}
+                              onChange={(e) => setTotalQuantity(e.target.value)}
                             />
                           </td>
                           <td>
@@ -490,10 +490,10 @@ const AddSalesDataForm = () => {
                               placeholder='Unit Cost'
                               name='unit_cost'
                               value={unitCost || ""}
-                              onChange={e => setUnitCost(e.target.value)}
+                              onChange={(e) => setUnitCost(e.target.value)}
                             />
                           </td>
-                          <td>
+                          {/* <td>
                             <Select
                               className='select'
                               placeholder='Select Part No'
@@ -502,7 +502,7 @@ const AddSalesDataForm = () => {
                               options={partsStatus}
                               onChange={setstatus}
                             />
-                          </td>
+                          </td> */}
                           <td>
                             <input
                               className='new_input_class'
@@ -510,7 +510,7 @@ const AddSalesDataForm = () => {
                               placeholder='GST'
                               name='gst'
                               value={gst}
-                              onChange={e => setgst(e.target.value)}
+                              onChange={(e) => setgst(e.target.value)}
                             />
                           </td>
                           <td>
@@ -520,7 +520,7 @@ const AddSalesDataForm = () => {
                               placeholder='Net Price'
                               name='net_price'
                               value={net_price || ""}
-                              onChange={e => setNet_price(e.target.value)}
+                              onChange={(e) => setNet_price(e.target.value)}
                             />
                           </td>
                           <td>
@@ -530,7 +530,7 @@ const AddSalesDataForm = () => {
                               placeholder='Extd Gross Price'
                               name='extd_gross_price'
                               value={extd_gross_price || ""}
-                              onChange={e =>
+                              onChange={(e) =>
                                 setExtd_gross_price(e.target.value)
                               }
                             />
@@ -571,7 +571,7 @@ const AddSalesDataForm = () => {
                     <th scope='col'>Short Description</th>
                     <th scope='col'>Quantity</th>
                     <th scope='col'>Unit Cost</th>
-                    <th scope='col'>Status</th>
+                    {/* <th scope='col'>Status</th> */}
                     <th scope='col'>GST</th>
                     <th scope='col'>Net Price</th>
                     <th scope='col'>Extd Gross Price</th>
@@ -595,7 +595,7 @@ const AddSalesDataForm = () => {
                               name='part_id'
                               isSearchable
                               isClearable
-                              onChange={selectedOption =>
+                              onChange={(selectedOption) =>
                                 handlePartSelectChange(selectedOption, index)
                               }
                             />
@@ -634,7 +634,7 @@ const AddSalesDataForm = () => {
                           />
                         </td>
 
-                        <td>
+                        {/* <td>
                           <Select
                             className='select'
                             placeholder='Select Part No'
@@ -646,11 +646,11 @@ const AddSalesDataForm = () => {
                               value: part?.status,
                             }}
                             options={partsStatus}
-                            onChange={selectedOption =>
+                            onChange={(selectedOption) =>
                               handlePartStatusChange(selectedOption, index)
                             }
                           />
-                        </td>
+                        </td> */}
 
                         <td>
                           <input
