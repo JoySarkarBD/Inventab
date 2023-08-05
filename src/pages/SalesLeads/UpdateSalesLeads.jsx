@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import "react-datepicker/dist/react-datepicker.css";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
+import TextArea from "../../components/Form/TextArea";
 import SalesDataForm from "../../components/SalesDataForm/SalesDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
 import Loader from "../../ui/Loader";
@@ -13,6 +14,10 @@ import "./AddSalesLeads.css";
 
 function SalesLeadHistoryModal(props) {
   // console.log(props.salesData?.sales_lead_history);
+
+  const [toggleForm, setToggleForm] = useState(false);
+  const [commentValue, setCommentValue] = useState("");
+  const [historyDataObj, setHistoryDataObj] = useState({});
 
   const sales_lead_history = [
     {
@@ -29,45 +34,94 @@ function SalesLeadHistoryModal(props) {
     },
   ];
 
+  const closeModal = (props) => {
+    if (toggleForm) {
+      setToggleForm(false);
+    }
+    props.onHide();
+  };
+
+  const submitData = () => {
+    if (toggleForm) {
+      setToggleForm(false);
+    }
+
+    const newHistoryData = {
+      date: "",
+      created_by: "",
+      comment: commentValue,
+    };
+
+    setHistoryDataObj(newHistoryData);
+
+    console.log(historyDataObj);
+    setCommentValue("");
+    props.onHide();
+  };
+
   return (
     <Modal
       {...props}
       size='lg'
       aria-labelledby='contained-modal-title-vcenter'
       centered>
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title id='contained-modal-title-vcenter'>
           History for Lead - xxx
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {sales_lead_history.map((s) => (
-          <div className='card border' key={s?.id}>
-            <div className='card-header text-dark fs-5'>Date: {s?.date}</div>
-            <div className='card-body'>
-              <blockquote className='blockquote mb-0'>
-                <p className='text-dark fs-5 mb-0'>
-                  Comment:
-                  <span className='fs-6'> {s?.comment}</span>
-                </p>
-                <p className='text-dark fs-5 mb-0'>
-                  Created By:
-                  <span className='fs-6'> {s?.created_by}</span>
-                </p>
-              </blockquote>
+        {!toggleForm ? (
+          sales_lead_history.map((s) => (
+            <div className='card border' key={s?.id}>
+              <div className='card-header text-dark fs-5'>Date: {s?.date}</div>
+              <div className='card-body'>
+                <blockquote className='blockquote mb-0'>
+                  <p className='text-dark fs-5 mb-0'>
+                    Comment:
+                    <span className='fs-6'> {s?.comment}</span>
+                  </p>
+                  <p className='text-dark fs-5 mb-0'>
+                    Created By:
+                    <span className='fs-6'> {s?.created_by}</span>
+                  </p>
+                </blockquote>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <form>
+            <TextArea
+              title='Comment'
+              name='comment'
+              placeHolder='Type your comment.......'
+              value={commentValue}
+              onChange={(e) => setCommentValue(e.target.value)}
+            />
+          </form>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button
-          // onClick={props.onHide}
+          onClick={() => closeModal(props)}
           className='rounded-1 px-5 py-3 outline-none border-0'>
           Cancel
         </Button>
-        <Button className='rounded-1 px-5 py-3 outline-none border-0'>
-          Add
-        </Button>
+        {toggleForm ? (
+          <Button
+            className='rounded-1 px-5 py-3 outline-none border-0'
+            type='submit'
+            form='salesLeadHistoryForm'
+            onClick={() => submitData(props)}>
+            Submit
+          </Button>
+        ) : (
+          <Button
+            className='rounded-1 px-5 py-3 outline-none border-0'
+            onClick={() => setToggleForm(!toggleForm)}>
+            Add
+          </Button>
+        )}
       </Modal.Footer>
     </Modal>
   );
@@ -93,7 +147,6 @@ const UpdateSalesLeads = () => {
           "http://inventab.io/api/v1/pipo/sales/lead/?lead_no=62176817-cce6-48ae-94a0-ffeb0663305d"
         );
         setLoading(false);
-
         setSelectedData(data?.results[0]);
       } catch (error) {
         setLoading(true);
