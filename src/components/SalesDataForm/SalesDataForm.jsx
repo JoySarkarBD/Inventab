@@ -518,7 +518,6 @@ export default function SalesDataForm(props) {
                             placeholder="Select Part No"
                             isSearchable
                             isClearable
-                            defaultMenuIsOpen
                             menuPortalTarget={document.querySelector("body")}
                             isLoading={partsLoading}
                             options={allParts}
@@ -559,7 +558,7 @@ export default function SalesDataForm(props) {
                       <td>
                         <Select
                           className="select select-width"
-                          placeholder="Select Part No"
+                          placeholder="Select Status"
                           isSearchable
                           isClearable
                           menuPortalTarget={document.querySelector("body")}
