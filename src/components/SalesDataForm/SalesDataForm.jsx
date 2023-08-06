@@ -514,10 +514,11 @@ export default function SalesDataForm(props) {
                       <td>
                         <div className='select-port'>
                           <Select
-                            className='select'
+                            className='select select-width'
                             placeholder='Select Part No'
                             isSearchable
                             isClearable
+                            defaultMenuIsOpen
                             isLoading={partsLoading}
                             options={allParts}
                             onChange={(option) => handleSelectPart(option)}
@@ -526,7 +527,7 @@ export default function SalesDataForm(props) {
                       </td>
                       <td>
                         <input
-                          className='new_input_class'
+                          className='new_input_class dsc-width'
                           type='text'
                           placeholder='Short Description'
                           name='short_description'
@@ -536,7 +537,7 @@ export default function SalesDataForm(props) {
                       </td>
                       <td>
                         <input
-                          className='new_input_class'
+                          className='new_input_class input-width'
                           type='number'
                           placeholder='Unit Cost'
                           name='unit_cost'
@@ -546,7 +547,7 @@ export default function SalesDataForm(props) {
                       </td>
                       <td>
                         <input
-                          className='new_input_class'
+                          className='new_input_class input-width'
                           type='number'
                           placeholder='Total Quantity'
                           name='quantity'
@@ -556,7 +557,7 @@ export default function SalesDataForm(props) {
                       </td>
                       <td>
                         <Select
-                          className='select'
+                          className='select select-width'
                           placeholder='Select Part No'
                           isSearchable
                           isClearable
@@ -566,7 +567,7 @@ export default function SalesDataForm(props) {
                       </td>
                       <td>
                         <input
-                          className='new_input_class'
+                          className='new_input_class input-width'
                           type='number'
                           placeholder='GST'
                           name='gst'
@@ -576,7 +577,7 @@ export default function SalesDataForm(props) {
                       </td>
                       <td>
                         <input
-                          className='new_input_class'
+                          className='new_input_class input-width'
                           type='number'
                           placeholder='Net Price'
                           name='net_price'
@@ -586,7 +587,7 @@ export default function SalesDataForm(props) {
                       </td>
                       <td>
                         <input
-                          className='new_input_class'
+                          className='new_input_class input-width'
                           type='number'
                           placeholder='Extd Gross Price'
                           name='extd_gross_price'
@@ -650,7 +651,7 @@ export default function SalesDataForm(props) {
                           <td>
                             <div className='select-port'>
                               <Select
-                                className='select'
+                                className='select select-width'
                                 placeholder='Select Port No'
                                 value={{
                                   label: part?.part_id?.part_number || "",
@@ -669,7 +670,7 @@ export default function SalesDataForm(props) {
                           </td>
                           <td>
                             <input
-                              className='new_input_class'
+                              className='new_input_class dsc-width'
                               type='text'
                               placeholder='Short Description'
                               name={`parts[${index}].short_description`}
@@ -680,7 +681,7 @@ export default function SalesDataForm(props) {
 
                           <td>
                             <input
-                              className='new_input_class'
+                              className='new_input_class input-width'
                               type='number'
                               placeholder='Unit Cost'
                               name={`parts[${index}].unit_cost`}
@@ -691,7 +692,7 @@ export default function SalesDataForm(props) {
 
                           <td>
                             <input
-                              className='new_input_class'
+                              className='new_input_class input-width'
                               type='number'
                               placeholder='Total Quntity'
                               name={`parts[${index}].quantity`}
@@ -702,8 +703,8 @@ export default function SalesDataForm(props) {
 
                           <td>
                             <Select
-                              className='select'
-                              placeholder='Select Part No'
+                              className='select select-width'
+                              placeholder='Status'
                               isSearchable
                               isClearable
                               name={`parts[${index}].status`}
@@ -720,7 +721,7 @@ export default function SalesDataForm(props) {
 
                           <td>
                             <input
-                              className='new_input_class'
+                              className='new_input_class input-width'
                               type='number'
                               placeholder='Extd Net Cost'
                               name={`parts[${index}].gst`}
@@ -731,7 +732,7 @@ export default function SalesDataForm(props) {
 
                           <td>
                             <input
-                              className='new_input_class'
+                              className='new_input_class input-width'
                               type='number'
                               placeholder='Extd Net Cost'
                               name={`parts[${index}].net_price`}
@@ -741,7 +742,7 @@ export default function SalesDataForm(props) {
                           </td>
                           <td>
                             <input
-                              className='new_input_class'
+                              className='new_input_class input-width'
                               type='number'
                               placeholder='Extd Gross Cost'
                               name={`parts[${index}].extd_gross_price`}
@@ -771,7 +772,7 @@ export default function SalesDataForm(props) {
         {/* Submit Button */}
         <div className='d-flex justify-content-end my-4'>
           <input
-            className='btn btn-primary rounded-1'
+            className='btn btn-primary btn-common rounded-1'
             type='submit'
             value='Update Sales Lead'
           />

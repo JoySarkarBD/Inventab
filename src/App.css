@@ -26221,10 +26221,16 @@ body > * {
 }
 /* custom common button css */
 
-[data-theme-version="dark"] .invoice-details-card{
+[data-theme-version="dark"] .invoice-details-card {
   background-color: #2e2e42 !important;
 }
 
-[data-theme-version="dark"] .invoice-details .title{
-  color: white!important;
+[data-theme-version="dark"] .invoice-details .title {
+  color: white !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

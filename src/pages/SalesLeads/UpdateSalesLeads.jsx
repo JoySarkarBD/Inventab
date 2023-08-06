@@ -233,7 +233,7 @@ const UpdateSalesLeads = () => {
       <div className="d-flex justify-content-end me-5 mb-4 ">
         <Link
           to="/dashboard/sales-leads"
-          className="btn btn-primary rounded-1 border-0"
+          className="btn btn-primary btn-common rounded-1 border-0"
         >
           <BsArrowLeft className="me-2" />
           Back
@@ -242,20 +242,22 @@ const UpdateSalesLeads = () => {
       <div className="row">
         <div className="col-xl-12 col-lg-12">
           <div className="card">
-            <div className="card-header flex">
+            <div className="card-header flex gap-3 gap-sm-3 gap-md-0 gap-lg-0 flex-column flex-md-row flex-lg-row flex-sm-column">
               <h4 className="card-title">Update Sales Lead</h4>
-              <button
-                className="btn btn-primary text-white rounded-1 border-0 py-3 px-4"
-                onClick={() => setModalShow(true)}
-              >
-                See History
-              </button>
-              <button
-                className="btn btn-primary text-white rounded-1 border-0 py-3 px-4"
-                onClick={() => setToggleForm(true)}
-              >
-                Add History
-              </button>
+              <div className="d-flex align-items-center gap-3">
+                <button
+                  className="btn btn-primary btn-common text-white rounded-1 border-0 py-3 px-4 "
+                  onClick={() => setModalShow(true)}
+                >
+                  See History
+                </button>
+                <button
+                  className="btn btn-primary btn-common text-white rounded-1 border-0 py-3 px-4"
+                  onClick={() => setToggleForm(true)}
+                >
+                  Add History
+                </button>
+              </div>
             </div>
 
             {/* -------modal hidden ------ */}
