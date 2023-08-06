@@ -15,7 +15,6 @@ import "./AddSalesLeads.css";
 
 function SalesLeadHistoryModal(props) {
   const [histories, setHistories] = useState([]);
-
   const {
     modalState,
     onHide,
@@ -100,16 +99,16 @@ function SalesLeadHistoryModal(props) {
     <>
       {/* add history modal */}
       {toggleForm && (
-        <div className='modal fade' id='myModal1'>
-          <div className='modal-dialog modal-dialog-centered'>
-            <div className='modal-content'>
-              <div className='modal-header'>
-                <h5 className='modal-title'>Modal Title</h5>
+        <div className="modal fade" id="myModal1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Modal Title</h5>
                 <button
-                  type='button'
-                  className='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
                   onClick={() => {
                     setToggleForm(false);
                   }}
@@ -117,23 +116,26 @@ function SalesLeadHistoryModal(props) {
               </div>
 
               <>
-                <div className='modal-body'>
+                <div className="modal-body">
                   <TextArea
-                    title='Comment'
-                    name='comment'
-                    placeHolder='Type your comment.......'
+                    title="Comment"
+                    name="comment"
+                    placeHolder="Type your comment......."
                     value={commentValue}
                     onChange={(e) => setCommentValue(e.target.value)}
                   />
                 </div>
-                <button
-                  className='rounded-1 px-5 py-3 outline-none border-0 btn btn-primary'
-                  type='submit'
-                  form='salesLeadHistoryForm'
-                  data-bs-dismiss='modal'
-                  onClick={(e) => submitData(e, props)}>
-                  Submit
-                </button>
+                <div className="w-50 mx-auto mb-4">
+                  <button
+                    className="rounded-1 w-100  px-5 py-3 outline-none border-0 btn btn-primary"
+                    type="submit"
+                    form="salesLeadHistoryForm"
+                    data-bs-dismiss="modal"
+                    onClick={(e) => submitData(e, props)}
+                  >
+                    Submit
+                  </button>
+                </div>
               </>
             </div>
           </div>
@@ -141,16 +143,16 @@ function SalesLeadHistoryModal(props) {
       )}
 
       {/* see history modal */}
-      <div className='modal fade' id='myModal2'>
-        <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h5 className='modal-title'>See History</h5>
+      <div className="modal fade" id="myModal2">
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">See History</h5>
               <button
-                type='button'
-                className='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
                 onClick={() => {
                   setModalShow(false);
                 }}
@@ -158,31 +160,37 @@ function SalesLeadHistoryModal(props) {
             </div>
 
             <>
-              <div className='modal-body'>
-                {histories?.map((s, i) => (
-                  <div className='card border' key={i}>
-                    <div className='card-header text-dark fs-5'>
-                      Date: {s?.date}
+              <div className="modal-body">
+                {histories.length === 0 ? (
+                  <h2 className="text-center fw-bold fs-3">
+                    Histories Not Found
+                  </h2>
+                ) : (
+                  histories?.map((s, i) => (
+                    <div className="card border" key={i}>
+                      <div className="card-header text-dark fs-5">
+                        Date: {s?.date}
+                      </div>
+                      <div className="card-body">
+                        <blockquote className="blockquote mb-0">
+                          <p className="text-dark fs-5 mb-0">
+                            Comment:
+                            <span className="fs-6"> {s?.comment}</span>
+                          </p>
+                          <p className="text-dark fs-5 mb-0">
+                            Created By:
+                            <span className="fs-6">
+                              {" "}
+                              {s?.created_by.first_name +
+                                " " +
+                                s?.created_by.last_name}
+                            </span>
+                          </p>
+                        </blockquote>
+                      </div>
                     </div>
-                    <div className='card-body'>
-                      <blockquote className='blockquote mb-0'>
-                        <p className='text-dark fs-5 mb-0'>
-                          Comment:
-                          <span className='fs-6'> {s?.comment}</span>
-                        </p>
-                        <p className='text-dark fs-5 mb-0'>
-                          Created By:
-                          <span className='fs-6'>
-                            {" "}
-                            {s?.created_by.first_name +
-                              " " +
-                              s?.created_by.last_name}
-                          </span>
-                        </p>
-                      </blockquote>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </>
           </div>
@@ -220,29 +228,32 @@ const UpdateSalesLeads = () => {
 
   return (
     <div>
-      <PageTitle title='Update Sales Leads' />
+      <PageTitle title="Update Sales Leads" />
       {/* back button */}
-      <div className='d-flex justify-content-end me-5 mb-4 '>
+      <div className="d-flex justify-content-end me-5 mb-4 ">
         <Link
-          to='/dashboard/sales-leads'
-          className='btn btn-primary rounded-1 border-0'>
-          <BsArrowLeft className='me-2' />
+          to="/dashboard/sales-leads"
+          className="btn btn-primary rounded-1 border-0"
+        >
+          <BsArrowLeft className="me-2" />
           Back
         </Link>
       </div>
-      <div className='row'>
-        <div className='col-xl-12 col-lg-12'>
-          <div className='card'>
-            <div className='card-header flex'>
-              <h4 className='card-title'>Update Sales Lead</h4>
+      <div className="row">
+        <div className="col-xl-12 col-lg-12">
+          <div className="card">
+            <div className="card-header flex">
+              <h4 className="card-title">Update Sales Lead</h4>
               <button
-                className='btn btn-primary text-white rounded-1 border-0 py-3 px-4'
-                onClick={() => setModalShow(true)}>
+                className="btn btn-primary text-white rounded-1 border-0 py-3 px-4"
+                onClick={() => setModalShow(true)}
+              >
                 See History
               </button>
               <button
-                className='btn btn-primary text-white rounded-1 border-0 py-3 px-4'
-                onClick={() => setToggleForm(true)}>
+                className="btn btn-primary text-white rounded-1 border-0 py-3 px-4"
+                onClick={() => setToggleForm(true)}
+              >
                 Add History
               </button>
             </div>
@@ -256,7 +267,7 @@ const UpdateSalesLeads = () => {
             />
             {/* -------modal hidden------- */}
 
-            <div className='card-body'>
+            <div className="card-body">
               {!loading ? (
                 <SalesDataForm
                   salesData={selectedData}
