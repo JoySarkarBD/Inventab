@@ -45,11 +45,11 @@ const SalesOrders = () => {
   const columns = [
     {
       name: "Order No",
-      cell: row => {
+      cell: (row) => {
         return (
           <Link
             className='text-center text-info dark_theme_text'
-            to={`/dashboard/sales-orders/update-sales-order/${row?.so_id}`}>
+            to={`/dashboard/sales-orders/update-sales-order/${row?.id}`}>
             {row?.so_id}
           </Link>
         );
@@ -58,32 +58,32 @@ const SalesOrders = () => {
 
     {
       name: "Sub Org",
-      selector: row => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org || "No data found",
       sortable: true,
     },
     {
       name: "Client",
-      selector: row => row?.client?.company_name || "No data found",
+      selector: (row) => row?.client?.company_name || "No data found",
       sortable: true,
     },
     {
       name: "Desc",
-      selector: row => row?.description || "No data found",
+      selector: (row) => row?.description || "No data found",
       sortable: true,
     },
     {
       name: "Ref PO No",
-      selector: row => row?.ref_po || "No data found",
+      selector: (row) => row?.ref_po || "No data found",
       sortable: true,
     },
     {
       name: "PO Date",
-      selector: row => row?.po_date || "No data found",
+      selector: (row) => row?.po_date || "No data found",
       sortable: true,
     },
     {
       name: "Expected Inv Date",
-      selector: row => row?.expected_inv_date || "No data found",
+      selector: (row) => row?.expected_inv_date || "No data found",
       sortable: true,
     },
     {
@@ -94,12 +94,12 @@ const SalesOrders = () => {
 
     {
       name: "Dept",
-      selector: row => row?.department?.name || "No data found",
+      selector: (row) => row?.department?.name || "No data found",
       sortable: true,
     },
     {
       name: "Status",
-      selector: row => row?.so_status || "No data found",
+      selector: (row) => row?.so_status || "No data found",
       sortable: true,
     },
   ];
@@ -109,7 +109,7 @@ const SalesOrders = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach(salesData => {
+    searchData.forEach((salesData) => {
       const csvObj = {
         SO: salesData?.so_id || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -126,14 +126,14 @@ const SalesOrders = () => {
       data.push(csvObj);
     });
 
-    setCsv(prev => [...prev, ...data]);
+    setCsv((prev) => [...prev, ...data]);
   };
 
   // search items sorting
   useEffect(() => {
     let result;
     if (selectedEl?.value) {
-      result = salesOrders.filter(order => {
+      result = salesOrders.filter((order) => {
         switch (selectedEl?.value) {
           case "so_id":
             return order?.so_id?.toLowerCase().match(search.toLowerCase());
@@ -252,7 +252,7 @@ const SalesOrders = () => {
                         placeholder='Search here'
                         className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
                         value={search}
-                        onChange={e => setSearch(e.target.value)}
+                        onChange={(e) => setSearch(e.target.value)}
                       />
                     </div>
                   }
