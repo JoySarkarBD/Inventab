@@ -18,6 +18,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
   const [subOrg, setSubOrg] = useState([]);
+  const [paymentTerm, setPaymentTerm] = useState([]);
+  const [deliveryTerm, setDeliveryTerm] = useState([]);
+  const [contactTo, setContactTo] = useState([]);
 
   // parts option
   const [selectPart, setSelectPart] = useState("");
@@ -128,8 +131,83 @@ const UpdateOrderDataForm = ({ orderData }) => {
         console.log(error);
       }
     })();
+
+    // payment term
+    (async function () {
+      try {
+        setLoading(true);
+        const { data } = await axios.get("organizations/fetch/payment/term/");
+        setLoading(false);
+
+        const paymentArr = [];
+        data?.results?.forEach((data) => {
+          const paymentObj = {
+            label: data?.term,
+            value: data?.id,
+          };
+          paymentArr.push(paymentObj);
+        });
+        const removeUndefinedData = removeUndefinedObj(paymentArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setPaymentTerm(uniqueArr);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    })();
+
+    // delivery term
+    (async function () {
+      try {
+        setLoading(true);
+        const { data } = await axios.get("organizations/fetch/delivery/term/");
+        setLoading(false);
+
+        const deliveryArr = [];
+        data?.results?.forEach((data) => {
+          const paymentObj = {
+            label: data?.term,
+            value: data?.id,
+          };
+          deliveryArr.push(paymentObj);
+        });
+        const removeUndefinedData = removeUndefinedObj(deliveryArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setDeliveryTerm(uniqueArr);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    })();
+
+    // contact_to
+    (async function () {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          "users/get/user/?org=Autopeepal%20Technologies%20Private%20Limited"
+        );
+        setLoading(false);
+
+        const contactArr = [];
+        data?.results?.forEach((data) => {
+          const contactObj = {
+            label: data?.email,
+            value: data?.id,
+          };
+          contactArr.push(contactObj);
+        });
+        const removeUndefinedData = removeUndefinedObj(contactArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setContactTo(uniqueArr);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    })();
   }, []);
 
+  // console.log(deliveryTerm);
   // extract data from order data
   const {
     total,
@@ -146,6 +224,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
     department,
     comments,
     parts,
+    payment_term,
+    delivery_term,
+    contact_to,
     client: cl,
   } = orderData;
 
@@ -159,21 +240,39 @@ const UpdateOrderDataForm = ({ orderData }) => {
       is_approved,
       expected_inv_date,
       description,
-      department: {
-        label: department?.name,
-        value: department?.id,
-      },
       comments,
       parts,
+
+      department: {
+        label: department?.name || "",
+        value: department?.id || "",
+      },
+
       client: {
-        label: cl?.company_name,
-        value: cl?.id,
+        label: cl?.company_name || "",
+        value: cl?.id || "",
+      },
+
+      payment_term: {
+        label: payment_term?.term || "",
+        value: payment_term?.id || "",
+      },
+
+      delivery_term: {
+        label: delivery_term?.term || "",
+        value: delivery_term?.id || "",
+      },
+
+      contact_to: {
+        label: contact_to?.email || "",
+        value: contact_to?.id || "",
       },
     },
 
     onSubmit: async (values) => {
       try {
-        const { parts, client, department } = values;
+        const { parts, client, department, contact_to, sub_org, so_status } =
+          values;
         const partArr = [];
         parts.forEach((part) => {
           const partObj = {
@@ -192,6 +291,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
           ...values,
           client: client?.value,
           department: department?.value,
+          contact_to: contact_to?.value || null,
+          sub_org,
+          so_status,
           partArr,
         });
       } catch (error) {
@@ -299,17 +401,6 @@ const UpdateOrderDataForm = ({ orderData }) => {
             />
           </div>
 
-          {/* So Id input */}
-          {/*   <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>So Id</label>
-            <Select
-              placeholder='Select So Id'
-              isSearchable
-              isClearable
-              name='so_id'
-            />
-          </div> */}
-
           {/* comments input */}
           <div className='mb-3 col-md-6'>
             <TextArea
@@ -345,28 +436,6 @@ const UpdateOrderDataForm = ({ orderData }) => {
               options={soStatus}
             />
           </div>
-
-          {/* created by input */}
-          {/* <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>Created By</label>
-            <Select
-              placeholder='Select Created By'
-              isSearchable
-              isClearable
-              name='created_by'
-            />
-          </div> */}
-
-          {/* Select org */}
-          {/*    <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>Org</label>
-            <Select
-              placeholder='Select Org'
-              isSearchable
-              isClearable
-              name='org'
-            />
-          </div> */}
 
           {/* Select client */}
           <div className='mb-3 col-md-6'>
@@ -430,6 +499,10 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isSearchable
               isClearable
               name='payment_term'
+              isLoading={loading}
+              options={paymentTerm}
+              value={values.payment_term}
+              onChange={(option) => setFieldValue("payment_term", option)}
             />
           </div>
 
@@ -443,6 +516,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isSearchable
               isClearable
               name='delivery_term'
+              options={deliveryTerm}
+              value={values.delivery_term}
+              onChange={(option) => setFieldValue("delivery_term", option)}
             />
           </div>
 
@@ -454,6 +530,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isSearchable
               isClearable
               name='contact_to'
+              value={values?.contact_to || null}
+              options={contactTo}
+              onChange={(option) => setFieldValue("contact_to", option)}
             />
           </div>
 
