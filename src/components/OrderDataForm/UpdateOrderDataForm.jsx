@@ -1,121 +1,283 @@
+/* eslint-disable react/prop-types */
+import { useFormik } from "formik";
 import Select from "react-select";
 import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 
-const UpdateOrderDataForm = () => {
+const UpdateOrderDataForm = ({ orderData }) => {
+  // extract data from order data
+  const {
+    total,
+    sub_org,
+    so_status,
+    so_id,
+    ref_po,
+    po_date,
+    is_active,
+    is_approved,
+    id,
+    expected_inv_date,
+    description,
+    department,
+  } = orderData;
+
+  const { values, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      total,
+      sub_org,
+      ref_po,
+      po_date,
+      is_active,
+      is_approved,
+      expected_inv_date,
+      description,
+      department,
+    },
+
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
   return (
     <div className='card-body'>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className='row'>
-          {/* Sales Lead input */}
+          {/* Po date input */}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>Sales Lead</label>
-            <Select
-              title='Sales Lead'
-              placeholder='Sales Lead'
-              name='sales_lead'
-            />
+            <InputText title='PO Date' type='date' name='po_date' />
           </div>
 
-          {/* add sub org input */}
+          {/* ex inv date input */}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>Sub org</label>
-            <Select placeholder='Select Sub Org' name='sub_org' />
+            <InputText
+              title='Expected Invoice Date'
+              type='date'
+              name='expected_inv_date'
+            />
           </div>
 
           {/* Rof PO NO input */}
           <div className='mb-3 col-md-6'>
-            <InputText title='Ref PO No' type='text' name='ref_po_no' />
-          </div>
-
-          {/* Rof PO Date input */}
-          <div className='mb-3 col-md-6'>
-            <InputText title='Rof PO Date' type='date' name='ref_po_date' />
-          </div>
-
-          {/* add invoice date input */}
-          <div className='mb-3 col-md-6'>
             <InputText
-              title='Expected Invoice Date*'
-              type='date'
-              name='expected_invoice_date'
+              title='Ref PO'
+              type='number'
+              name='ref_po'
+              placeholder='Type Ref Po Number'
             />
           </div>
 
-          {/* Select Payment Term */}
+          {/* So Id input */}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Payment Term
-            </label>
-            <Select placeholder='Select Payment Term' name='payment_term' />
+            <label className='mb-2 text-dark text-capitalize'>So Id</label>
+            <Select
+              placeholder='Select So Id'
+              isSearchable
+              isClearable
+              name='so_id'
+            />
           </div>
 
-          {/* Select Delivery Term */}
+          {/* comments input */}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Delivery Term
-            </label>
-            <Select placeholder='Select Delivery Term' name='delivery_term' />
+            <TextArea
+              title='Comments'
+              type='text'
+              name='comments'
+              placeholder='Type Your Comments'
+            />
           </div>
 
-          {/* Select Client */}
+          {/* total input*/}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Client
-            </label>
-            <Select placeholder='Select Client' name='client' />
+            <InputText
+              title='Total'
+              type='number'
+              name='total'
+              placeholder='Type Total'
+            />
           </div>
 
-          {/* Select Client Contact */}
+          {/* so status select*/}
           <div className='mb-3 col-md-6'>
-            <label className='mb-2 text-dark text-capitalize'>
-              Select Client Contact
-            </label>
-            <Select placeholder='Select Client Contact' name='contact' />
+            <label className='mb-2 text-dark text-capitalize'>So Status</label>
+            <Select
+              placeholder='Select So Status'
+              isSearchable
+              isClearable
+              name='so_status'
+            />
           </div>
 
-          {/* Select Billing Address */}
+          {/* created by input */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Created By</label>
+            <Select
+              placeholder='Select Created By'
+              isSearchable
+              isClearable
+              name='created_by'
+            />
+          </div>
+
+          {/* Select org */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Org</label>
+            <Select
+              placeholder='Select Org'
+              isSearchable
+              isClearable
+              name='org'
+            />
+          </div>
+
+          {/* Select client */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Client</label>
+            <Select
+              placeholder='Select Client'
+              isSearchable
+              isClearable
+              name='client'
+            />
+          </div>
+
+          {/* Select sub org */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Sub Org</label>
+            <Select
+              placeholder='Select Sub Org'
+              isSearchable
+              isClearable
+              name='sub_org'
+            />
+          </div>
+
+          {/* select billing address */}
           <div className='mb-3 col-md-6'>
             <label className='mb-2 text-dark text-capitalize'>
-              Select Billing Address
+              Billing Address
             </label>
             <Select
               placeholder='Select Billing Address'
+              isSearchable
+              isClearable
               name='billing_address'
             />
           </div>
 
-          {/* Select Shipping Address */}
+          {/* select shipping address */}
           <div className='mb-3 col-md-6'>
             <label className='mb-2 text-dark text-capitalize'>
-              Select Shipping Address
+              Shipping Address
             </label>
             <Select
               placeholder='Select Shipping Address'
+              isSearchable
+              isClearable
               name='shipping_address'
             />
           </div>
 
-          {/* description input */}
+          {/* payment term select */}
           <div className='mb-3 col-md-6'>
-            <TextArea
-              title='Description*'
-              className='w-100'
-              placeholder='Description'
-              name='description'
+            <label className='mb-2 text-dark text-capitalize'>
+              Payment Term
+            </label>
+            <Select
+              placeholder='Select Payment Term'
+              isSearchable
+              isClearable
+              name='payment_term'
             />
-            <br />
           </div>
 
-          {/* Comment input */}
-          <div className='mb-3 col-12'>
-            <TextArea
-              title='Comment*'
-              className='w-100'
-              placeholder='Comment'
-              name='comment'
+          {/* delivery term select */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>
+              Delivery Term
+            </label>
+            <Select
+              placeholder='Select Delivery Term'
+              isSearchable
+              isClearable
+              name='delivery_term'
             />
-            <br />
+          </div>
+
+          {/* contact to select */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Contact To</label>
+            <Select
+              placeholder='Select Contact To'
+              isSearchable
+              isClearable
+              name='contact_to'
+            />
+          </div>
+
+          {/* department select */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>Department</label>
+            <Select
+              placeholder='Select Department'
+              isSearchable
+              isClearable
+              name='department'
+            />
+          </div>
+
+          {/* transportation term select */}
+          <div className='mb-3 col-md-6'>
+            <label className='mb-2 text-dark text-capitalize'>
+              Transportation Term
+            </label>
+            <Select
+              placeholder='Select Transportation Term'
+              isSearchable
+              isClearable
+              name='transportation_term'
+            />
+          </div>
+
+          {/* description input */}
+          <div className='mb-3 col-md-12'>
+            <TextArea
+              title='Description'
+              type='text'
+              name='description'
+              placeholder='Type Description'
+            />
+          </div>
+
+          {/* is_active checkbox */}
+          <div className='mb-3 col-md-12'>
+            <label>
+              <input
+                type='checkbox'
+                name='is_active'
+                checked={values.is_active}
+                onChange={handleChange}
+              />
+              Active
+            </label>
+          </div>
+
+          {/* is_approved checkbox */}
+          <div className='mb-3 col-md-12'>
+            <label>
+              <input
+                type='checkbox'
+                name='is_approved'
+                checked={values.is_approved}
+                onChange={handleChange}
+              />
+              Approved
+            </label>
           </div>
         </div>
         {/* Table Part */}
@@ -127,19 +289,27 @@ const UpdateOrderDataForm = () => {
                 <table className='table header-border table-responsive-sm111'>
                   <thead>
                     <tr>
-                      <th scope='col'>Part No</th>
-                      <th scope='col'>Short Description</th>
                       <th scope='col'>Quantity</th>
-                      <th scope='col'>Unit Cost</th>
-                      <th scope='col'>Status</th>
+                      <th scope='col'>Parts No</th>
+                      <th scope='col'>Price</th>
                       <th scope='col'>GST</th>
                       <th scope='col'>Net Price</th>
                       <th scope='col'>Extd Gross Price</th>
+                      <th scope='col'>Short Description</th>
+                      <th scope='col'>Parts Id</th>
                       <th scope='col'>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
+                      <td>
+                        <input
+                          className='new_input_class'
+                          type='number'
+                          placeholder='Total Quantity'
+                          name='quantity'
+                        />
+                      </td>
                       <td>
                         <div className='select-port'>
                           <Select
@@ -153,33 +323,9 @@ const UpdateOrderDataForm = () => {
                       <td>
                         <input
                           className='new_input_class'
-                          type='text'
-                          placeholder='Short Description'
-                          name='short_description'
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
                           type='number'
-                          placeholder='Total Quantity'
-                          name='quantity'
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Unit Cost'
-                          name='unit_cost'
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='text'
-                          placeholder='Status'
-                          name='status'
+                          placeholder='Price'
+                          name='price'
                         />
                       </td>
                       <td>
@@ -207,6 +353,24 @@ const UpdateOrderDataForm = () => {
                         />
                       </td>
                       <td>
+                        <input
+                          className='new_input_class'
+                          type='text'
+                          placeholder='Short Description'
+                          name='short_description'
+                        />
+                      </td>
+                      <td>
+                        <div className='select-port'>
+                          <Select
+                            className='select'
+                            placeholder='Select Parts Id'
+                            isSearchable
+                            isClearable
+                          />
+                        </div>
+                      </td>
+                      <td>
                         <button className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'>
                           Add
                         </button>
@@ -224,25 +388,32 @@ const UpdateOrderDataForm = () => {
           <table className='table table-bordered table-responsive-sm111'>
             <thead>
               <tr>
-                <th scope='col'>Part No</th>
-                <th scope='col'>Short Description</th>
                 <th scope='col'>Quantity</th>
-                <th scope='col'>Unit Cost</th>
-                <th scope='col'>Status</th>
+                <th scope='col'>Parts No</th>
+                <th scope='col'>Price</th>
                 <th scope='col'>GST</th>
                 <th scope='col'>Net Price</th>
                 <th scope='col'>Extd Gross Price</th>
+                <th scope='col'>Short Description</th>
+                <th scope='col'>Parts Id</th>
                 <th scope='col'>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Total Quantity'
+                    name='quantity'
+                  />
+                </td>
+                <td>
                   <div className='select-port'>
                     <Select
                       className='select'
-                      placeholder='Select Port No'
-                      name='part_id'
+                      placeholder='Select Part No'
                       isSearchable
                       isClearable
                     />
@@ -251,59 +422,57 @@ const UpdateOrderDataForm = () => {
                 <td>
                   <input
                     className='new_input_class'
+                    type='number'
+                    placeholder='Price'
+                    name='price'
+                  />
+                </td>
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='GST'
+                    name='gst'
+                  />
+                </td>
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Net Price'
+                    name='net_price'
+                  />
+                </td>
+                <td>
+                  <input
+                    className='new_input_class'
+                    type='number'
+                    placeholder='Extd Gross Price'
+                    name='extd_gross_price'
+                  />
+                </td>
+                <td>
+                  <input
+                    className='new_input_class'
                     type='text'
                     placeholder='Short Description'
-                  />
-                </td>
-
-                <td>
-                  <input
-                    className='new_input_class'
-                    type='number'
-                    placeholder='Total Quantity'
-                  />
-                </td>
-
-                <td>
-                  <input
-                    className='new_input_class'
-                    type='number'
-                    placeholder='Unit Cost'
-                  />
-                </td>
-
-                <td>
-                  <input
-                    className='new_input_class'
-                    type='text'
-                    placeholder='Status'
-                  />
-                </td>
-
-                <td>
-                  <input
-                    className='new_input_class'
-                    type='number'
-                    placeholder='Extd Net Cost'
-                  />
-                </td>
-
-                <td>
-                  <input
-                    className='new_input_class'
-                    type='number'
-                    placeholder='Extd Net Cost'
+                    name='short_description'
                   />
                 </td>
                 <td>
-                  <input
-                    className='new_input_class'
-                    type='number'
-                    placeholder='Extd Gross Cost'
-                  />
+                  <div className='select-port'>
+                    <Select
+                      className='select'
+                      placeholder='Select Parts Id'
+                      isSearchable
+                      isClearable
+                    />
+                  </div>
                 </td>
                 <td>
-                  <button className='btn btn-danger btn-sm'>Remove</button>
+                  <button type='button' className='btn btn-danger btn-sm'>
+                    Remove
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -314,7 +483,7 @@ const UpdateOrderDataForm = () => {
           <input
             className='btn btn-primary btn-common rounded-1'
             type='submit'
-            value='Update Sales Order'
+            value='Add Sales Order'
           />
         </div>
       </form>
