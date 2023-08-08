@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
+import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
@@ -820,120 +821,133 @@ export default function DataForm() {
 
         {/* dynamic table */}
         {/* dynamic table */}
-        <div className='table-responsive111'>
-          <table className='table table-bordered table-responsive-sm111'>
-            <thead>
-              <tr>
-                <th scope='col'>Parts No</th>
-                <th scope='col'>Short Description</th>
-                <th scope='col'>Quantity</th>
-                <th scope='col'>Price</th>
-                <th scope='col'>GST</th>
-                <th scope='col'>Net Price</th>
-                <th scope='col'>Extd Gross Price</th>
-                <th scope='col'>Action</th>
-              </tr>
-            </thead>
-            {values?.parts?.map((part, index) => {
-              return (
-                <tbody key={index}>
-                  <tr>
-                    <td>
-                      <div className='select-port'>
-                        <Select
-                          className='select select-width'
-                          placeholder='Select Part No'
-                          isSearchable
-                          isClearable
-                          value={{
-                            label: part?.parts_id?.part_number,
-                            value: part?.parts_id?.id,
-                          }}
-                          menuPortalTarget={document.querySelector("body")}
-                          options={allParts}
-                          name='part_id'
-                          isLoading={partsLoading}
-                          onChange={(selectedOption) =>
-                            handlePartSelectChange(selectedOption, index)
-                          }
-                        />
-                      </div>
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='text'
-                        placeholder='Short Description'
-                        name={`parts[${index}].short_description`}
-                        value={part.short_description}
-                        onChange={handleChange}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Total Quantity'
-                        name={`parts[${index}].quantity`}
-                        value={part.quantity}
-                        onChange={handleChange}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Price'
-                        name={`parts[${index}].price`}
-                        value={part?.price}
-                        onChange={handleChange}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='GST'
-                        name={`parts[${index}].gst`}
-                        value={part?.gst}
-                        onChange={handleChange}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Net Price'
-                        name={`parts[${index}].net_price`}
-                        value={part?.net_price}
-                        onChange={handleChange}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        className='new_input_class'
-                        type='number'
-                        placeholder='Extd Gross Price'
-                        name={`parts[${index}].extd_gross_price`}
-                        value={part?.extd_gross_price}
-                        onChange={handleChange}
-                      />
-                    </td>
+        {partsLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {" "}
+            <div className='table-responsive111'>
+              {values?.parts?.length > 0 ? (
+                <table className='table table-bordered table-responsive-sm111'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>Parts No</th>
+                      <th scope='col'>Short Description</th>
+                      <th scope='col'>Quantity</th>
+                      <th scope='col'>Price</th>
+                      <th scope='col'>GST</th>
+                      <th scope='col'>Net Price</th>
+                      <th scope='col'>Extd Gross Price</th>
+                      <th scope='col'>Action</th>
+                    </tr>
+                  </thead>
+                  {values?.parts?.map((part, index) => {
+                    return (
+                      <tbody key={index}>
+                        <tr>
+                          <td>
+                            <div className='select-port'>
+                              <Select
+                                className='select select-width'
+                                placeholder='Select Part No'
+                                isSearchable
+                                isClearable
+                                value={{
+                                  label: part?.parts_id?.part_number,
+                                  value: part?.parts_id?.id,
+                                }}
+                                menuPortalTarget={document.querySelector(
+                                  "body"
+                                )}
+                                options={allParts}
+                                name='part_id'
+                                isLoading={partsLoading}
+                                onChange={(selectedOption) =>
+                                  handlePartSelectChange(selectedOption, index)
+                                }
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='text'
+                              placeholder='Short Description'
+                              name={`parts[${index}].short_description`}
+                              value={part.short_description}
+                              onChange={handleChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Total Quantity'
+                              name={`parts[${index}].quantity`}
+                              value={part.quantity}
+                              onChange={handleChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Price'
+                              name={`parts[${index}].price`}
+                              value={part?.price}
+                              onChange={handleChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='GST'
+                              name={`parts[${index}].gst`}
+                              value={part?.gst}
+                              onChange={handleChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Net Price'
+                              name={`parts[${index}].net_price`}
+                              value={part?.net_price}
+                              onChange={handleChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className='new_input_class'
+                              type='number'
+                              placeholder='Extd Gross Price'
+                              name={`parts[${index}].extd_gross_price`}
+                              value={part?.extd_gross_price}
+                              onChange={handleChange}
+                            />
+                          </td>
 
-                    <td>
-                      <button
-                        type='button'
-                        className='btn btn-danger btn-sm'
-                        onClick={() => handleRemovePart(index)}>
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              );
-            })}
-          </table>
-        </div>
+                          <td>
+                            <button
+                              type='button'
+                              className='btn btn-danger btn-sm'
+                              onClick={() => handleRemovePart(index)}>
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    );
+                  })}
+                </table>
+              ) : (
+                <h3 className='text-center'>No Parts Added</h3>
+              )}
+            </div>
+          </>
+        )}
         {/* Submit Button */}
         <div className='d-flex justify-content-end my-4'>
           <input

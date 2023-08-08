@@ -28,7 +28,7 @@ const AddSalesDataForm = () => {
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [unitCost, setUnitCost] = useState(0);
   const [status, setstatus] = useState("");
-  const [gst, setgst] = useState(0);
+  const [gst, setgst] = useState();
   const [net_price, setNet_price] = useState(0);
   const [extd_gross_price, setExtd_gross_price] = useState(0);
 
@@ -39,7 +39,7 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=3f31d296-4803-4973-883c-6441af37737a&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -87,7 +87,7 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://inventab.io/api/v1/organizations/get/suborg/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+          `http://inventab.io/api/v1/organizations/get/suborg/?org=3f31d296-4803-4973-883c-6441af37737a`
         );
         setLoading(false);
         const subOrgArr = [];
@@ -189,7 +189,7 @@ const AddSalesDataForm = () => {
         // created lead obj
         const createLeadObj = {
           ...values,
-          org: "0a055b26-ae15-40a9-8291-25427b94ebb3",
+          org: "3f31d296-4803-4973-883c-6441af37737a",
           department: department?.value,
           sub_org: sub_org?.value,
           status: status?.value,
@@ -475,7 +475,9 @@ const AddSalesDataForm = () => {
                                 isClearable
                                 isLoading={partsLoading && parts?.length > 0}
                                 options={parts}
-                                menuPortalTarget={document.querySelector("body")}
+                                menuPortalTarget={document.querySelector(
+                                  "body"
+                                )}
                                 onChange={(option) => handleSelectPart(option)}
                               />
                             </div>
