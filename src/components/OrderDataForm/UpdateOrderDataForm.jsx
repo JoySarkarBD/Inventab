@@ -21,6 +21,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
   const [paymentTerm, setPaymentTerm] = useState([]);
   const [deliveryTerm, setDeliveryTerm] = useState([]);
   const [contactTo, setContactTo] = useState([]);
+  const [transportationTerm, setTransportationTerm] = useState([]);
+  const [shippingAddress, setShippingAddress] = useState([]);
+  const [billingAddress, setBillingAddress] = useState([]);
 
   // parts option
   const [selectPart, setSelectPart] = useState("");
@@ -205,6 +208,61 @@ const UpdateOrderDataForm = ({ orderData }) => {
         console.log(error);
       }
     })();
+
+    // transportation term
+    (async function () {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`pipo/transportation-terms/list/`);
+
+        setLoading(false);
+        const transportationArr = [];
+        data?.results?.forEach((t) => {
+          const transportationObj = {
+            label: t?.name,
+            value: t?.id,
+          };
+          transportationArr.push(transportationObj);
+        });
+
+        const removeUndefinedData = removeUndefinedObj(transportationArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setTransportationTerm(uniqueArr);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    })();
+
+    // shipping && billing address
+    (async function () {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          `organizations/fetch/org/address/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+        );
+
+        setLoading(false);
+        const shippingArr = [];
+        data?.results?.forEach((s) => {
+          const shippingArrObj = {
+            value: s?.id,
+            label: s?.address,
+          };
+          shippingArr.push(shippingArrObj);
+        });
+
+        const removeUndefinedData = removeUndefinedObj(shippingArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        // shipping
+        setShippingAddress(uniqueArr);
+        //billing
+        setBillingAddress(uniqueArr);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    })();
   }, []);
 
   // console.log(deliveryTerm);
@@ -219,6 +277,8 @@ const UpdateOrderDataForm = ({ orderData }) => {
     is_active,
     is_approved,
     id,
+    org,
+    created_by,
     expected_inv_date,
     description,
     department,
@@ -228,29 +288,43 @@ const UpdateOrderDataForm = ({ orderData }) => {
     delivery_term,
     contact_to,
     client: cl,
+    transportation_term,
+    shipping_address,
+    billing_address,
   } = orderData;
 
   const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
-      total,
-      sub_org,
-      ref_po,
       po_date,
+      expected_inv_date,
+      ref_po,
+      so_id,
+      comments,
       is_active,
       is_approved,
-      expected_inv_date,
+      total,
       description,
-      comments,
-      parts,
-
-      department: {
-        label: department?.name || "",
-        value: department?.id || "",
-      },
+      created_by,
+      org: org?.id,
 
       client: {
         label: cl?.company_name || "",
         value: cl?.id || "",
+      },
+
+      sub_org: {
+        label: sub_org?.sub_company_name || "",
+        value: sub_org?.id || "",
+      },
+
+      billing_address: {
+        label: billing_address?.address || "",
+        value: billing_address?.id || "",
+      },
+
+      shipping_address: {
+        label: shipping_address?.address || "",
+        value: shipping_address?.id || "",
       },
 
       payment_term: {
@@ -267,18 +341,48 @@ const UpdateOrderDataForm = ({ orderData }) => {
         label: contact_to?.email || "",
         value: contact_to?.id || "",
       },
+
+      department: {
+        label: department?.name || "",
+        value: department?.id || "",
+      },
+
+      transportation_term: {
+        label: transportation_term?.name || "",
+        value: transportation_term?.id || "",
+      },
+
+      so_status: {
+        label: so_status || "",
+        value: so_status || "",
+      },
+
+      parts,
     },
 
     onSubmit: async (values) => {
       try {
-        const { parts, client, department, contact_to, sub_org, so_status } =
-          values;
+        const {
+          parts,
+          client,
+          department,
+          contact_to,
+          sub_org,
+          so_status,
+          delivery_term,
+          payment_term,
+          transportation_term,
+          shipping_address,
+          billing_address,
+        } = values;
+
+        // part arr d. s. like server
         const partArr = [];
         parts.forEach((part) => {
           const partObj = {
             short_description: part?.short_description,
             quantity: part?.quantity,
-            part_no: part?.part_no,
+            part_no: part?.parts_id?.part_number,
             price: part?.price,
             gst: part?.gst,
             net_price: part?.net_price,
@@ -290,11 +394,16 @@ const UpdateOrderDataForm = ({ orderData }) => {
         console.log({
           ...values,
           client: client?.value,
-          department: department?.value,
+          sub_org: sub_org?.value || null,
+          billing_address: billing_address?.value || null,
+          shipping_address: shipping_address?.value || null,
+          payment_term: payment_term?.value || null,
+          delivery_term: delivery_term?.value || null,
           contact_to: contact_to?.value || null,
-          sub_org,
-          so_status,
-          partArr,
+          department: department?.value,
+          so_status: so_status?.value || null,
+          transportation_term: transportation_term?.value || null,
+          parts: partArr,
         });
       } catch (error) {
         console.log(error);
@@ -343,8 +452,10 @@ const UpdateOrderDataForm = ({ orderData }) => {
   const handleAddPart = () => {
     const newPart = {
       short_description,
-      parts_no: selectPart.label,
-      parts_id: selectPart.value,
+      parts_id: {
+        part_number: selectPart?.label,
+        id: selectPart?.value,
+      },
       quantity: totalQuantity,
       price,
       gst,
@@ -434,6 +545,8 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isClearable
               name='so_status'
               options={soStatus}
+              value={values.so_status}
+              onChange={(option) => setFieldValue("so_status", option)}
             />
           </div>
 
@@ -458,8 +571,11 @@ const UpdateOrderDataForm = ({ orderData }) => {
               placeholder='Select Sub Org'
               isSearchable
               isClearable
+              isLoading={loading}
               name='sub_org'
               options={subOrg}
+              value={values?.sub_org}
+              onChange={(option) => setFieldValue("sub_org", option)}
             />
           </div>
 
@@ -473,6 +589,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isSearchable
               isClearable
               name='billing_address'
+              options={billingAddress}
+              value={values.billing_address}
+              onChange={(option) => setFieldValue("billing_address", option)}
             />
           </div>
 
@@ -486,6 +605,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isSearchable
               isClearable
               name='shipping_address'
+              options={shippingAddress}
+              value={values.shipping_address}
+              onChange={(option) => setFieldValue("shipping_address", option)}
             />
           </div>
 
@@ -560,6 +682,10 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isSearchable
               isClearable
               name='transportation_term'
+              options={transportationTerm}
+              onChange={(option) =>
+                setFieldValue("transportation_term", option)
+              }
             />
           </div>
 
@@ -754,8 +880,8 @@ const UpdateOrderDataForm = ({ orderData }) => {
                             isSearchable
                             isClearable
                             value={{
-                              label: part?.parts_no,
-                              value: part?.parts_id,
+                              label: part?.parts_id?.part_number,
+                              value: part?.parts_id?.id,
                             }}
                             menuPortalTarget={document.querySelector("body")}
                             options={allParts}
