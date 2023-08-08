@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
 import axios from "../../utils/axios/axios";
 import {
@@ -33,6 +34,8 @@ const UpdateOrderDataForm = ({ orderData }) => {
   const [gst, setgst] = useState(0);
   const [net_price, setNet_price] = useState(0);
   const [extd_gross_price, setExtd_gross_price] = useState(0);
+
+  // load sub_org, client,  org, parts, payment term, delivery term, contact to, transportation term, shipping && billing address
 
   useEffect(() => {
     // load sub_organization
@@ -265,32 +268,31 @@ const UpdateOrderDataForm = ({ orderData }) => {
     })();
   }, []);
 
-  // console.log(deliveryTerm);
   // extract data from order data
   const {
-    total,
-    sub_org,
-    so_status,
-    so_id,
-    ref_po,
+    id,
     po_date,
+    expected_inv_date,
+    ref_po,
+    so_id,
+    comments,
     is_active,
     is_approved,
-    id,
-    org,
-    created_by,
-    expected_inv_date,
+    total,
     description,
-    department,
-    comments,
-    parts,
+    so_status,
+    created_by,
+    org,
+    client: cl,
+    sub_org,
+    billing_address,
+    shipping_address,
     payment_term,
     delivery_term,
     contact_to,
-    client: cl,
+    department,
     transportation_term,
-    shipping_address,
-    billing_address,
+    parts,
   } = orderData;
 
   const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
@@ -381,19 +383,20 @@ const UpdateOrderDataForm = ({ orderData }) => {
         parts.forEach((part) => {
           const partObj = {
             short_description: part?.short_description,
-            quantity: part?.quantity,
-            part_no: part?.parts_id?.part_number,
-            price: part?.price,
-            gst: part?.gst,
-            net_price: part?.net_price,
-            extd_gross_price: part?.extd_gross_price,
+            quantity: parseFloat(part?.quantity),
+            parts_no: part.parts_no,
+            parts_id: part?.parts_id?.id,
+            price: parseFloat(part?.price),
+            gst: parseFloat(part?.gst),
+            net_price: parseFloat(part?.net_price),
+            extd_gross_price: parseFloat(part?.extd_gross_price),
           };
           partArr.push(partObj);
         });
 
-        console.log({
+        const updateSalesOrderObj = {
           ...values,
-          client: client?.value,
+          client: client?.value || null,
           sub_org: sub_org?.value || null,
           billing_address: billing_address?.value || null,
           shipping_address: shipping_address?.value || null,
@@ -404,13 +407,29 @@ const UpdateOrderDataForm = ({ orderData }) => {
           so_status: so_status?.value || null,
           transportation_term: transportation_term?.value || null,
           parts: partArr,
-        });
+        };
+
+        // return console.log(partArr);
+
+        const res = await axios.put(
+          `pipo/update/sales/order/${id}/`,
+          JSON.stringify(updateSalesOrderObj)
+        );
+        if (res.status === 200) {
+          toast.success("Order updated successfully");
+        } else {
+          toast.error("Something wrong, please try again later", {
+            duration: 2000,
+          });
+        }
       } catch (error) {
+        toast.error(error?.message, { duration: 2000 });
         console.log(error);
       }
     },
   });
 
+  // console.log(values.transportation_term);
   // so status
   const soStatus = [
     { label: "Paid", value: "Paid" },
@@ -438,7 +457,8 @@ const UpdateOrderDataForm = ({ orderData }) => {
 
     if (value) {
       // console.log(updatedParts[index]);
-      updatedParts[index].parts_id = value;
+      updatedParts[index].parts_id.id = value;
+      updatedParts[index].parts_id.part_number = label;
       updatedParts[index].parts_no = label;
       let s = partFullObj.find((part) => part?.id === value);
       updatedParts[index].short_description = s?.short_description || "";
@@ -456,11 +476,12 @@ const UpdateOrderDataForm = ({ orderData }) => {
         part_number: selectPart?.label,
         id: selectPart?.value,
       },
-      quantity: totalQuantity,
-      price,
-      gst,
-      net_price,
-      extd_gross_price,
+      parts_no: selectPart?.label,
+      quantity: parseFloat(totalQuantity),
+      price: parseFloat(price),
+      gst: parseFloat(gst),
+      net_price: parseFloat(net_price),
+      extd_gross_price: parseFloat(extd_gross_price),
     };
 
     setFieldValue("parts", [...values.parts, newPart]);
@@ -474,8 +495,16 @@ const UpdateOrderDataForm = ({ orderData }) => {
     setExtd_gross_price(0);
   };
 
+  // remove row
+  const handleRemovePart = (index) => {
+    const updatedParts = [...values.parts];
+    updatedParts.splice(index, 1); // Remove the object at the specified index
+    setFieldValue("parts", updatedParts);
+  };
+
   return (
     <div className='card-body'>
+      <Toaster />
       <form onSubmit={handleSubmit}>
         <div className='row'>
           {/* Po date input */}
@@ -683,6 +712,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
               isClearable
               name='transportation_term'
               options={transportationTerm}
+              value={values?.transportation_term}
               onChange={(option) =>
                 setFieldValue("transportation_term", option)
               }
@@ -703,7 +733,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
 
           {/* is_active checkbox */}
           <div className='mb-3 col-md-12'>
-            <label className="d-flex align-items-center column-gap-2">
+            <label className='d-flex align-items-center column-gap-2'>
               <input
                 type='checkbox'
                 name='is_active'
@@ -716,7 +746,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
 
           {/* is_approved checkbox */}
           <div className='mb-3 col-md-12'>
-            <label className="d-flex align-items-center column-gap-2">
+            <label className='d-flex align-items-center column-gap-2'>
               <input
                 type='checkbox'
                 name='is_approved'
@@ -868,100 +898,100 @@ const UpdateOrderDataForm = ({ orderData }) => {
             </thead>
             {values?.parts?.map((part, index) => {
               return (
-                <>
-                  {" "}
-                  <tbody key={index}>
-                    <tr>
-                      <td>
-                        <div className='select-port'>
-                          <Select
-                            className='select select-width'
-                            placeholder='Select Part No'
-                            isSearchable
-                            isClearable
-                            value={{
-                              label: part?.parts_id?.part_number,
-                              value: part?.parts_id?.id,
-                            }}
-                            menuPortalTarget={document.querySelector("body")}
-                            options={allParts}
-                            name='part_id'
-                            isLoading={partsLoading}
-                            onChange={(selectedOption) =>
-                              handlePartSelectChange(selectedOption, index)
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='text'
-                          placeholder='Short Description'
-                          name={`parts[${index}].short_description`}
-                          value={part.short_description}
-                          onChange={handleChange}
+                <tbody key={index}>
+                  <tr>
+                    <td>
+                      <div className='select-port'>
+                        <Select
+                          className='select select-width'
+                          placeholder='Select Part No'
+                          isSearchable
+                          isClearable
+                          value={{
+                            label: part?.parts_id?.part_number,
+                            value: part?.parts_id?.id,
+                          }}
+                          menuPortalTarget={document.querySelector("body")}
+                          options={allParts}
+                          name='part_id'
+                          isLoading={partsLoading}
+                          onChange={(selectedOption) =>
+                            handlePartSelectChange(selectedOption, index)
+                          }
                         />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Total Quantity'
-                          name={`parts[${index}].quantity`}
-                          value={part.quantity}
-                          onChange={handleChange}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Price'
-                          name={`parts[${index}].price`}
-                          value={part?.price}
-                          onChange={handleChange}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='GST'
-                          name={`parts[${index}].gst`}
-                          value={part?.gst}
-                          onChange={handleChange}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Net Price'
-                          name={`parts[${index}].net_price`}
-                          value={part?.net_price}
-                          onChange={handleChange}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class'
-                          type='number'
-                          placeholder='Extd Gross Price'
-                          name={`parts[${index}].extd_gross_price`}
-                          value={part?.extd_gross_price}
-                          onChange={handleChange}
-                        />
-                      </td>
+                      </div>
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class'
+                        type='text'
+                        placeholder='Short Description'
+                        name={`parts[${index}].short_description`}
+                        value={part.short_description}
+                        onChange={handleChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class'
+                        type='number'
+                        placeholder='Total Quantity'
+                        name={`parts[${index}].quantity`}
+                        value={part.quantity}
+                        onChange={handleChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class'
+                        type='number'
+                        placeholder='Price'
+                        name={`parts[${index}].price`}
+                        value={part?.price}
+                        onChange={handleChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class'
+                        type='number'
+                        placeholder='GST'
+                        name={`parts[${index}].gst`}
+                        value={part?.gst}
+                        onChange={handleChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class'
+                        type='number'
+                        placeholder='Net Price'
+                        name={`parts[${index}].net_price`}
+                        value={part?.net_price}
+                        onChange={handleChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class'
+                        type='number'
+                        placeholder='Extd Gross Price'
+                        name={`parts[${index}].extd_gross_price`}
+                        value={part?.extd_gross_price}
+                        onChange={handleChange}
+                      />
+                    </td>
 
-                      <td>
-                        <button type='button' className='btn btn-danger btn-sm'>
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </>
+                    <td>
+                      <button
+                        type='button'
+                        className='btn btn-danger btn-sm'
+                        onClick={() => handleRemovePart(index)}>
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
               );
             })}
           </table>
