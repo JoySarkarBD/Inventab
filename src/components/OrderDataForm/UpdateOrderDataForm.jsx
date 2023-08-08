@@ -577,7 +577,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
 
           {/* is_active checkbox */}
           <div className='mb-3 col-md-12'>
-            <label>
+            <label className="d-flex align-items-center column-gap-2">
               <input
                 type='checkbox'
                 name='is_active'
@@ -590,7 +590,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
 
           {/* is_approved checkbox */}
           <div className='mb-3 col-md-12'>
-            <label>
+            <label className="d-flex align-items-center column-gap-2">
               <input
                 type='checkbox'
                 name='is_approved'
@@ -749,7 +749,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
                       <td>
                         <div className='select-port'>
                           <Select
-                            className='select'
+                            className='select select-width'
                             placeholder='Select Part No'
                             isSearchable
                             isClearable

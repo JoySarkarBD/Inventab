@@ -475,6 +475,7 @@ const AddSalesDataForm = () => {
                                 isClearable
                                 isLoading={partsLoading && parts?.length > 0}
                                 options={parts}
+                                menuPortalTarget={document.querySelector("body")}
                                 onChange={(option) => handleSelectPart(option)}
                               />
                             </div>
