@@ -26234,3 +26234,7 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+[data-theme-version="dark"] input::placeholder {
+  color: white;
+}
