@@ -245,24 +245,12 @@ const SalesInvoiceDetails = () => {
                               data-bs-target='#exampleModal'>
                               Serial no
                             </button>
-                            {/* <table className='table table-bordered mt-4'>
-                              <thead style={{ background: "#343A40" }}>
-                                <tr>
-                                  <th className='text-light ps-4 fs-5'>
-                                    Serial No List
-                                  </th>
-                                </tr>
-                              </thead>
-                            </table> */}
-
-                            {/* {part?.parts_no?.serialized_parts?.map((sn) => {
-                              return <p key={sn?.id}>{sn?.serial_number}</p>;
-                            })} */}
                             {/* mrp in unit value */}
                             {/* Extd Wo Tax this will multipy by unit value and qty */}
                           </td>
-                          <td></td>
+                          <td>{part?.parts_no?.mrp}</td>
                           <td>{part?.quantity}</td>
+                          <td>{part?.parts_no?.mrp * part?.quantity}</td>
                         </tr>
                       );
                     })}
