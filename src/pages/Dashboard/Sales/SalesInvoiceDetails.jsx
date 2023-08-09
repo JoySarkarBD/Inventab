@@ -87,7 +87,7 @@ const SalesInvoiceDetails = () => {
       </div>
       <div ref={printRef} className='mx-2'>
         <div className='d-flex justify-content-center align-items-center'>
-          <SectionTitle heading='Sales Invoice xxx' />
+          <SectionTitle heading='Sales Invoice Details' />
         </div>
         {/* Billing Address Detail & Shipping address Detail including GST*/}
         <div className='row my-5 row-gap-2'>

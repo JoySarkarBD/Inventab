@@ -721,7 +721,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
           </div>
 
           {/* description input */}
-          <div className='mb-3 col-md-12'>
+          <div className='mb-3 col-md-6'>
             <TextArea
               title='Description'
               type='text'
