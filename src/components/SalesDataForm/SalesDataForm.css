@@ -20,12 +20,13 @@
 
 .select-width,
 .dsc-width {
-  width: 150px;
+  min-width: 150px;
+  width: 100%;
 }
 .input-width {
-  width: 100px;
+  min-width: 100px;
+  width: 100%;
 }
-
 .table-responsive111::-webkit-scrollbar {
   width: 12px; /* width of the entire scrollbar */
 }
