@@ -17,7 +17,7 @@ export default function KPIInvoice() {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=INVOICE"
+        "pipo/kpi/list/?org=3f31d296-4803-4973-883c-6441af37737a&metric=INVOICE"
       );
       setKpiInvoice(data?.results);
       setLoading(false);
@@ -36,7 +36,7 @@ export default function KPIInvoice() {
   useEffect(() => {
     let total = 0;
     if (!loading && kipInvoice?.length && kipInvoice?.length > 0) {
-      kipInvoice.forEach(invoice => {
+      kipInvoice.forEach((invoice) => {
         let res = kpiEachTotal(invoice);
         // added total property in existing invoice obj
         invoice["total"] = res;
@@ -51,72 +51,72 @@ export default function KPIInvoice() {
   const columns = [
     {
       name: "Department",
-      selector: row => row?.department,
+      selector: (row) => row?.department,
       sortable: true,
     },
     {
       name: "Apr",
-      selector: row => numDifferentiation(row?.apr) || 0,
+      selector: (row) => numDifferentiation(row?.apr) || 0,
       sortable: true,
     },
     {
       name: "May",
-      selector: row => numDifferentiation(row?.may) || 0,
+      selector: (row) => numDifferentiation(row?.may) || 0,
       sortable: true,
     },
     {
       name: "Jun",
-      selector: row => numDifferentiation(row?.jun) || 0,
+      selector: (row) => numDifferentiation(row?.jun) || 0,
       sortable: true,
     },
     {
       name: "Jul",
-      selector: row => numDifferentiation(row?.jul) || 0,
+      selector: (row) => numDifferentiation(row?.jul) || 0,
       sortable: true,
     },
     {
       name: "Aug",
-      selector: row => numDifferentiation(row?.aug) || 0,
+      selector: (row) => numDifferentiation(row?.aug) || 0,
       sortable: true,
     },
     {
       name: "Sep",
-      selector: row => numDifferentiation(row?.sep) || 0,
+      selector: (row) => numDifferentiation(row?.sep) || 0,
       sortable: true,
     },
     {
       name: "Oct",
-      selector: row => numDifferentiation(row?.oct) || 0,
+      selector: (row) => numDifferentiation(row?.oct) || 0,
       sortable: true,
     },
     {
       name: "Nov",
-      selector: row => numDifferentiation(row?.nov) || 0,
+      selector: (row) => numDifferentiation(row?.nov) || 0,
       sortable: true,
     },
     {
       name: "Dec",
-      selector: row => numDifferentiation(row?.dec) || 0,
+      selector: (row) => numDifferentiation(row?.dec) || 0,
       sortable: true,
     },
     {
       name: "Jan",
-      selector: row => numDifferentiation(row?.jan) || 0,
+      selector: (row) => numDifferentiation(row?.jan) || 0,
       sortable: true,
     },
     {
       name: "Feb",
-      selector: row => numDifferentiation(row?.feb) || 0,
+      selector: (row) => numDifferentiation(row?.feb) || 0,
       sortable: true,
     },
     {
       name: "Mar",
-      selector: row => numDifferentiation(row?.mar) || 0,
+      selector: (row) => numDifferentiation(row?.mar) || 0,
       sortable: true,
     },
     {
       name: "Total",
-      selector: row => numDifferentiation(row?.total) || 0,
+      selector: (row) => numDifferentiation(row?.total) || 0,
       sortable: true,
     },
   ];

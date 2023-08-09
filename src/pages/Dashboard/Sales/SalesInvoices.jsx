@@ -45,7 +45,7 @@ const SalesInvoices = () => {
   const columns = [
     {
       name: "Inv No",
-      cell: row => {
+      cell: (row) => {
         return (
           <Link
             className='text-center text-info dk_theme_text'
@@ -58,26 +58,26 @@ const SalesInvoices = () => {
 
     {
       name: "Sub Org",
-      selector: row => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org || "No data found",
       sortable: true,
     },
 
     {
       name: "Client",
-      selector: row => row?.org?.company_name || "No data found",
+      selector: (row) => row?.org?.company_name || "No data found",
       sortable: true,
     },
 
     {
       name: "Sales Order",
-      selector: row => row?.sale_order || "No data found",
+      selector: (row) => row?.sale_order || "No data found",
       sortable: true,
     },
 
     // Ref PO No - which field is this in API?
     {
       name: "Ref PO No",
-      selector: row => row?.po_no || "No data found",
+      selector: (row) => row?.po_no || "No data found",
       sortable: true,
     },
 
@@ -90,13 +90,13 @@ const SalesInvoices = () => {
 
     {
       name: "Dept",
-      selector: row => row?.dept?.name || "No data found",
+      selector: (row) => row?.dept?.name || "No data found",
       sortable: true,
     },
 
     {
       name: "Status",
-      selector: row => row?.status || "No data found",
+      selector: (row) => row?.status || "No data found",
       sortable: true,
     },
   ];
@@ -105,7 +105,7 @@ const SalesInvoices = () => {
   useEffect(() => {
     let result;
     if (selectedEl?.value) {
-      result = invoices.filter(invoice => {
+      result = invoices.filter((invoice) => {
         switch (selectedEl?.value) {
           case "invoice_number":
             return invoice?.invoice_number
@@ -146,7 +146,7 @@ const SalesInvoices = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach(salesData => {
+    searchData.forEach((salesData) => {
       const csvObj = {
         "Inv No": salesData?.invoice_number || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -161,7 +161,7 @@ const SalesInvoices = () => {
       data.push(csvObj);
     });
 
-    setCsv(prev => [...prev, ...data]);
+    setCsv((prev) => [...prev, ...data]);
   };
 
   // react select options
@@ -239,7 +239,7 @@ const SalesInvoices = () => {
                         placeholder='Search here'
                         className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
                         value={search}
-                        onChange={e => setSearch(e.target.value)}
+                        onChange={(e) => setSearch(e.target.value)}
                       />
                     </div>
                   }
