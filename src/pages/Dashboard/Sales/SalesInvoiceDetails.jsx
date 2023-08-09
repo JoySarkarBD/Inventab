@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import DataTable from "react-data-table-component";
 import { AiOutlinePrinter } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
@@ -16,7 +15,6 @@ const SalesInvoiceDetails = () => {
   const [loading, setLoading] = useState(false);
 
   const printRef = useRef();
-
   // load leads
   useEffect(() => {
     // fetch invoiceDetails table data
@@ -35,33 +33,6 @@ const SalesInvoiceDetails = () => {
     };
     leads();
   }, [invoice_id]);
-
-  // columns
-  const columns = [
-    {
-      name: "Part No with Desc",
-      cell: () => "No Data Found",
-      sortable: true,
-    },
-
-    {
-      name: "Unit Value",
-      selector: () => "No data found",
-      sortable: true,
-    },
-
-    {
-      name: "Qty",
-      selector: () => "No data found",
-      sortable: true,
-    },
-
-    {
-      name: "Extd wo Tax",
-      selector: () => "No data found",
-      sortable: true,
-    },
-  ];
 
   return (
     <div>
@@ -165,44 +136,41 @@ const SalesInvoiceDetails = () => {
                     {invoiceDetails?.shipping_address?.pincode?.pin_code}
                   </span>
                 </p>
+                <p className='text-dark fs-4 my-2'>
+                  GST:
+                  <span className='fs-5'>
+                    {" "}
+                    {invoiceDetails?.shipping_address?.gst_no}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
 
-          <div className='col-12'>
-            <div className='invoice-details invoice-details-card mt-3 card-body'>
-              {/* Payment Terms */}
-              <div className='d-flex align-items-center column-gap-3 mb-2'>
-                <p className='m-0 title'>
-                  Payment Terms
-                  <span className='ms-1'>
-                    : {invoiceDetails?.payment_term?.term}
+          {/* Payment & Delivery Terms  */}
+          <div className='col-12 col-md-6 col-lg-6'>
+            <div className='invoice-details-card'>
+              <div className='card-body'>
+                <h4 className='card-title'>Payment & Delivery</h4>
+                <p className='text-dark fs-4 my-2'>
+                  Payment Terms:
+                  <span className='fs-5'>
+                    {" "}
+                    {invoiceDetails?.payment_term?.term}
                   </span>
                 </p>
-              </div>
-              <div className='d-flex align-items-center column-gap-3 mb-2'>
-                <p className='m-0 title'>
-                  Payment Date{" "}
-                  <span className='ms-1'>: {invoiceDetails?.payment_date}</span>
+                <p className='text-dark fs-4 my-2'>
+                  Payment Date:
+                  <span className='fs-5'> {invoiceDetails?.payment_date}</span>
                 </p>
-              </div>
-
-              {/* Delivery Terms */}
-              <div className='d-flex align-items-center column-gap-3 mb-2'>
-                <p className='m-0 title'>
-                  Delivery Terms{" "}
-                  <span className='ms-1'>
-                    : {invoiceDetails?.delivery_term}
-                  </span>
+                <p className='text-dark fs-4 my-2'>
+                  Delivery Terms:
+                  <span className='fs-5'> {invoiceDetails?.delivery_term}</span>
                 </p>
-              </div>
-
-              {/* Status */}
-              <div className='d-flex align-items-center column-gap-3 mb-2'>
-                <p className='m-0 title'>
-                  Status{" "}
-                  <span className='ms-1'>
-                    :{" "}
+                <p className='text-dark fs-4 my-2'>
+                  Status:
+                  <span className='fs-5'>
+                    {" "}
                     {invoiceDetails?.status === null
                       ? "------------"
                       : invoiceDetails?.status}
@@ -211,16 +179,37 @@ const SalesInvoiceDetails = () => {
               </div>
             </div>
           </div>
-        </div>
 
-        {/*user contact email name */}
-        <div className='row my-4'>
-          <div className='col-12 col-md-12 col-lg-12'>
-            <div className='card bg-primary userInfo-invoice-details'>
-              <div className='card-body text-center'>
-                <span className='text-white card-title'>
-                  Contact person, mail, email
-                </span>
+          {/* Created By Details  */}
+          <div className='col-12 col-md-6 col-lg-6'>
+            <div className='invoice-details-card'>
+              <div className='card-body'>
+                <h4 className='card-title'>Contact Details</h4>
+                <p className='text-dark fs-4 my-2'>
+                  Created By:
+                  <span className='fs-5'>
+                    {" "}
+                    {invoiceDetails?.created_by?.first_name +
+                      " " +
+                      invoiceDetails?.created_by?.last_name}
+                  </span>
+                </p>
+
+                <p className='text-dark fs-4 my-2'>
+                  Email:
+                  <span className='fs-5'>
+                    {" "}
+                    {invoiceDetails?.created_by?.email}
+                  </span>
+                </p>
+
+                <p className='text-dark fs-4 my-2'>
+                  Mobile:
+                  <span className='fs-5'>
+                    {" "}
+                    {invoiceDetails?.created_by?.mobile}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -230,30 +219,114 @@ const SalesInvoiceDetails = () => {
         <div className='row'>
           <div className='col-12'>
             <div className='card'>
-              <div className='card-body'>
-                <DataTable
-                  columns={columns}
-                  customStyles={{
-                    rows: {
-                      style: {
-                        fontSize: "16px",
-                      },
-                    },
-                    headCells: {
-                      style: {
-                        fontSize: "19px",
-                      },
-                    },
-                  }}
-                  noContextMenu
-                  fixedHeader
-                  fixedHeaderScrollHeight='550px'
-                  pagination
-                  striped
-                  highlightOnHover
-                  progressPending={loading}
-                />
+              <div className='card-body table-responsive'>
+                <table className='table table-bordered'>
+                  <thead style={{ background: "#343A40" }}>
+                    <tr>
+                      <th className='text-light ps-4 fs-5'>
+                        Part No with Desc
+                      </th>
+                      <th className='text-light ps-4 fs-5'>Unit Value</th>
+                      <th className='text-light ps-4 fs-5'>Qty</th>
+                      <th className='text-light ps-4 fs-5'>Extd wo Tax</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {invoiceDetails?.parts_invoice?.map((part) => {
+                      return (
+                        <tr key={part?.id}>
+                          <td>
+                            {part?.short_description}
+                            <br />
+                            <button
+                              className='btn btn-primary btn-sm'
+                              type='button'
+                              data-bs-toggle='modal'
+                              data-bs-target='#exampleModal'>
+                              Serial no
+                            </button>
+                            {/* <table className='table table-bordered mt-4'>
+                              <thead style={{ background: "#343A40" }}>
+                                <tr>
+                                  <th className='text-light ps-4 fs-5'>
+                                    Serial No List
+                                  </th>
+                                </tr>
+                              </thead>
+                            </table> */}
+
+                            {/* {part?.parts_no?.serialized_parts?.map((sn) => {
+                              return <p key={sn?.id}>{sn?.serial_number}</p>;
+                            })} */}
+                            {/* mrp in unit value */}
+                            {/* Extd Wo Tax this will multipy by unit value and qty */}
+                          </td>
+                          <td></td>
+                          <td>{part?.quantity}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal for serial no */}
+      <div
+        className='modal fade'
+        id='exampleModal'
+        tabIndex='-1'
+        aria-labelledby='exampleModalLabel'
+        aria-hidden='true'>
+        <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'></button>
+            </div>
+            <div className='table-responsive'>
+              <table className='table table-bordered'>
+                <thead style={{ background: "#343A40" }}>
+                  <tr>
+                    <th className='text-light ps-4 fs-5'>No</th>
+                    <th className='text-light ps-4 fs-5'>Serial No</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoiceDetails?.parts_invoice?.map((part) => {
+                    return (
+                      <tr key={part?.id}>
+                        <td>
+                          {part?.parts_no?.serialized_parts?.map(
+                            (sn, index) => {
+                              return <p key={sn?.id}>{"Sl-" + ++index}</p>;
+                            }
+                          )}
+                        </td>
+                        <td>
+                          {part?.parts_no?.serialized_parts?.map((sn) => {
+                            return <p key={sn?.id}>{sn?.serial_number}</p>;
+                          })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                data-bs-dismiss='modal'>
+                Close
+              </button>
             </div>
           </div>
         </div>
