@@ -6,11 +6,14 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import { useAuth } from "../../../hooks/useAuth";
 import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
 const SalesOrders = () => {
+  const { auth } = useAuth();
+  const { orgId } = auth;
   const [search, setSearch] = useState("");
   const [salesOrders, setSalesOrders] = useState([]);
   const [searchData, setSearchData] = useState([]);
@@ -18,26 +21,23 @@ const SalesOrders = () => {
   const [csv, setCsv] = useState([]);
   const [selectedEl, setSelectedEL] = useState(null);
 
-  // fetch table
-  const getSalesOrders = async () => {
-    try {
-      setLoading(true);
-      const response = (
-        await axios.get(`pipo/so/order/?org=${import.meta.env.VITE_ORG_ID}`)
-      ).data;
-      setLoading(false);
-      setSalesOrders(response?.results);
-      setSearchData(response?.results);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
-
   // load leads
   useEffect(() => {
+    // fetch table
+    const getSalesOrders = async () => {
+      try {
+        setLoading(true);
+        const response = (await axios.get(`pipo/so/order/?org=${orgId}`)).data;
+        setLoading(false);
+        setSalesOrders(response?.results);
+        setSearchData(response?.results);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
     getSalesOrders();
-  }, []);
+  }, [orgId]);
 
   // columns
   const columns = [

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 import axios from "../../utils/axios/axios";
 import {
   kpiEachTotal,
@@ -6,29 +7,30 @@ import {
 } from "../../utils/utilityFunc/utilityFunc";
 
 const KpiInvoice = () => {
+  const { auth } = useAuth();
+  const { orgId } = auth;
   const [loading, setLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [invoiceTotal, setInvoicesTotal] = useState([]);
 
-  // get kpi invoices
-  const getKpiInvoice = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=INVOICE`
-      );
-      setLoading(false);
-      setInvoices(data?.results);
-    } catch (error) {
-      console.log(error?.message);
-    }
-  };
-
   // load kpi invoices
   useEffect(() => {
+    // get kpi invoices
+    const getKpiInvoice = async () => {
+      try {
+        setLoading(true);
+        // 0a055b26-ae15-40a9-8291-25427b94ebb3
+        const { data } = await axios.get(
+          `pipo/kpi/list/?org=${orgId}&metric=INVOICE`
+        );
+        setLoading(false);
+        setInvoices(data?.results);
+      } catch (error) {
+        console.log(error?.message);
+      }
+    };
     getKpiInvoice();
-  }, []);
-
+  }, [orgId]);
 
   //kpi PO each sub total
   useEffect(() => {

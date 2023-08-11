@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
+import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
@@ -12,6 +13,9 @@ import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 
 export default function DataForm() {
+  const { auth } = useAuth();
+  const { orgId, userId } = auth;
+
   const [loading, setLoading] = useState(false);
   const [partsLoading, setPartsLoading] = useState(false);
   const [allParts, setParts] = useState([]);
@@ -45,9 +49,7 @@ export default function DataForm() {
 
         const {
           data: { results },
-        } = await axios.get(
-          `organizations/get/suborg/?org=${import.meta.env.VITE_ORG_ID}`
-        );
+        } = await axios.get(`organizations/get/suborg/?org=${orgId}`);
         setLoading(false);
 
         const subOrgArr = [];
@@ -95,9 +97,7 @@ export default function DataForm() {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=${
-            import.meta.env.VITE_ORG_ID
-          }&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -246,7 +246,7 @@ export default function DataForm() {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/org/address/?org=${import.meta.env.VITE_ORG_ID}`
+          `organizations/fetch/org/address/?org=${orgId}`
         );
 
         setLoading(false);
@@ -270,7 +270,7 @@ export default function DataForm() {
         console.log(error);
       }
     })();
-  }, []);
+  }, [orgId]);
 
   // handle sales order from
   const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
@@ -284,8 +284,8 @@ export default function DataForm() {
       total: 0,
       description: "",
       so_status: "",
-      created_by: import.meta.env.VITE_USER_ID,
-      org: import.meta.env.VITE_ORG_ID,
+      created_by: userId,
+      org: orgId,
       client: "",
       sub_org: "",
       billing_address: "",
@@ -392,12 +392,10 @@ export default function DataForm() {
     const updatedParts = [...values.parts];
 
     if (value) {
-      // console.log(updatedParts[index]);
       updatedParts[index].parts_id = value;
       updatedParts[index].parts_no = label;
       let s = partFullObj.find((part) => part?.id === value);
       updatedParts[index].short_description = s?.short_description || "";
-      // console.log(updatedParts[index].short_description);
     }
 
     setFieldValue("parts", updatedParts);

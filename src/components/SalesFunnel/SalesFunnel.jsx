@@ -2,55 +2,55 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
+import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import { numDifferentiation } from "../../utils/utilityFunc/utilityFunc";
 
 export default function SalesFunnel() {
+  const { auth } = useAuth();
+  const { orgId } = auth;
   const [loading, setLoading] = useState(false);
   const [salesFunnel, setSalesFunnel] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const getSalesFunnelData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(
-        "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-      );
-
-      // Create an object to store the counts for each status
-      const statusData = {};
-
-      data?.results.forEach(lead => {
-        if (!statusData[lead.status]) {
-          statusData[lead.status] = {
-            count: 0,
-            value: 0,
-          };
-        }
-        statusData[lead.status].count++;
-        statusData[lead.status].value += parseFloat(lead.total);
-      });
-
-      // Create the data array as per the desired format
-      const finalData = Object.keys(statusData).map(status => ({
-        status,
-        count: statusData[status].count,
-        value: numDifferentiation(statusData[status].value),
-      }));
-
-      setLoading(false);
-      setSalesFunnel(finalData);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
-
   // load leads
   useEffect(() => {
+    const getSalesFunnelData = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`pipo/sales/lead/?org=${orgId}`);
+
+        // Create an object to store the counts for each status
+        const statusData = {};
+
+        data?.results.forEach((lead) => {
+          if (!statusData[lead.status]) {
+            statusData[lead.status] = {
+              count: 0,
+              value: 0,
+            };
+          }
+          statusData[lead.status].count++;
+          statusData[lead.status].value += parseFloat(lead.total);
+        });
+
+        // Create the data array as per the desired format
+        const finalData = Object.keys(statusData).map((status) => ({
+          status,
+          count: statusData[status].count,
+          value: numDifferentiation(statusData[status].value),
+        }));
+
+        setLoading(false);
+        setSalesFunnel(finalData);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
     getSalesFunnelData();
-  }, []);
+  }, [orgId]);
 
   // Define the columns for the DataTable
   const columns = [
@@ -84,7 +84,7 @@ export default function SalesFunnel() {
   ];
 
   // Handle selection change in react-select
-  const handleSelectChange = selected => {
+  const handleSelectChange = (selected) => {
     setSelectedOption(selected);
   };
 
@@ -92,7 +92,7 @@ export default function SalesFunnel() {
   const filteredData =
     selectedOption && selectedOption.value
       ? salesFunnel.filter(
-          item =>
+          (item) =>
             item.status === selectedOption.value || selectedOption.value === ""
         )
       : salesFunnel;

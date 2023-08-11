@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 import axios from "../../utils/axios/axios";
 import {
   kpiEachTotal,
@@ -6,30 +7,31 @@ import {
 } from "../../utils/utilityFunc/utilityFunc";
 
 const KpiPo = () => {
+  const { auth } = useAuth();
+  const { orgId } = auth;
   const [loading, setLoading] = useState(false);
   const [kpiPoList, setKpiList] = useState([]);
   const [kpiTotal, setKpiTotal] = useState([]);
 
-  // get KPI  PO List
-  const getKpiPo = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(
-        /*prev org 0a055b26-ae15-40a9-8291-25427b94ebb3 */
-        `pipo/kpi/list/?org=${import.meta.env.VITE_ORG_ID}&metric=PO`
-      );
-      setLoading(false);
-      setKpiList(data?.results);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
   // load kpi PO list
   useEffect(() => {
+    // get KPI  PO List
+    const getKpiPo = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          // 0a055b26-ae15-40a9-8291-25427b94ebb3
+          `pipo/kpi/list/?org=${orgId}&metric=PO`
+        );
+        setLoading(false);
+        setKpiList(data?.results);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
     getKpiPo();
-  }, []);
+  }, [orgId]);
 
   //kpi PO each sub total
   useEffect(() => {

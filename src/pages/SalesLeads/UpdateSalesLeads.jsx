@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import TextArea from "../../components/Form/TextArea";
 import SalesDataForm from "../../components/SalesDataForm/SalesDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
+import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import { formatDateToIndianVersion } from "../../utils/utilityFunc/utilityFunc";
@@ -16,6 +17,9 @@ import "./AddSalesLeads.css";
 
 // sales lead history  modal
 function SalesLeadHistoryModal(props) {
+  const { auth } = useAuth();
+  const { firstname, lastname, userId } = auth;
+
   const [histories, setHistories] = useState([]);
   const {
     salesData,
@@ -39,7 +43,7 @@ function SalesLeadHistoryModal(props) {
       const newHistoryData = {
         saleslead: lead_no,
         date,
-        created_by: import.meta.env.VITE_USER_ID,
+        created_by: userId,
         comment: commentValue,
       };
 
@@ -55,8 +59,8 @@ function SalesLeadHistoryModal(props) {
         // history obj for showing UI
         const historyObj = {
           created_by: {
-            first_name: import.meta.env.VITE_USER_FIRST_NAME,
-            last_name: import.meta.env.VITE_USER_LAST_NAME,
+            first_name: firstname,
+            last_name: lastname,
           },
           date: newHistoryData.date,
           comment: commentValue,

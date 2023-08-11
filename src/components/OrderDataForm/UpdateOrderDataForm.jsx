@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
+import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
@@ -13,6 +14,9 @@ import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 
 const UpdateOrderDataForm = ({ orderData }) => {
+  const { auth } = useAuth();
+  const { orgId } = auth;
+
   const [loading, setLoading] = useState(false);
   const [partsLoading, setPartsLoading] = useState(false);
   const [allParts, setParts] = useState([]);
@@ -46,9 +50,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
 
         const {
           data: { results },
-        } = await axios.get(
-          `organizations/get/suborg/?org=${import.meta.env.VITE_ORG_ID}`
-        );
+        } = await axios.get(`organizations/get/suborg/?org=${orgId}`);
         setLoading(false);
 
         const subOrgArr = [];
@@ -96,9 +98,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=${
-            import.meta.env.VITE_ORG_ID
-          }&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -246,7 +246,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/org/address/?org=${import.meta.env.VITE_ORG_ID}`
+          `organizations/fetch/org/address/?org=${orgId}`
         );
 
         setLoading(false);
@@ -270,7 +270,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
         console.log(error);
       }
     })();
-  }, []);
+  }, [orgId]);
 
   // extract data from order data
   const {
@@ -366,6 +366,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
       parts,
     },
 
+    // submit form
     onSubmit: async (values) => {
       try {
         const {
@@ -460,13 +461,11 @@ const UpdateOrderDataForm = ({ orderData }) => {
     const updatedParts = [...values.parts];
 
     if (value) {
-      // console.log(updatedParts[index]);
       updatedParts[index].parts_id.id = value;
       updatedParts[index].parts_id.part_number = label;
       updatedParts[index].parts_no = label;
       let s = partFullObj.find((part) => part?.id === value);
       updatedParts[index].short_description = s?.short_description || "";
-      // console.log(updatedParts[index].short_description);
     }
 
     setFieldValue("parts", updatedParts);
@@ -724,7 +723,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
           </div>
 
           {/* description input */}
-          <div className='mb-3 col-md-12'>
+          <div className='mb-3 col-md-6'>
             <TextArea
               title='Description'
               type='text'
@@ -1013,7 +1012,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
           <input
             className='btn btn-primary btn-common rounded-1'
             type='submit'
-            value='Add Sales Order'
+            value='Update Sales Order'
           />
         </div>
       </form>

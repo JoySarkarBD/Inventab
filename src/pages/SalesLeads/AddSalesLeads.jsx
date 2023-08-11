@@ -5,6 +5,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../components/Shared/PageTitle";
+import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
@@ -15,6 +16,9 @@ import InputText from "./../../components/Form/InputText";
 import TextArea from "./../../components/Form/TextArea";
 
 const AddSalesDataForm = () => {
+  const { auth } = useAuth();
+  const { orgId } = auth;
+
   const [loading, setLoading] = useState(false);
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
@@ -29,7 +33,7 @@ const AddSalesDataForm = () => {
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [unitCost, setUnitCost] = useState(0);
   const [status, setstatus] = useState("");
-  const [gst, setgst] = useState(0);
+  const [gst, setgst] = useState();
   const [net_price, setNet_price] = useState(0);
   const [extd_gross_price, setExtd_gross_price] = useState(0);
 
@@ -40,9 +44,7 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=${
-            import.meta.env.VITE_ORG_ID
-          }&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -92,9 +94,7 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://inventab.io/api/v1/organizations/get/suborg/?org=${
-            import.meta.env.VITE_ORG_ID
-          }`
+          `http://inventab.io/api/v1/organizations/get/suborg/?org=${orgId}`
         );
         setLoading(false);
         const subOrgArr = [];
@@ -138,7 +138,7 @@ const AddSalesDataForm = () => {
         console.log(error);
       }
     })();
-  }, []);
+  }, [orgId]);
 
   // status options
   const statusOptions = [
@@ -196,7 +196,7 @@ const AddSalesDataForm = () => {
         // created lead obj
         const createLeadObj = {
           ...values,
-          org: import.meta.env.VITE_ORG_ID,
+          org: orgId,
           department: department?.value || null,
           sub_org: sub_org?.value || null,
           status: status?.value || null,

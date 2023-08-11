@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
+import { useAuth } from "../../hooks/useAuth";
 import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
@@ -14,6 +15,10 @@ import TextArea from "../Form/TextArea";
 import "./SalesDataForm.css";
 
 export default function SalesDataForm(props) {
+  const { auth } = useAuth();
+  const { orgId } = auth;
+
+  // modal toggle func
   const { setToggleForm } = props.modalState;
 
   const [loading, setLoading] = useState(false);
@@ -59,9 +64,7 @@ export default function SalesDataForm(props) {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=${
-            import.meta.env.VITE_ORG_ID
-          }&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -110,9 +113,7 @@ export default function SalesDataForm(props) {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://inventab.io/api/v1/organizations/get/suborg/?org=${
-            import.meta.env.VITE_ORG_ID
-          }` /*  0a055b26-ae15-40a9-8291-25427b94ebb3 ==> prev org id*/
+          `http://inventab.io/api/v1/organizations/get/suborg/?org=${orgId}` /*  0a055b26-ae15-40a9-8291-25427b94ebb3 ==> prev org id*/
         );
         setLoading(false);
         const subOrgArr = [];
@@ -157,7 +158,7 @@ export default function SalesDataForm(props) {
         console.log(error);
       }
     })();
-  }, []);
+  }, [orgId]);
 
   // ==============================table stuff start==============
 
@@ -557,8 +558,9 @@ export default function SalesDataForm(props) {
                           isSearchable
                           isClearable
                           menuPortalTarget={document.querySelector("body")}
+                          isLoading={partsLoading}
                           options={partsStatus}
-                          onChange={setstatus}
+                          onChange={(option) => handleSelectPart(option)}
                         />
                       </td>
                       <td>
@@ -642,6 +644,7 @@ export default function SalesDataForm(props) {
                   </thead>
                   <tbody>
                     {values?.parts?.map((part, index) => {
+                      console.log(part);
                       return (
                         <tr key={index + 1}>
                           <td>
