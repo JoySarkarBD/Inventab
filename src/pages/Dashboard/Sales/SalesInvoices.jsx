@@ -6,11 +6,12 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
-import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
 const SalesInvoices = () => {
+  const axios = useAxiosPrivate();
   const [search, setSearch] = useState("");
   const [invoices, setInvoice] = useState([]);
   const [searchData, setSearchData] = useState([]);

@@ -5,11 +5,12 @@ import { Link, useParams } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
-import axios from "../../../utils/axios/axios";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import "./sales.css";
 
 const SalesInvoiceDetails = () => {
   const { invoice_id } = useParams();
+  const axios = useAxiosPrivate();
 
   const [invoiceDetails, setInvoiceDetails] = useState();
   const [loading, setLoading] = useState(false);

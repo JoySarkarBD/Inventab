@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useAuth } from "../../../hooks/useAuth";
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
@@ -34,7 +35,7 @@ export default function MetricInvoice() {
       }
     };
     getActualInvoices();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   useEffect(() => {
     if (!loading && actualInvoices?.length > 0) {

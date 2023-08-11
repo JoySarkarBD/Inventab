@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {
   kpiEachTotal,
@@ -31,7 +32,7 @@ const KpiInvoice = () => {
       }
     };
     getKpiInvoice();
-  }, [axios]);
+  }, [axios, orgId]);
 
   //kpi PO each sub total
   useEffect(() => {

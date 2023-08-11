@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
 import { useAuth } from "../../hooks/useAuth";
+
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
 import {
@@ -66,6 +67,7 @@ export default function DataForm() {
       } catch (error) {
         setLoading(false);
         console.log(error.message);
+        toast.error(error.response.status);
       }
     })();
 
@@ -271,7 +273,7 @@ export default function DataForm() {
         console.log(error);
       }
     })();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   // handle sales order from
   const { values, handleChange, handleSubmit, setFieldValue } = useFormik({

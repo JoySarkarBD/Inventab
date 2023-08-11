@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {
   kpiEachTotal,
@@ -9,7 +10,7 @@ import {
 const KpiPo = () => {
   const axios = useAxiosPrivate();
   const { auth } = useAuth();
-  const { orgId } = auth;
+
   const [loading, setLoading] = useState(false);
   const [kpiPoList, setKpiList] = useState([]);
   const [kpiTotal, setKpiTotal] = useState([]);
@@ -17,12 +18,12 @@ const KpiPo = () => {
   // load kpi PO list
   useEffect(() => {
     // get KPI  PO List
+
     const getKpiPo = async () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          // 0a055b26-ae15-40a9-8291-25427b94ebb3
-          `pipo/kpi/list/?org=${orgId}&metric=PO`
+          `pipo/kpi/list/?org=${auth?.orgId}&metric=PO`
         );
         setLoading(false);
         setKpiList(data?.results);
@@ -32,7 +33,7 @@ const KpiPo = () => {
       }
     };
     getKpiPo();
-  }, [orgId]);
+  }, [axios, auth?.orgId]);
 
   //kpi PO each sub total
   useEffect(() => {
