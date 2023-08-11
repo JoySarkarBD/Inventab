@@ -1,69 +1,60 @@
 import { useEffect, useState } from "react";
-import axios from "../../utils/axios/axios";
+import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {
   kpiEachTotal,
   numDifferentiation,
 } from "../../utils/utilityFunc/utilityFunc";
 
 const KpiInvoice = () => {
+  const axios = useAxiosPrivate();
+  const { auth } = useAuth();
+  const { orgId } = auth;
   const [loading, setLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [invoiceTotal, setInvoicesTotal] = useState([]);
 
-  // get kpi invoices
-  const getKpiInvoice = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=INVOICE`
-      );
-      setLoading(false);
-      setInvoices(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // load kpi invoices
   useEffect(() => {
+    // get kpi invoices
+    const getKpiInvoice = async () => {
+      try {
+        setLoading(true);
+        // 0a055b26-ae15-40a9-8291-25427b94ebb3
+        const { data } = await axios.get(
+          `pipo/kpi/list/?org=${orgId}&metric=INVOICE`
+        );
+        setLoading(false);
+        setInvoices(data?.results);
+      } catch (error) {
+        console.log(error?.message);
+      }
+    };
     getKpiInvoice();
-  }, []);
+  }, [axios]);
 
   //kpi PO each sub total
   useEffect(() => {
-    if (invoices.length > 0) {
+    if (invoices.length > 0 && !loading) {
       let kpiInvoiceTotalArr = [];
+
       invoices.forEach((invoice) => {
-        if (
-          invoice.department === "SLS-KAM-WEST" &&
-          invoice.id === "54a97d7f-ced4-4308-865b-8b7f9c1e6e99"
-        ) {
-          let res = kpiEachTotal(invoice);
-          kpiInvoiceTotalArr.push(res);
-        }
-
-        // south
-        if (
-          invoice.department === "SLS-KAM-SOUTH" &&
-          invoice.id === "e5ad66d4-23a3-485e-8a04-6191e865502b"
-        ) {
-          let res = kpiEachTotal(invoice);
-          kpiInvoiceTotalArr.push(res);
-        }
-
-        // north
-        if (
-          invoice.department === "SLS-KAM-NORTH" &&
-          invoice.id === "57bfdda3-ebd2-4ddc-8b19-ac5057572cfd"
-        ) {
-          let res = kpiEachTotal(invoice);
-          kpiInvoiceTotalArr.push(res);
+        // find the specific obj
+        let findInvoiceEntry = kpiInvoiceTotalArr.find(
+          (inv) => inv.department === invoice.data
+        );
+        // if not found then add
+        if (!findInvoiceEntry) {
+          findInvoiceEntry = {
+            department: invoice?.department,
+            total: kpiEachTotal(invoice),
+          };
+          kpiInvoiceTotalArr.push(findInvoiceEntry);
         }
       });
-
       setInvoicesTotal(kpiInvoiceTotalArr);
     }
-  }, [invoices]);
+  }, [invoices, loading]);
 
   //invoice sub total
   let invoiceSubtotal = 0;

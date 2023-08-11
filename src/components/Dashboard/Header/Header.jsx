@@ -1,6 +1,7 @@
 import { AiOutlineLogout } from "react-icons/ai";
 // import { BsSun, BsMoon } from "react-icons/bs";
 import avatar from "../../../assets/images/avatar.png";
+import DarkModeSwitcher from "./DarkModeSwitcher";
 
 const Header = () => {
   return (
@@ -14,14 +15,8 @@ const Header = () => {
               </div>
               <ul className="navbar-nav header-right">
                 <li className="nav-item dropdown notification_dropdown">
-                  <a
-                    className="nav-link bell dz-theme-mode p-0"
-                    href="javascript:void(0);"
-                  >
-                    <i id="icon-light" className="fas fa-sun" />
-                    <i id="icon-dark" className="fas fa-moon" />
-                    {/* <BsSun /> */}
-                    {/* <BsMoon /> */}
+                  <a className="nav-link bell dz-theme-mode p-0">
+                    <DarkModeSwitcher />
                   </a>
                 </li>
 
@@ -35,7 +30,7 @@ const Header = () => {
                   >
                     <img
                       src={avatar}
-                      className="img-fluid rounded-circle"
+                      className="img-fluid rounded-circle avatar-profile"
                       width={60}
                       alt
                     />

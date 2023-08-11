@@ -6,10 +6,15 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
-import axios from "../../../utils/axios/axios";
+import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import Loader from "../../../ui/Loader";
 import "./sales.css";
 
 const SalesOrders = () => {
+  const axios = useAxiosPrivate();
+  const { auth } = useAuth();
+  const { orgId } = auth;
   const [search, setSearch] = useState("");
   const [salesOrders, setSalesOrders] = useState([]);
   const [searchData, setSearchData] = useState([]);
@@ -17,28 +22,23 @@ const SalesOrders = () => {
   const [csv, setCsv] = useState([]);
   const [selectedEl, setSelectedEL] = useState(null);
 
-  // fetch table
-  const getSalesOrders = async () => {
-    try {
-      setLoading(true);
-      const response = (
-        await axios.get(
-          "pipo/so/order/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-        )
-      ).data;
-      setLoading(false);
-      setSalesOrders(response);
-      setSearchData(response);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
-
   // load leads
   useEffect(() => {
+    // fetch table
+    const getSalesOrders = async () => {
+      try {
+        setLoading(true);
+        const response = (await axios.get(`pipo/so/order/?org=${orgId}`)).data;
+        setLoading(false);
+        setSalesOrders(response?.results);
+        setSearchData(response?.results);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
     getSalesOrders();
-  }, []);
+  }, [orgId]);
 
   // columns
   const columns = [
@@ -46,7 +46,9 @@ const SalesOrders = () => {
       name: "Order No",
       cell: (row) => {
         return (
-          <Link className='text-center text-info dark_theme_text' to={`${row?.so_id}`}>
+          <Link
+            className='text-center text-info dark_theme_text'
+            to={`/dashboard/sales-orders/update-sales-order/${row?.id}`}>
             {row?.so_id}
           </Link>
         );
@@ -55,48 +57,48 @@ const SalesOrders = () => {
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org?.sub_company_name || "",
       sortable: true,
     },
     {
       name: "Client",
-      selector: (row) => row?.client?.company_name || "No data found",
+      selector: (row) => row?.client?.company_name || "",
       sortable: true,
     },
     {
       name: "Desc",
-      selector: (row) => row?.description || "No data found",
+      selector: (row) => row?.description || "",
       sortable: true,
     },
     {
       name: "Ref PO No",
-      selector: (row) => row?.ref_po || "No data found",
+      selector: (row) => row?.ref_po || "",
       sortable: true,
     },
     {
       name: "PO Date",
-      selector: (row) => row?.po_date || "No data found",
+      selector: (row) => row?.po_date || "",
       sortable: true,
     },
     {
       name: "Expected Inv Date",
-      selector: (row) => row?.expected_inv_date || "No data found",
+      selector: (row) => row?.expected_inv_date || "",
       sortable: true,
     },
     {
       name: "Value",
-      selector: () => "No data found",
+      selector: () => 0,
       sortable: true,
     },
 
     {
       name: "Dept",
-      selector: (row) => row?.department?.name || "No data found",
+      selector: (row) => row?.department?.name || "",
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row?.so_status || "No data found",
+      selector: (row) => row?.so_status || "",
       sortable: true,
     },
   ];
@@ -108,16 +110,16 @@ const SalesOrders = () => {
     let data = [];
     searchData.forEach((salesData) => {
       const csvObj = {
-        SO: salesData?.so_id || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.client?.company_name || "No data found",
-        Description: salesData?.description || "No data found",
-        "Ref PO No": salesData?.ref_po || "No data found",
-        "PO Date": salesData?.po_date || "No data found",
-        "Expected Inv Date": salesData?.expected_inv_date || "No data found",
-        Value: salesData?.value || "No data found",
-        Dept: salesData?.department?.name || "no data found",
-        Status: salesData?.so_status || "No data found",
+        SO: salesData?.so_id || "",
+        "Sub Org": salesData?.sub_org?.sub_company_name || "",
+        Client: salesData?.client?.company_name || "",
+        Description: salesData?.description || "",
+        "Ref PO No": salesData?.ref_po || "",
+        "PO Date": salesData?.po_date || "",
+        "Expected Inv Date": salesData?.expected_inv_date || "",
+        Value: salesData?.value || 0,
+        Dept: salesData?.department?.name || "",
+        Status: salesData?.so_status || "",
       };
 
       data.push(csvObj);
@@ -176,83 +178,86 @@ const SalesOrders = () => {
   ];
 
   return (
-    <div className="position-relative">
-      <PageTitle title="Sales Orders" />
-      <SectionTitle title="Sales Orders" />
-      <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-body">
-              <DataTable
-                title={<h2>Sales Orders</h2>}
-                columns={columns}
-                data={searchData}
-                customStyles={{
-                  rows: {
-                    style: {
-                      fontSize: "16px",
+    <div className='position-relative'>
+      <PageTitle title='Sales Orders' />
+      <SectionTitle title='Sales Orders' />
+      <div className='row'>
+        <div className='col-12'>
+          <div className='card'>
+            <div className='card-body'>
+              {loading ? (
+                <Loader />
+              ) : (
+                <DataTable
+                  title={<h2>Sales Orders</h2>}
+                  columns={columns}
+                  data={searchData}
+                  customStyles={{
+                    rows: {
+                      style: {
+                        fontSize: "16px",
+                      },
                     },
-                  },
-                  headCells: {
-                    style: {
-                      fontSize: "19px",width:"170px"
+                    headCells: {
+                      style: {
+                        fontSize: "19px",
+                        width: "170px",
+                      },
                     },
-                  },
-                }}
-                noContextMenu
-                fixedHeader
-                fixedHeaderScrollHeight="550px"
-                pagination
-                striped
-                highlightOnHover
-                subHeader
-                progressPending={loading}
-                actions={
-                  <>
-                    <CSVLink
-                      enclosingCharacter={` `}
-                      data={csv}
-                      filename={`Sales-Orders-${new Date(
-                        Date.now()
-                      ).toLocaleDateString("en-IN")}`}
-                      className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1"
-                      onClick={exportAsCsv}
-                    >
-                      <FiDownload className="fs-4 me-2" />
-                      Export as CSV
-                    </CSVLink>
+                  }}
+                  noContextMenu
+                  fixedHeader
+                  fixedHeaderScrollHeight='550px'
+                  pagination
+                  striped
+                  highlightOnHover
+                  subHeader
+                  actions={
+                    <>
+                      <CSVLink
+                        enclosingCharacter={` `}
+                        data={csv}
+                        filename={`Sales-Orders-${new Date(
+                          Date.now()
+                        ).toLocaleDateString("en-IN")}`}
+                        className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
+                        onClick={exportAsCsv}>
+                        <FiDownload className='fs-4 me-2' />
+                        Export as CSV
+                      </CSVLink>
 
-                    {/* Add Sale Order */}
-                    <Link to="/dashboard/sales-orders/add-sales-order">
-                      <button className="bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1">
-                        Add Sales Order
-                      </button>
-                    </Link>
-                  </>
-                }
-                subHeaderComponent={
-                  <div className='searchBox-salesLead rounded my-4'>
-                    {/* Select Area */}
-                    <Select
-                      className='select text-start'
-                      options={options}
-                      onChange={setSelectedEL}
-                      isClearable
-                      isSearchable
-                      placeholder='Search'
-                    />
-                    {/* Input Search Area */}
-                    <input
-                      type='search'
-                      placeholder='Search here'
-                      className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </div>
-                }
-                subHeaderAlign="left"
-              />
+                      {/* Add Sale Order */}
+                      <Link to='/dashboard/sales-orders/add-sales-order'>
+                        <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
+                          Add Sales Order
+                        </button>
+                      </Link>
+                    </>
+                  }
+                  subHeaderComponent={
+                    <div className='searchBox-salesLead rounded my-4'>
+                      {/* Select Area */}
+                      <Select
+                        className='select text-start'
+                        options={options}
+                        onChange={setSelectedEL}
+                        isClearable
+                        isSearchable
+                        placeholder='Search'
+                      />
+                      {/* Input Search Area */}
+                      <input
+                        type='search'
+                        placeholder='Search here'
+                        className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </div>
+                  }
+                  subHeaderAlign='left'
+                />
+              )}
             </div>
           </div>
         </div>

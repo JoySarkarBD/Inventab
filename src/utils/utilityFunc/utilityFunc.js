@@ -25,7 +25,7 @@ utils.numDifferentiation = (value) => {
 
 // kpi Each total
 utils.kpiEachTotal = (kpi) => {
-  const total =
+  return (
     (parseFloat(kpi?.jan) || 0) +
     (parseFloat(kpi?.feb) || 0) +
     (parseFloat(kpi?.mar) || 0) +
@@ -37,9 +37,54 @@ utils.kpiEachTotal = (kpi) => {
     (parseFloat(kpi?.sep) || 0) +
     (parseFloat(kpi?.oct) || 0) +
     (parseFloat(kpi?.nov) || 0) +
-    (parseFloat(kpi?.dec) || 0);
+    (parseFloat(kpi?.dec) || 0)
+  );
+};
 
-  return { department: kpi.department, total };
+utils.getMonthName = (dateString) => {
+  const months = [
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+
+  // Split the dateString into year, month, and day parts
+  const [year, month, day] = dateString.includes("-")
+    ? dateString.split("-")
+    : dateString.split("/");
+
+  // Convert the month part (which is 0-indexed) to a number and subtract 1 (since months in JS are 0-11)
+  const monthIndex = parseInt(month) - 1;
+
+  // Return the month name
+  return months[monthIndex];
+};
+
+// month total value
+utils.monthTotalValue = (arr) => {
+  let t = 0;
+  for (let i of arr) {
+    t += i;
+  }
+  return t;
+};
+
+// indian date format
+utils.formatDateToIndianVersion = (date) => {
+  if (!(date instanceof Date) || isNaN(date))
+    throw new Error("Invalid date object.");
+  return `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 };
 
 export const {
@@ -47,4 +92,7 @@ export const {
   removeUndefinedObj,
   numDifferentiation,
   kpiEachTotal,
+  monthTotalValue,
+  getMonthName,
+  formatDateToIndianVersion,
 } = utils;

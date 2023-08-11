@@ -6,10 +6,17 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
-import axios from "../../../utils/axios/axios";
+
+import { Toaster, toast } from "react-hot-toast";
+import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import Loader from "../../../ui/Loader";
 import "./sales.css";
 
 const SalesLead = () => {
+  const axios = useAxiosPrivate();
+  const { auth } = useAuth();
+  const { orgId } = auth;
   const [search, setSearch] = useState("");
   const [salesLeads, setSalesLeads] = useState([]);
   const [searchData, setSearchData] = useState([]);
@@ -18,27 +25,26 @@ const SalesLead = () => {
   // const [selectedFiled, setSelectedfield] = useState("");
   const [selectedEl, setSelectedEL] = useState(null);
 
-  // fetch table
-  const getLeads = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(
-        "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-      );
-
-      setLoading(false);
-      setSalesLeads(data);
-      setSearchData(data);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
-
   // load leads
   useEffect(() => {
+    // fetch table
+    const getLeads = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`pipo/sales/lead/?org=${orgId}`);
+        setLoading(false);
+        setSalesLeads(data?.results);
+        setSearchData(data?.results);
+      } catch (error) {
+        setLoading(false);
+        if (error.response.status === 401) {
+          toast.error(error.response.statusText);
+          console.log(error);
+        }
+      }
+    };
     getLeads();
-  }, []);
+  }, [orgId]);
 
   // columns for table
   const columns = [
@@ -57,7 +63,7 @@ const SalesLead = () => {
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org?.sub_company_name || "",
       sortable: true,
     },
     {
@@ -72,7 +78,7 @@ const SalesLead = () => {
     },
     {
       name: "Value",
-      selector: () => "No data found",
+      selector: () => 0,
       sortable: true,
     },
     {
@@ -87,7 +93,7 @@ const SalesLead = () => {
     },
     {
       name: "Dept",
-      selector: (row) => row?.department?.name || "No data found",
+      selector: (row) => row?.department?.name || "",
       sortable: true,
     },
     {
@@ -141,15 +147,15 @@ const SalesLead = () => {
     let data = [];
     searchData.forEach((salesData) => {
       const csvObj = {
-        Sl: salesData?.lead_id || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.client?.company_name || "No data found",
-        "Expected PO date": salesData?.expected_date || "No data found",
-        Value: salesData?.value || "No data found",
-        "Probabilities value": salesData?.probability || "No data found",
-        Description: salesData?.description || "No data found",
-        Dept: salesData?.department?.name || "no data found",
-        Status: salesData?.status || "No data found",
+        Sl: salesData?.lead_id || "",
+        "Sub Org": salesData?.sub_org?.sub_company_name || "",
+        Client: salesData?.client?.company_name || "",
+        "Expected PO date": salesData?.expected_date || "",
+        Value: salesData?.value || 0,
+        "Probabilities value": salesData?.probability || 0,
+        Description: salesData?.description || "",
+        Dept: salesData?.department?.name || "",
+        Status: salesData?.status || "",
       };
 
       data.push(csvObj);
@@ -175,79 +181,84 @@ const SalesLead = () => {
       <PageTitle title='Sales Leads' />
       <SectionTitle title='Sales Leads' />
       <div className='row'>
+        <Toaster />
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
-              <DataTable
-                title={<h2>Sales Leads</h2>}
-                columns={columns}
-                data={searchData}
-                customStyles={{
-                  rows: {
-                    style: {
-                      fontSize: "16px",
+              {loading ? (
+                <Loader />
+              ) : (
+                <DataTable
+                  title={<h2>Sales Leads</h2>}
+                  columns={columns}
+                  data={searchData}
+                  customStyles={{
+                    rows: {
+                      style: {
+                        fontSize: "16px",
+                      },
                     },
-                  },
-                  headCells: {
-                    style: {
-                      fontSize: "19px",
-                      width: "170px",
+                    headCells: {
+                      style: {
+                        fontSize: "19px",
+                        width: "170px",
+                      },
                     },
-                  },
-                }}
-                noContextMenu
-                fixedHeader
-                fixedHeaderScrollHeight='550px'
-                pagination
-                striped
-                highlightOnHover
-                subHeader
-                progressPending={loading}
-                //Search & select area start
-                subHeaderComponent={
-                  <div className='searchBox-salesLead rounded my-4'>
-                    {/* Select Area */}
-                    <Select
-                      className='select text-start'
-                      options={options}
-                      onChange={setSelectedEL}
-                      isClearable
-                      isSearchable
-                      placeholder='Search'
-                    />
-                    {/* Input Search Area */}
-                    <input
-                      type='search'
-                      placeholder='Search here'
-                      className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </div>
-                }
-                // Search & select area start
-                actions={
-                  <>
-                    <CSVLink
-                      enclosingCharacter={` `}
-                      data={csv}
-                      filename={`Sales-Leads -${new Date(
-                        Date.now()
-                      ).toLocaleDateString("en-IN")}`}
-                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
-                      onClick={exportAsCsv}>
-                      <FiDownload className='fs-4 me-2' />
-                      Export as CSV
-                    </CSVLink>
-                    {/* Add Sale Order */}
-                    <Link to='/dashboard/sales/add-sales-leads'>
-                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
-                        Add Sales Lead
-                      </button>
-                    </Link>
-                  </>
-                }
-              />
+                  }}
+                  noContextMenu
+                  fixedHeader
+                  fixedHeaderScrollHeight='550px'
+                  pagination
+                  striped
+                  highlightOnHover
+                  subHeader
+                  // progressPending={loading}
+                  //Search & select area start
+                  subHeaderComponent={
+                    <div className='searchBox-salesLead rounded my-4'>
+                      {/* Select Area */}
+                      <Select
+                        className='select text-start'
+                        options={options}
+                        onChange={setSelectedEL}
+                        isClearable
+                        isSearchable
+                        placeholder='Search'
+                      />
+                      {/* Input Search Area */}
+                      <input
+                        type='search'
+                        placeholder='Search here'
+                        className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </div>
+                  }
+                  // Search & select area start
+                  actions={
+                    <>
+                      <CSVLink
+                        enclosingCharacter={` `}
+                        data={csv}
+                        filename={`Sales-Leads -${new Date(
+                          Date.now()
+                        ).toLocaleDateString("en-IN")}`}
+                        className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
+                        onClick={exportAsCsv}>
+                        <FiDownload className='fs-4 me-2' />
+                        Export as CSV
+                      </CSVLink>
+                      {/* Add Sale Order */}
+                      <Link to='/dashboard/sales/add-sales-leads'>
+                        <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
+                          Add Sales Lead
+                        </button>
+                      </Link>
+                    </>
+                  }
+                />
+              )}
             </div>
           </div>
         </div>

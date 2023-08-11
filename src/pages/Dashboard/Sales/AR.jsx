@@ -6,6 +6,7 @@ import { FiDownload } from "react-icons/fi";
 import Select, { components } from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+import Loader from "../../../ui/Loader";
 import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
@@ -15,7 +16,6 @@ const AR = () => {
   const [loading, setLoading] = useState(false);
   const [csv, setCsv] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-
 
   /* React Select with checkbox */
   const InputOption = ({
@@ -32,7 +32,6 @@ const AR = () => {
     const onMouseDown = () => setIsActive(true);
     const onMouseUp = () => setIsActive(false);
     const onMouseLeave = () => setIsActive(false);
-
 
     // styles
     let bg = "transparent";
@@ -62,9 +61,8 @@ const AR = () => {
         isFocused={isFocused}
         isSelected={isSelected}
         getStyles={getStyles}
-        innerProps={props}
-      >
-        <input type="checkbox" checked={isSelected} className="me-2" />
+        innerProps={props}>
+        <input type='checkbox' checked={isSelected} className='me-2' />
         {children}
       </components.Option>
     );
@@ -90,8 +88,8 @@ const AR = () => {
         )
       ).data;
       setLoading(false);
-      setReports(response);
-      setSearchData(response);
+      setReports(response?.results);
+      setSearchData(response?.results);
     } catch (error) {
       setLoading(true);
       console.log(error);
@@ -169,7 +167,7 @@ const AR = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach((salesData) => {
+    searchData.forEach(salesData => {
       const csvObj = {
         "Inv No": salesData?.invoice_number || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -184,78 +182,80 @@ const AR = () => {
       data.push(csvObj);
     });
 
-    setCsv((prev) => [...prev, ...data]);
+    setCsv(prev => [...prev, ...data]);
   };
 
   return (
     <div>
-      <PageTitle title="AR" />
-      <SectionTitle title="AR" />
-      <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-body">
-              <DataTable
-                title={<h2>Account Receivables Report</h2>}
-                columns={columns}
-                data={searchData}
-                customStyles={{
-                  rows: {
-                    style: {
-                      fontSize: "16px",
+      <PageTitle title='AR' />
+      <SectionTitle title='AR' />
+      <div className='row'>
+        <div className='col-12'>
+          <div className='card'>
+            <div className='card-body'>
+              {loading ? (
+                <Loader />
+              ) : (
+                <DataTable
+                  title={<h2>Account Receivables Report</h2>}
+                  columns={columns}
+                  data={searchData}
+                  customStyles={{
+                    rows: {
+                      style: {
+                        fontSize: "16px",
+                      },
                     },
-                  },
-                  headCells: {
-                    style: {
-                      fontSize: "19px",
-                      width: "170px",
+                    headCells: {
+                      style: {
+                        fontSize: "19px",
+                        width: "170px",
+                      },
                     },
-                  },
-                }}
-                noContextMenu
-                fixedHeader
-                fixedHeaderScrollHeight="550px"
-                pagination
-                subHeaderComponent={
-                  <Select
-                    className="text-start w-75 select-ar"
-                    defaultValue={[]}
-                    closeMenuOnSelect={false}
-                    hideSelectedOptions={false}
-                    isMulti
-                    onChange={(options) => {
-                      if (Array.isArray(options)) {
-                        setSelectedOptions(options.map((opt) => opt.value));
-                      }
-                    }}
-                    options={allOptions}
-                    components={{
-                      Option: InputOption,
-                    }}
-                  />
-                }
-                striped
-                highlightOnHover
-                subHeader
-                progressPending={loading}
-                actions={
-                  <div className="d-flex align-items-center column-gap-4">
-                    <CSVLink
-                      enclosingCharacter={` `}
-                      data={csv}
-                      filename={`Invoices-${new Date(
-                        Date.now()
-                      ).toLocaleDateString("en-IN")}`}
-                      className="bg-primary btn text-white rounded-1  border-0 d-flex align-items-center"
-                      onClick={exportAsCsv}
-                    >
-                      <FiDownload className="fs-4 me-2" />
-                      Download
-                    </CSVLink>
-                  </div>
-                }
-                subHeaderAlign="left"
-              />
+                  }}
+                  noContextMenu
+                  fixedHeader
+                  fixedHeaderScrollHeight='550px'
+                  pagination
+                  subHeaderComponent={
+                    <Select
+                      className='text-start w-75 select-ar'
+                      defaultValue={[]}
+                      closeMenuOnSelect={false}
+                      hideSelectedOptions={false}
+                      isMulti
+                      onChange={options => {
+                        if (Array.isArray(options)) {
+                          setSelectedOptions(options.map(opt => opt.value));
+                        }
+                      }}
+                      options={allOptions}
+                      components={{
+                        Option: InputOption,
+                      }}
+                    />
+                  }
+                  striped
+                  highlightOnHover
+                  subHeader
+                  actions={
+                    <div className='d-flex align-items-center column-gap-4'>
+                      <CSVLink
+                        enclosingCharacter={` `}
+                        data={csv}
+                        filename={`Invoices-${new Date(
+                          Date.now()
+                        ).toLocaleDateString("en-IN")}`}
+                        className='bg-primary btn text-white rounded-1  border-0 d-flex align-items-center'
+                        onClick={exportAsCsv}>
+                        <FiDownload className='fs-4 me-2' />
+                        Download
+                      </CSVLink>
+                    </div>
+                  }
+                  subHeaderAlign='left'
+                />
+              )}
             </div>
           </div>
         </div>
