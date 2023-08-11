@@ -1,0 +1,13 @@
+.select-port {
+  min-width: 150px;
+  width: 100%;
+}
+
+.select-port select .select {
+  z-index: 999999 !important;
+}
+
+[data-theme-version="dark"] .eeeVJd {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}

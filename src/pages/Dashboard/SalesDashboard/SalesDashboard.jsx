@@ -5,6 +5,7 @@ import MetricInvoice from "../../../components/Metric/MetricInvoice/MetricInvoic
 import MetricPO from "../../../components/Metric/MetricPO/MetricPO";
 import SalesKPI from "../../../components/SalesKPI/SalesKPI";
 import PageTitle from "../../../components/Shared/PageTitle";
+import "./SalesDashboard.css";
 
 const SalesDashboard = () => {
   return (

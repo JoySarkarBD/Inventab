@@ -1,0 +1,29 @@
+form {
+  /* position: relative; */
+}
+
+.table-responsive1 {
+  overflow-x: auto;
+  /* position: relative; */
+  /* max-height: 300px; */
+  /* height: 180px;
+  border: 2px solid red;
+  z-index: 9; */
+}
+
+@media (max-width: 1199.98px) {
+    .table-responsive111 {
+    overflow-x: auto;
+    } 
+}
+
+
+form .css-1jj59y3-MenuList2 {
+  /* position: absolute; */
+  z-index: 99999999999999999999 !important;
+  /* bottom: -486%; */
+  /* background: white; */
+  /* max-width: 220px; */
+  /* width: 100%; */
+  border: 1px solid green;
+}

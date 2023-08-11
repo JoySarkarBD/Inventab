@@ -19,15 +19,16 @@ const SalesLead = () => {
   const [selectedEl, setSelectedEL] = useState(null);
 
   // fetch table
-  const leads = async () => {
+  const getLeads = async () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
         "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
       );
+
       setLoading(false);
-      setSalesLeads(data?.results);
-      setSearchData(data?.results);
+      setSalesLeads(data);
+      setSearchData(data);
     } catch (error) {
       setLoading(true);
       console.log(error);
@@ -36,7 +37,7 @@ const SalesLead = () => {
 
   // load leads
   useEffect(() => {
-    leads();
+    getLeads();
   }, []);
 
   // columns for table
@@ -45,7 +46,9 @@ const SalesLead = () => {
       name: "SL No",
       cell: (row) => {
         return (
-          <Link className='text-center text-primary' to={`${row?.lead_no}`}>
+          <Link
+            className='text-center text-info dark_theme_text'
+            to={`/dashboard/sales/update-sales-leads/${row?.lead_no}`}>
             {row?.lead_id}
           </Link>
         );
@@ -175,29 +178,6 @@ const SalesLead = () => {
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>
-              {/* ==========================================  select & search option start ===================================== */}
-              <div className='row w-100'>
-                <div className='col-3 col-sm-12 col-md-12 col-lg-2 select-search-category'>
-                  <Select
-                    options={options}
-                    onChange={setSelectedEL}
-                    isClearable
-                    isSearchable
-                    placeholder='search'
-                  />
-                </div>
-                {/* <div className='separator-light position-absolute'></div> */}
-                <div className='col-6 col-sm-12 col-md-12 col-lg-6'>
-                  <input
-                    type='search'
-                    placeholder='Search here'
-                    className='form-control ' /* border-0 bg-transparent shadow-none */
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </div>
-              </div>
-              {/* =====================================================  select & search option end ========================================= */}
               <DataTable
                 title={<h2>Sales Leads</h2>}
                 columns={columns}
@@ -211,9 +191,11 @@ const SalesLead = () => {
                   headCells: {
                     style: {
                       fontSize: "19px",
+                      width: "170px",
                     },
                   },
                 }}
+                noContextMenu
                 fixedHeader
                 fixedHeaderScrollHeight='550px'
                 pagination
@@ -221,18 +203,49 @@ const SalesLead = () => {
                 highlightOnHover
                 subHeader
                 progressPending={loading}
+                //Search & select area start
+                subHeaderComponent={
+                  <div className='searchBox-salesLead rounded my-4'>
+                    {/* Select Area */}
+                    <Select
+                      className='select text-start'
+                      options={options}
+                      onChange={setSelectedEL}
+                      isClearable
+                      isSearchable
+                      placeholder='Search'
+                    />
+                    {/* Input Search Area */}
+                    <input
+                      type='search'
+                      placeholder='Search here'
+                      className='form-control shadow-none' /* border-0 bg-transparent shadow-none */
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                }
+                // Search & select area start
                 actions={
-                  <CSVLink
-                    enclosingCharacter={` `}
-                    data={csv}
-                    filename={`Sales-Leads -${new Date(
-                      Date.now()
-                    ).toLocaleDateString("en-IN")}`}
-                    className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center'
-                    onClick={exportAsCsv}>
-                    <FiDownload className='fs-4 me-2' />
-                    Export as CSV
-                  </CSVLink>
+                  <>
+                    <CSVLink
+                      enclosingCharacter={` `}
+                      data={csv}
+                      filename={`Sales-Leads -${new Date(
+                        Date.now()
+                      ).toLocaleDateString("en-IN")}`}
+                      className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center rounded-1'
+                      onClick={exportAsCsv}>
+                      <FiDownload className='fs-4 me-2' />
+                      Export as CSV
+                    </CSVLink>
+                    {/* Add Sale Order */}
+                    <Link to='/dashboard/sales/add-sales-leads'>
+                      <button className='bg-primary btn text-white mb-3 border-0 d-flex align-items-center ms-2 rounded-1'>
+                        Add Sales Lead
+                      </button>
+                    </Link>
+                  </>
                 }
               />
             </div>
