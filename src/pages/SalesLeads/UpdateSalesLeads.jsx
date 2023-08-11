@@ -14,11 +14,10 @@ import axios from "../../utils/axios/axios";
 import { formatDateToIndianVersion } from "../../utils/utilityFunc/utilityFunc";
 import "./AddSalesLeads.css";
 
+// sales lead history  modal
 function SalesLeadHistoryModal(props) {
   const [histories, setHistories] = useState([]);
   const {
-    modalState,
-    onHide,
     salesData,
     show: { modalShow, setModalShow },
   } = props;
@@ -28,17 +27,19 @@ function SalesLeadHistoryModal(props) {
   const [commentValue, setCommentValue] = useState("");
 
   // submit modal
-  const submitData = async e => {
+  const submitData = async (e) => {
     try {
       const { lead_no } = salesData;
       e.preventDefault();
 
+      // date [indian format]
       const date = formatDateToIndianVersion(new Date());
 
+      // history data
       const newHistoryData = {
         saleslead: lead_no,
         date,
-        created_by: "87cf5463-8b3b-40fc-9aee-5d7dc96ca32d",
+        created_by: import.meta.env.VITE_USER_ID,
         comment: commentValue,
       };
 
@@ -50,15 +51,17 @@ function SalesLeadHistoryModal(props) {
       if (res.status === 201) {
         setToggleForm(false);
         toast.success("History created successfully");
+
+        // history obj for showing UI
         const historyObj = {
           created_by: {
-            first_name: "Test",
-            last_name: "Test",
+            first_name: import.meta.env.VITE_USER_FIRST_NAME,
+            last_name: import.meta.env.VITE_USER_LAST_NAME,
           },
           date: newHistoryData.date,
           comment: commentValue,
         };
-        setHistories(prev => [historyObj, ...prev]);
+        setHistories((prev) => [historyObj, ...prev]);
       } else {
         toast.error("Something wrong", { duration: 2000 });
       }
@@ -123,7 +126,7 @@ function SalesLeadHistoryModal(props) {
                     name='comment'
                     placeHolder='Type your comment.......'
                     value={commentValue}
-                    onChange={e => setCommentValue(e.target.value)}
+                    onChange={(e) => setCommentValue(e.target.value)}
                   />
                 </div>
                 <div className='w-50 mx-auto mb-4'>
@@ -132,7 +135,7 @@ function SalesLeadHistoryModal(props) {
                     type='submit'
                     form='salesLeadHistoryForm'
                     data-bs-dismiss='modal'
-                    onClick={e => submitData(e, props)}>
+                    onClick={(e) => submitData(e, props)}>
                     Submit
                   </button>
                 </div>
@@ -260,7 +263,6 @@ const UpdateSalesLeads = () => {
             {/* -------modal hidden ------ */}
             <SalesLeadHistoryModal
               show={{ modalShow, setModalShow }}
-              onHide={() => setModalShow(false)}
               salesData={selectedData}
               modalState={{ toggleForm, setToggleForm }}
             />

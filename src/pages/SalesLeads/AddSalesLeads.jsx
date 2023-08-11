@@ -5,6 +5,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../components/Shared/PageTitle";
+import Loader from "../../ui/Loader";
 import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
@@ -39,7 +40,9 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${
+            import.meta.env.VITE_ORG_ID
+          }&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -51,7 +54,9 @@ const AddSalesDataForm = () => {
           deptArr.push(deptObj);
         });
 
-        setDept(deptArr);
+        const removeUndefinedData = removeUndefinedObj(deptArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setDept(uniqueArr);
       } catch (error) {
         setLoading(false);
         console.log(error);
@@ -87,7 +92,9 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://inventab.io/api/v1/organizations/get/suborg/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+          `http://inventab.io/api/v1/organizations/get/suborg/?org=${
+            import.meta.env.VITE_ORG_ID
+          }`
         );
         setLoading(false);
         const subOrgArr = [];
@@ -171,12 +178,12 @@ const AddSalesDataForm = () => {
             lead_part_id: p?.lead_part_id,
             part_id: p?.part_id?.id,
             short_description: p?.short_description,
-            quantity: p?.quantity,
-            unit_cost: p?.unit_cost,
+            quantity: parseFloat(p?.quantity),
+            unit_cost: parseFloat(p?.unit_cost),
             status: "Active",
-            gst: p?.gst,
-            net_price: p?.net_price,
-            extd_gross_price: p?.extd_gross_price,
+            gst: parseFloat(p?.gst),
+            net_price: parseFloat(p?.net_price),
+            extd_gross_price: parseFloat(p?.extd_gross_price),
           };
 
           if (p?.lead_part_id == undefined) {
@@ -189,11 +196,11 @@ const AddSalesDataForm = () => {
         // created lead obj
         const createLeadObj = {
           ...values,
-          org: "0a055b26-ae15-40a9-8291-25427b94ebb3",
-          department: department?.value,
-          sub_org: sub_org?.value,
-          status: status?.value,
-          client: client?.value,
+          org: import.meta.env.VITE_ORG_ID,
+          department: department?.value || null,
+          sub_org: sub_org?.value || null,
+          status: status?.value || null,
+          client: client?.value || null,
           parts,
         };
         // return console.log(createLeadObj);
@@ -305,6 +312,8 @@ const AddSalesDataForm = () => {
                   title='Department'
                   placeholder='Select Department'
                   name='department'
+                  isClearable
+                  isSearchable
                   options={dept}
                   value={values.department}
                   onChange={(option) => setFieldValue("department", option)}
@@ -475,7 +484,9 @@ const AddSalesDataForm = () => {
                                 isClearable
                                 isLoading={partsLoading && parts?.length > 0}
                                 options={parts}
-                                menuPortalTarget={document.querySelector("body")}
+                                menuPortalTarget={document.querySelector(
+                                  "body"
+                                )}
                                 onChange={(option) => handleSelectPart(option)}
                               />
                             </div>
@@ -484,7 +495,7 @@ const AddSalesDataForm = () => {
                             <input
                               className='new_input_class'
                               type='text'
-                              placeholder='Short Description'
+                              // placeholder='Short Description'
                               name='short_description'
                               value={short_description || ""}
                               onChange={(e) =>
@@ -496,7 +507,7 @@ const AddSalesDataForm = () => {
                             <input
                               className='new_input_class'
                               type='number'
-                              placeholder='Total Quantity'
+                              // placeholder='Total Quantity'
                               name='quantity'
                               value={totalQuantity || ""}
                               onChange={(e) => setTotalQuantity(e.target.value)}
@@ -506,7 +517,7 @@ const AddSalesDataForm = () => {
                             <input
                               className='new_input_class'
                               type='number'
-                              placeholder='Unit Cost'
+                              // placeholder='Unit Cost'
                               name='unit_cost'
                               value={unitCost || ""}
                               onChange={(e) => setUnitCost(e.target.value)}
@@ -516,9 +527,9 @@ const AddSalesDataForm = () => {
                             <input
                               className='new_input_class'
                               type='number'
-                              placeholder='GST'
+                              // placeholder='GST'
                               name='gst'
-                              value={gst}
+                              value={gst || ""}
                               onChange={(e) => setgst(e.target.value)}
                             />
                           </td>
@@ -526,7 +537,7 @@ const AddSalesDataForm = () => {
                             <input
                               className='new_input_class'
                               type='number'
-                              placeholder='Net Price'
+                              // placeholder='Net Price'
                               name='net_price'
                               value={net_price || ""}
                               onChange={(e) => setNet_price(e.target.value)}
@@ -536,7 +547,7 @@ const AddSalesDataForm = () => {
                             <input
                               className='new_input_class'
                               type='number'
-                              placeholder='Extd Gross Price'
+                              // placeholder='Extd Gross Price'
                               name='extd_gross_price'
                               value={extd_gross_price || ""}
                               onChange={(e) =>
@@ -572,122 +583,136 @@ const AddSalesDataForm = () => {
             {/*  */}
 
             {/* dynamic table */}
-            <div className='table-responsive111'>
-              <table className='table table-bordered table-responsive-sm111'>
-                <thead>
-                  <tr>
-                    <th scope='col'>Part No</th>
-                    <th scope='col'>Short Description</th>
-                    <th scope='col'>Quantity</th>
-                    <th scope='col'>Unit Cost</th>
-                    {/* <th scope='col'>Status</th> */}
-                    <th scope='col'>GST</th>
-                    <th scope='col'>Net Price</th>
-                    <th scope='col'>Extd Gross Price</th>
-                    <th scope='col'>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {values?.parts?.map((part, index) => {
-                    return (
-                      <tr key={index + 1}>
-                        <td>
-                          <div className='select-port'>
-                            <Select
-                              className='select'
-                              placeholder='Select Port No'
-                              value={{
-                                label: part?.part_id?.part_number,
-                                value: part?.part_id?.id,
-                              }}
-                              options={parts}
-                              name='part_id'
-                              isSearchable
-                              isClearable
-                              onChange={(selectedOption) =>
-                                handlePartSelectChange(selectedOption, index)
-                              }
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='text'
-                            placeholder='Short Description'
-                            name={`parts[${index}].short_description`}
-                            value={part.short_description}
-                            onChange={handleChange}
-                          />
-                        </td>
+            {partsLoading ? (
+              <Loader />
+            ) : (
+              <>
+                {" "}
+                <div className='table-responsive111'>
+                  {values.parts.length > 0 ? (
+                    <table className='table table-bordered table-responsive-sm111'>
+                      <thead>
+                        <tr>
+                          <th scope='col'>Part No</th>
+                          <th scope='col'>Short Description</th>
+                          <th scope='col'>Quantity</th>
+                          <th scope='col'>Unit Cost</th>
+                          {/* <th scope='col'>Status</th> */}
+                          <th scope='col'>GST</th>
+                          <th scope='col'>Net Price</th>
+                          <th scope='col'>Extd Gross Price</th>
+                          <th scope='col'>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {values?.parts?.map((part, index) => {
+                          return (
+                            <tr key={index + 1}>
+                              <td>
+                                <div className='select-port'>
+                                  <Select
+                                    className='select'
+                                    placeholder='Select Port No'
+                                    value={{
+                                      label: part?.part_id?.part_number,
+                                      value: part?.part_id?.id,
+                                    }}
+                                    options={parts}
+                                    name='part_id'
+                                    isSearchable
+                                    isClearable
+                                    onChange={(selectedOption) =>
+                                      handlePartSelectChange(
+                                        selectedOption,
+                                        index
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </td>
+                              <td>
+                                <input
+                                  className='new_input_class'
+                                  type='text'
+                                  placeholder='Short Description'
+                                  name={`parts[${index}].short_description`}
+                                  value={part.short_description}
+                                  onChange={handleChange}
+                                />
+                              </td>
 
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Total Quntity'
-                            name={`parts[${index}].quantity`}
-                            value={part.quantity}
-                            onChange={handleChange}
-                          />
-                        </td>
+                              <td>
+                                <input
+                                  className='new_input_class'
+                                  type='number'
+                                  placeholder='Total Quntity'
+                                  name={`parts[${index}].quantity`}
+                                  value={part.quantity}
+                                  onChange={handleChange}
+                                />
+                              </td>
 
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Unit Cost'
-                            name={`parts[${index}].unit_cost`}
-                            value={part?.unit_cost}
-                            onChange={handleChange}
-                          />
-                        </td>
+                              <td>
+                                <input
+                                  className='new_input_class'
+                                  type='number'
+                                  placeholder='Unit Cost'
+                                  name={`parts[${index}].unit_cost`}
+                                  value={part?.unit_cost}
+                                  onChange={handleChange}
+                                />
+                              </td>
 
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Extd Net Cost'
-                            name={`parts[${index}].gst`}
-                            value={part?.gst || ""}
-                            onChange={handleChange}
-                          />
-                        </td>
+                              <td>
+                                <input
+                                  className='new_input_class'
+                                  type='number'
+                                  placeholder='Extd Net Cost'
+                                  name={`parts[${index}].gst`}
+                                  value={part?.gst || ""}
+                                  onChange={handleChange}
+                                />
+                              </td>
 
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Extd Net Cost'
-                            name={`parts[${index}].net_price`}
-                            value={part?.net_price}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            className='new_input_class'
-                            type='number'
-                            placeholder='Extd Gross Cost'
-                            name={`parts[${index}].extd_gross_price`}
-                            value={part?.extd_gross_price}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <button
-                            type='button'
-                            className='btn btn-danger btn-sm'
-                            onClick={() => handleRemovePart(index)}>
-                            Remove
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                              <td>
+                                <input
+                                  className='new_input_class'
+                                  type='number'
+                                  placeholder='Extd Net Cost'
+                                  name={`parts[${index}].net_price`}
+                                  value={part?.net_price}
+                                  onChange={handleChange}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  className='new_input_class'
+                                  type='number'
+                                  placeholder='Extd Gross Cost'
+                                  name={`parts[${index}].extd_gross_price`}
+                                  value={part?.extd_gross_price}
+                                  onChange={handleChange}
+                                />
+                              </td>
+                              <td>
+                                <button
+                                  type='button'
+                                  className='btn btn-danger btn-sm'
+                                  onClick={() => handleRemovePart(index)}>
+                                  Remove
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <h3 className='text-center'>No Parts Added</h3>
+                  )}
+                </div>
+              </>
+            )}
 
             {/* Submit Button */}
             <div className='d-flex justify-content-end my-4'>

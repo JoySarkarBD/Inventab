@@ -47,7 +47,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
         const {
           data: { results },
         } = await axios.get(
-          `organizations/get/suborg/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+          `organizations/get/suborg/?org=${import.meta.env.VITE_ORG_ID}`
         );
         setLoading(false);
 
@@ -96,7 +96,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${
+            import.meta.env.VITE_ORG_ID
+          }&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -107,8 +109,9 @@ const UpdateOrderDataForm = ({ orderData }) => {
           };
           deptArr.push(deptObj);
         });
-
-        setDept(deptArr);
+        const removeUndefinedData = removeUndefinedObj(deptArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
+        setDept(uniqueArr);
       } catch (error) {
         setLoading(false);
         console.log(error);
@@ -243,7 +246,7 @@ const UpdateOrderDataForm = ({ orderData }) => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/org/address/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+          `organizations/fetch/org/address/?org=${import.meta.env.VITE_ORG_ID}`
         );
 
         setLoading(false);

@@ -15,7 +15,8 @@ const KpiPo = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `pipo/kpi/list/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&metric=PO`
+        /*prev org 0a055b26-ae15-40a9-8291-25427b94ebb3 */
+        `pipo/kpi/list/?org=${import.meta.env.VITE_ORG_ID}&metric=PO`
       );
       setLoading(false);
       setKpiList(data?.results);
@@ -29,7 +30,6 @@ const KpiPo = () => {
   useEffect(() => {
     getKpiPo();
   }, []);
-
 
   //kpi PO each sub total
   useEffect(() => {

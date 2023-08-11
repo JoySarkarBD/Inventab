@@ -23,9 +23,7 @@ const SalesOrders = () => {
     try {
       setLoading(true);
       const response = (
-        await axios.get(
-          "pipo/so/order/?org=3f31d296-4803-4973-883c-6441af37737a"
-        )
+        await axios.get(`pipo/so/order/?org=${import.meta.env.VITE_ORG_ID}`)
       ).data;
       setLoading(false);
       setSalesOrders(response?.results);
@@ -58,48 +56,48 @@ const SalesOrders = () => {
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org?.sub_company_name || "",
       sortable: true,
     },
     {
       name: "Client",
-      selector: (row) => row?.client?.company_name || "No data found",
+      selector: (row) => row?.client?.company_name || "",
       sortable: true,
     },
     {
       name: "Desc",
-      selector: (row) => row?.description || "No data found",
+      selector: (row) => row?.description || "",
       sortable: true,
     },
     {
       name: "Ref PO No",
-      selector: (row) => row?.ref_po || "No data found",
+      selector: (row) => row?.ref_po || "",
       sortable: true,
     },
     {
       name: "PO Date",
-      selector: (row) => row?.po_date || "No data found",
+      selector: (row) => row?.po_date || "",
       sortable: true,
     },
     {
       name: "Expected Inv Date",
-      selector: (row) => row?.expected_inv_date || "No data found",
+      selector: (row) => row?.expected_inv_date || "",
       sortable: true,
     },
     {
       name: "Value",
-      selector: () => "No data found",
+      selector: () => 0,
       sortable: true,
     },
 
     {
       name: "Dept",
-      selector: (row) => row?.department?.name || "No data found",
+      selector: (row) => row?.department?.name || "",
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row?.so_status || "No data found",
+      selector: (row) => row?.so_status || "",
       sortable: true,
     },
   ];
@@ -111,16 +109,16 @@ const SalesOrders = () => {
     let data = [];
     searchData.forEach((salesData) => {
       const csvObj = {
-        SO: salesData?.so_id || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.client?.company_name || "No data found",
-        Description: salesData?.description || "No data found",
-        "Ref PO No": salesData?.ref_po || "No data found",
-        "PO Date": salesData?.po_date || "No data found",
-        "Expected Inv Date": salesData?.expected_inv_date || "No data found",
-        Value: salesData?.value || "No data found",
-        Dept: salesData?.department?.name || "no data found",
-        Status: salesData?.so_status || "No data found",
+        SO: salesData?.so_id || "",
+        "Sub Org": salesData?.sub_org?.sub_company_name || "",
+        Client: salesData?.client?.company_name || "",
+        Description: salesData?.description || "",
+        "Ref PO No": salesData?.ref_po || "",
+        "PO Date": salesData?.po_date || "",
+        "Expected Inv Date": salesData?.expected_inv_date || "",
+        Value: salesData?.value || 0,
+        Dept: salesData?.department?.name || "",
+        Status: salesData?.so_status || "",
       };
 
       data.push(csvObj);

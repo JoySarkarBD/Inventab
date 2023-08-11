@@ -24,7 +24,7 @@ const SalesLead = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "pipo/sales/lead/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
+        `pipo/sales/lead/?org=${import.meta.env.VITE_ORG_ID}`
       );
       setLoading(false);
       setSalesLeads(data?.results);
@@ -142,7 +142,7 @@ const SalesLead = () => {
     searchData.forEach((salesData) => {
       const csvObj = {
         Sl: salesData?.lead_id || "",
-        "Sub Org": salesData?.sub_org || "",
+        "Sub Org": salesData?.sub_org?.sub_company_name || "",
         Client: salesData?.client?.company_name || "",
         "Expected PO date": salesData?.expected_date || "",
         Value: salesData?.value || 0,

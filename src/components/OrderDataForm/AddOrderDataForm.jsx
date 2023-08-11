@@ -46,7 +46,7 @@ export default function DataForm() {
         const {
           data: { results },
         } = await axios.get(
-          `organizations/get/suborg/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+          `organizations/get/suborg/?org=${import.meta.env.VITE_ORG_ID}`
         );
         setLoading(false);
 
@@ -95,7 +95,9 @@ export default function DataForm() {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${
+            import.meta.env.VITE_ORG_ID
+          }&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -106,8 +108,10 @@ export default function DataForm() {
           };
           deptArr.push(deptObj);
         });
+        const removeUndefinedData = removeUndefinedObj(deptArr);
+        const uniqueArr = removeDuplicateObjects(removeUndefinedData);
 
-        setDept(deptArr);
+        setDept(uniqueArr);
       } catch (error) {
         setLoading(false);
         console.log(error);
@@ -242,7 +246,7 @@ export default function DataForm() {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/org/address/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+          `organizations/fetch/org/address/?org=${import.meta.env.VITE_ORG_ID}`
         );
 
         setLoading(false);
@@ -280,8 +284,8 @@ export default function DataForm() {
       total: 0,
       description: "",
       so_status: "",
-      created_by: "2af0e700-44a9-449e-b851-105504ef7fa2",
-      org: "3f31d296-4803-4973-883c-6441af37737a",
+      created_by: import.meta.env.VITE_USER_ID,
+      org: import.meta.env.VITE_ORG_ID,
       client: "",
       sub_org: "",
       billing_address: "",
