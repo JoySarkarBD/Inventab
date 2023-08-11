@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import axios from "../../utils/axios/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {
   kpiEachTotal,
   numDifferentiation,
 } from "../../utils/utilityFunc/utilityFunc";
 
 const KpiInvoice = () => {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ const KpiInvoice = () => {
       }
     };
     getKpiInvoice();
-  }, [orgId]);
+  }, [axios]);
 
   //kpi PO each sub total
   useEffect(() => {

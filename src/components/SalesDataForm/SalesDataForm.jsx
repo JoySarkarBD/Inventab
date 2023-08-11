@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
-import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -15,6 +15,7 @@ import TextArea from "../Form/TextArea";
 import "./SalesDataForm.css";
 
 export default function SalesDataForm(props) {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
 
@@ -489,132 +490,129 @@ export default function SalesDataForm(props) {
         {/* Table */}
         <div className='row'>
           <div className='col-lg-12'>
-            <div className='card'>
-              <div className='table-responsive111'>
-                <table className='table header-border table-responsive-sm111'>
-                  <thead>
-                    <tr>
-                      <th scope='col'>Part No</th>
-                      <th scope='col'>Short Description</th>
-                      <th scope='col'>Unit Cost</th>
-                      <th scope='col'>Quantity</th>
-                      <th scope='col'>Status</th>
-                      <th scope='col'>GST</th>
-                      <th scope='col'>Net Price</th>
-                      <th scope='col'>Extd Gross Price</th>
-                      <th scope='col'>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div className='select-port'>
-                          <Select
-                            className='select select-width'
-                            placeholder='Select Part No'
-                            isSearchable
-                            isClearable
-                            menuPortalTarget={document.querySelector("body")}
-                            isLoading={partsLoading}
-                            options={allParts}
-                            onChange={(option) => handleSelectPart(option)}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class dsc-width'
-                          type='text'
-                          placeholder='Short Description'
-                          name='short_description'
-                          value={short_description || ""}
-                          onChange={(e) => setshort_description(e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class input-width'
-                          type='number'
-                          placeholder='Unit Cost'
-                          name='unit_cost'
-                          value={unitCost || ""}
-                          onChange={(e) => setUnitCost(e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class input-width'
-                          type='number'
-                          placeholder='Total Quantity'
-                          name='quantity'
-                          value={totalQuantity || ""}
-                          onChange={(e) => setTotalQuantity(e.target.value)}
-                        />
-                      </td>
-                      <td>
+            <div className='table-responsive111'>
+              <table className='table header-border table-bordered table-responsive-sm111'>
+                <thead>
+                  <tr>
+                    <th scope='col'>Part No</th>
+                    <th scope='col'>Short Description</th>
+                    <th scope='col'>Quantity</th>
+                    <th scope='col'>Unit Cost</th>
+                    <th scope='col'>Status</th>
+                    <th scope='col'>GST</th>
+                    <th scope='col'>Net Price</th>
+                    <th scope='col'>Extd Gross Price</th>
+                    <th scope='col'>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div className='select-port'>
                         <Select
                           className='select select-width'
-                          placeholder='Select Status'
+                          placeholder='Select Part No'
                           isSearchable
                           isClearable
                           menuPortalTarget={document.querySelector("body")}
                           isLoading={partsLoading}
-                          options={partsStatus}
+                          options={allParts}
                           onChange={(option) => handleSelectPart(option)}
                         />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class input-width'
-                          type='number'
-                          placeholder='GST'
-                          name='gst'
-                          value={gst || ""}
-                          onChange={(e) => setgst(e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class input-width'
-                          type='number'
-                          placeholder='Net Price'
-                          name='net_price'
-                          value={net_price || ""}
-                          onChange={(e) => setNet_price(e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          className='new_input_class input-width'
-                          type='number'
-                          placeholder='Extd Gross Price'
-                          name='extd_gross_price'
-                          value={extd_gross_price || ""}
-                          onChange={(e) => setExtd_gross_price(e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <button
-                          className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
-                          disabled={
-                            !(
-                              short_description ||
-                              totalQuantity ||
-                              unitCost ||
-                              status ||
-                              gst ||
-                              net_price ||
-                              extd_gross_price
-                            )
-                          }
-                          onClick={handleTable}>
-                          Add
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                      </div>
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class dsc-width'
+                        type='text'
+                        placeholder='Short Description'
+                        name='short_description'
+                        value={short_description || ""}
+                        onChange={(e) => setshort_description(e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class input-width'
+                        type='number'
+                        placeholder='Total Quantity'
+                        name='quantity'
+                        value={totalQuantity || ""}
+                        onChange={(e) => setTotalQuantity(e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class input-width'
+                        type='number'
+                        placeholder='Unit Cost'
+                        name='unit_cost'
+                        value={unitCost || ""}
+                        onChange={(e) => setUnitCost(e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <Select
+                        className='select select-width'
+                        placeholder='Select Status'
+                        isSearchable
+                        isClearable
+                        menuPortalTarget={document.querySelector("body")}
+                        options={partsStatus}
+                        onChange={setstatus}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class input-width'
+                        type='number'
+                        placeholder='GST'
+                        name='gst'
+                        value={gst || ""}
+                        onChange={(e) => setgst(e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class input-width'
+                        type='number'
+                        placeholder='Net Price'
+                        name='net_price'
+                        value={net_price || ""}
+                        onChange={(e) => setNet_price(e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className='new_input_class input-width'
+                        type='number'
+                        placeholder='Extd Gross Price'
+                        name='extd_gross_price'
+                        value={extd_gross_price || ""}
+                        onChange={(e) => setExtd_gross_price(e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <button
+                        className='btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center'
+                        disabled={
+                          !(
+                            short_description ||
+                            totalQuantity ||
+                            unitCost ||
+                            status ||
+                            gst ||
+                            net_price ||
+                            extd_gross_price
+                          )
+                        }
+                        onClick={handleTable}>
+                        Add
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

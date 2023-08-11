@@ -6,12 +6,15 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+
+import { Toaster, toast } from "react-hot-toast";
 import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
-import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
 const SalesLead = () => {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
   const [search, setSearch] = useState("");
@@ -33,8 +36,11 @@ const SalesLead = () => {
         setSalesLeads(data?.results);
         setSearchData(data?.results);
       } catch (error) {
-        setLoading(true);
-        console.log(error);
+        setLoading(false);
+        if (error.response.status === 401) {
+          toast.error(error.response.statusText);
+          console.log(error);
+        }
       }
     };
     getLeads();
@@ -175,6 +181,7 @@ const SalesLead = () => {
       <PageTitle title='Sales Leads' />
       <SectionTitle title='Sales Leads' />
       <div className='row'>
+        <Toaster />
         <div className='col-12'>
           <div className='card'>
             <div className='card-body'>

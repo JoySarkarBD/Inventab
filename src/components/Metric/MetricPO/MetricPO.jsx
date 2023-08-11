@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
-import axios from "../../../utils/axios/axios";
 import {
   getMonthName,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
 
 export default function MetricPO() {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
   const [loading, setLoading] = useState(false);

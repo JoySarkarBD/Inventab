@@ -7,11 +7,12 @@ import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
-import axios from "../../../utils/axios/axios";
 import "./sales.css";
 
 const SalesOrders = () => {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
   const [search, setSearch] = useState("");

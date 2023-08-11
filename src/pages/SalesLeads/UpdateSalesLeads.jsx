@@ -10,13 +10,14 @@ import TextArea from "../../components/Form/TextArea";
 import SalesDataForm from "../../components/SalesDataForm/SalesDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
-import axios from "../../utils/axios/axios";
 import { formatDateToIndianVersion } from "../../utils/utilityFunc/utilityFunc";
 import "./AddSalesLeads.css";
 
 // sales lead history  modal
 function SalesLeadHistoryModal(props) {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { firstname, lastname, userId } = auth;
 
@@ -208,6 +209,7 @@ function SalesLeadHistoryModal(props) {
 }
 
 const UpdateSalesLeads = () => {
+  const axios = useAxiosPrivate();
   const [toggleForm, setToggleForm] = useState(false);
   const { lead_no } = useParams();
   const [selectedData, setSelectedData] = useState({});

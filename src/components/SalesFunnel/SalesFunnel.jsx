@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
-import axios from "../../utils/axios/axios";
 import { numDifferentiation } from "../../utils/utilityFunc/utilityFunc";
 
 export default function SalesFunnel() {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
   const [loading, setLoading] = useState(false);

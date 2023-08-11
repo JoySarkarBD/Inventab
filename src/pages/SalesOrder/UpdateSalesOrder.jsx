@@ -3,11 +3,12 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import UpdateOrderDataForm from "../../components/OrderDataForm/UpdateOrderDataForm";
 import PageTitle from "../../components/Shared/PageTitle";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
-import axios from "../../utils/axios/axios";
 import "./AddSalesOrder.css";
 
 export default function UpdateSalesOrder() {
+  const axios = useAxiosPrivate();
   const { order_id } = useParams();
   const [loading, setloading] = useState(false);
   const [order, setOrder] = useState({});

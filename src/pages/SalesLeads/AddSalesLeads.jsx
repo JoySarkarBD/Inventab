@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../components/Shared/PageTitle";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
-import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -16,6 +16,7 @@ import InputText from "./../../components/Form/InputText";
 import TextArea from "./../../components/Form/TextArea";
 
 const AddSalesDataForm = () => {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
 

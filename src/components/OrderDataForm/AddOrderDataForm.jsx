@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
-import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -13,6 +13,7 @@ import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
 
 export default function DataForm() {
+  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId, userId } = auth;
 
