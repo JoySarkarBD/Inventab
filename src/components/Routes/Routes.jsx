@@ -14,6 +14,7 @@ import UpdateSalesLeads from "../../pages/SalesLeads/UpdateSalesLeads";
 import AddSalesOrder from "../../pages/SalesOrder/AddSalesOrder";
 import UpdateSalesOrder from "../../pages/SalesOrder/UpdateSalesOrder";
 import ErrorPage from "../../ui/ErrorPage";
+import PublicRoute from "../PublicRoute/PublicRoute";
 
 const router = createBrowserRouter([
   {
@@ -22,8 +23,13 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
-        element: <LogIn />,
+        element: <PublicRoute />,
+        children: [
+          {
+            path: "/",
+            element: <LogIn />,
+          },
+        ],
       },
     ],
   },

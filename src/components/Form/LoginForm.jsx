@@ -48,10 +48,11 @@ const LoginForm = () => {
             lastname: results?.last_name,
             phone: results?.mobile,
             email: results?.email,
+            isLoggedIn: true,
           };
           setAuth(userObj);
           localStorage.setItem("userInfo", JSON.stringify(userObj));
-          localStorage.setItem("isLoggedIn", true);
+
           // set userObj  into localstorage
           navigate("/dashboard");
         }
