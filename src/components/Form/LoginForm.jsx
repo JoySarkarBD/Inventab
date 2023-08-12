@@ -56,9 +56,8 @@ const LoginForm = () => {
 
           // set userObj  into localstorage
           navigate(from, { replace: true });
-          setTimeout(() => {
-            toast.success("Logged in successfull", { duration: 1000 });
-          }, 1000);
+
+          toast.success("Logged in successfull", { duration: 2000 });
         }
       } catch (error) {
         toast.error(error?.message, { duration: 2000 });
