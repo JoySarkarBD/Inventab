@@ -1,4 +1,3 @@
-import { Toaster } from "react-hot-toast";
 import RevenueChart from "../../../components/Chart/Chart";
 import KPIInvoice from "../../../components/KPI/KPI-Invoice/KPIInvoice";
 import KPIPO from "../../../components/KPI/KPI-PO/KPIPO";
@@ -12,7 +11,7 @@ import "./SalesDashboard.css";
 const SalesDashboard = () => {
   return (
     <>
-      <Toaster />
+      {/* <Toaster /> */}
       <PageTitle title='Sales Dashboard' />
       <div className='row'>
         {/* KPI table */}
