@@ -23,6 +23,7 @@ const useAxiosPrivate = () => {
         (response) => response,
         async (error) => {
           if (error.response.status === 401) {
+            toast.error("Session expired, Please log in");
             const modifiedObj = {
               ...auth,
               isLoggedIn: false,
@@ -30,7 +31,6 @@ const useAxiosPrivate = () => {
 
             setAuth(modifiedObj);
             localStorage.setItem("userInfo", JSON.parse(modifiedObj));
-            toast.error("Session expired, Please log in", { duration: 2000 });
           }
           return Promise.reject(error);
         }

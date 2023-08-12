@@ -40,7 +40,6 @@ const LoginForm = () => {
         );
 
         if (data.success) {
-          toast.success("Logged in successfull");
           const results = data?.data;
           const userObj = {
             accessToken: results?.auth_token?.access,
@@ -57,6 +56,9 @@ const LoginForm = () => {
 
           // set userObj  into localstorage
           navigate(from, { replace: true });
+          setTimeout(() => {
+            toast.success("Logged in successfull", { duration: 1000 });
+          }, 1000);
         }
       } catch (error) {
         toast.error(error?.message, { duration: 2000 });
