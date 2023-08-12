@@ -3,9 +3,8 @@ import { useAuth } from "../../hooks/useAuth";
 
 const PublicRoute = () => {
   const { auth } = useAuth();
-  const { isLoggedIn } = auth;
 
-  if (!isLoggedIn) return <Outlet />;
+  if (!auth?.isLoggedIn) return <Outlet />;
   return <Navigate to='/dashboard' />;
 };
 
