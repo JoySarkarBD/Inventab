@@ -1,9 +1,10 @@
 import { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { axiosPrivateInstance } from "../utils/axios/axios";
 import { useAuth } from "./useAuth";
 
 const useAxiosPrivate = () => {
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   useEffect(() => {
     const token = `JWT ${auth?.accessToken}`;
@@ -21,6 +22,16 @@ const useAxiosPrivate = () => {
       const responseintercept = axiosPrivateInstance.interceptors.response.use(
         (response) => response,
         async (error) => {
+          if (error.response.status === 401) {
+            const modifiedObj = {
+              ...auth,
+              isLoggedIn: false,
+            };
+
+            setAuth(modifiedObj);
+            localStorage.setItem("userInfo", JSON.parse(modifiedObj));
+            toast.error("Session expired, Please log in", { duration: 2000 });
+          }
           return Promise.reject(error);
         }
       );
@@ -30,7 +41,7 @@ const useAxiosPrivate = () => {
         axiosPrivateInstance.interceptors.response.eject(responseintercept);
       };
     }
-  }, [auth]);
+  }, [auth, setAuth]);
 
   return axiosPrivateInstance;
 };

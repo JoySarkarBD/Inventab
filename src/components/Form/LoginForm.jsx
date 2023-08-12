@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
 import { useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import {
   // AiOutlineCamera,
   AiOutlineEye,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { axiosInstance } from "../../utils/axios/axios";
 import ErrorMsg from "./ErrorMsg";
@@ -15,9 +15,11 @@ import TextInput from "./TextInput";
 
 const LoginForm = () => {
   const { setAuth } = useAuth();
+  let location = useLocation();
 
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  let from = location.state?.from?.pathname || "/dashboard";
 
   // password show & hide
   const togglePasswordVisibility = () => {
@@ -54,7 +56,7 @@ const LoginForm = () => {
           localStorage.setItem("userInfo", JSON.stringify(userObj));
 
           // set userObj  into localstorage
-          navigate("/dashboard");
+          navigate(from, { replace: true });
         }
       } catch (error) {
         toast.error(error?.message, { duration: 2000 });
@@ -65,7 +67,6 @@ const LoginForm = () => {
 
   return (
     <>
-      <Toaster />
       <form className='form' onSubmit={handleSubmit}>
         {/* Email */}
         <div className='mb-4'>
