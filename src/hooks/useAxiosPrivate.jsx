@@ -11,9 +11,7 @@ const useAxiosPrivate = () => {
       const requestIntercept = axiosPrivateInstance.interceptors.request.use(
         (config) => {
           if (!config.headers["Authorization"]) {
-            config.headers[
-              "Authorization"
-            ] = `JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxNDE0NzQ0LCJqdGkiOiJlY2NhYmI4ZjliYmU0MmExYWY1NWFiYzc4Y2Q5NDI2MyIsInVzZXJfaWQiOiI4N2NmNTQ2My04YjNiLTQwZmMtOWFlZS01ZDdkYzk2Y2EzMmQifQ.249jxm4uIP1XiJO_Wo3A_0GFzzsHEzyR6SrBiqcOf3s`;
+            config.headers["Authorization"] = token;
           }
           return config;
         },
@@ -38,3 +36,5 @@ const useAxiosPrivate = () => {
 };
 
 export default useAxiosPrivate;
+
+/* `JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkxNDE0NzQ0LCJqdGkiOiJlY2NhYmI4ZjliYmU0MmExYWY1NWFiYzc4Y2Q5NDI2MyIsInVzZXJfaWQiOiI4N2NmNTQ2My04YjNiLTQwZmMtOWFlZS01ZDdkYzk2Y2EzMmQifQ.249jxm4uIP1XiJO_Wo3A_0GFzzsHEzyR6SrBiqcOf3s` */
