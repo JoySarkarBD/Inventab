@@ -7,6 +7,7 @@ export const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Referer: "unsafe-url",
   },
 });
 
@@ -15,5 +16,6 @@ export const axiosPrivateInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    Referer: "unsafe-url",
   },
 });
