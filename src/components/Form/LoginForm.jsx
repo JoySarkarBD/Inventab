@@ -29,8 +29,8 @@ const LoginForm = () => {
   //login submition
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues: {
-      email: "Mukund.vs.atpl@autopeepal.com",
-      password: "Welcome2@ATPL",
+      email: "",
+      password: "",
     },
     onSubmit: async (values) => {
       try {
@@ -60,7 +60,6 @@ const LoginForm = () => {
         }
       } catch (error) {
         toast.error(error?.message, { duration: 2000 });
-        console.log(error);
       }
     },
   });
