@@ -14,6 +14,8 @@ import UpdateSalesLeads from "../../pages/SalesLeads/UpdateSalesLeads";
 import AddSalesOrder from "../../pages/SalesOrder/AddSalesOrder";
 import UpdateSalesOrder from "../../pages/SalesOrder/UpdateSalesOrder";
 import ErrorPage from "../../ui/ErrorPage";
+import AuthRequired from "../AuthRequired/AuthRequired";
+import PublicRoute from "../PublicRoute/PublicRoute";
 
 const router = createBrowserRouter([
   {
@@ -22,65 +24,75 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "login",
-        element: <LogIn />,
+        element: <PublicRoute />,
+        children: [
+          {
+            path: "/",
+            element: <LogIn />,
+          },
+        ],
       },
     ],
   },
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
-    errorElement: <ErrorPage />,
+    element: <AuthRequired />,
     children: [
       {
         path: "/dashboard",
-        element: <SalesDashboard />,
-      },
-      /* Leads */
-      {
-        path: "sales-leads",
-        element: <SalesLead />,
-      },
-      {
-        path: "sales/add-sales-leads",
-        element: <AddSalesLeads />,
-      },
-      {
-        path: "sales/update-sales-leads/:lead_no",
-        element: <UpdateSalesLeads />,
-      },
-      /* Orders */
-      {
-        path: "sales-orders",
-        element: <SalesOrders />,
-      },
-      {
-        path: "sales-orders/add-sales-order",
-        element: <AddSalesOrder />,
-      },
+        element: <DashboardLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "/dashboard",
+            element: <SalesDashboard />,
+          },
+          /* Leads */
+          {
+            path: "sales-leads",
+            element: <SalesLead />,
+          },
+          {
+            path: "sales/add-sales-leads",
+            element: <AddSalesLeads />,
+          },
+          {
+            path: "sales/update-sales-leads/:lead_no",
+            element: <UpdateSalesLeads />,
+          },
+          /* Orders */
+          {
+            path: "sales-orders",
+            element: <SalesOrders />,
+          },
+          {
+            path: "sales-orders/add-sales-order",
+            element: <AddSalesOrder />,
+          },
 
-      {
-        path: "sales-orders/update-sales-order/:order_id",
-        element: <UpdateSalesOrder />,
-      },
-      /* invoice */
-      {
-        path: "sales-invoices",
-        element: <SalesInvoices />,
-      },
-      {
-        path: "sales-invoices/sales-invoices-details/:invoice_id",
-        element: <SalesInvoiceDetails />,
-      },
-      /* ar */
-      {
-        path: "ar",
-        element: <AR />,
-      },
-      /* attendance */
-      {
-        path: "attendance",
-        element: <Attendance />,
+          {
+            path: "sales-orders/update-sales-order/:order_id",
+            element: <UpdateSalesOrder />,
+          },
+          /* invoice */
+          {
+            path: "sales-invoices",
+            element: <SalesInvoices />,
+          },
+          {
+            path: "sales-invoices/sales-invoices-details/:invoice_id",
+            element: <SalesInvoiceDetails />,
+          },
+          /* ar */
+          {
+            path: "ar",
+            element: <AR />,
+          },
+          /* attendance */
+          {
+            path: "attendance",
+            element: <Attendance />,
+          },
+        ],
       },
     ],
   },

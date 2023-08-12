@@ -11,6 +11,7 @@ import "./SalesDashboard.css";
 const SalesDashboard = () => {
   return (
     <>
+      {/* <Toaster /> */}
       <PageTitle title='Sales Dashboard' />
       <div className='row'>
         {/* KPI table */}

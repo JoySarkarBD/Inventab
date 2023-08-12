@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import Loader from "../../ui/Loader";
 import {
   kpiEachTotal,
   numDifferentiation,
@@ -27,11 +29,12 @@ const KpiInvoice = () => {
         setLoading(false);
         setInvoices(data?.results);
       } catch (error) {
+        setLoading(false);
         console.log(error?.message);
       }
     };
     getKpiInvoice();
-  }, [axios]);
+  }, [axios, orgId]);
 
   //kpi PO each sub total
   useEffect(() => {
@@ -63,43 +66,49 @@ const KpiInvoice = () => {
   }
 
   return (
-    <div className='col-xl-6 col-lg-6 col-xxl-6 col-md-12 col-sm-12'>
-      <div className='card rounded-0 h-auto'>
-        <ul className='list-group list-group-flush'>
-          <li className='list-group-item bg-primary rounded-0 text-white d-flex justify-content-between'>
-            <span className='mb-0 fs-4'>KPI-INVOICE </span>
-            <span className='fs-4'>
-              Total: {numDifferentiation(invoiceSubtotal)}
-            </span>
-          </li>
-        </ul>
-        <div className='card-body p-0 rounded-0'>
-          <div className='table-responsive'>
-            <table className='table table-bordered'>
-              <thead style={{ background: "#343A40" }}>
-                <tr>
-                  <th className='text-light ps-4 fs-5'>Department</th>
-                  <th className='text-light ps-4 fs-5'>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {invoiceTotal?.length > 0 &&
-                  invoiceTotal.map((invoice) => {
-                    return (
-                      <tr key={invoice?.department}>
-                        <td className='ps-4'>{invoice?.department}</td>
-                        <td className='ps-4'>
-                          {numDifferentiation(invoice?.total)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className='col-xl-6 col-lg-6 col-xxl-6 col-md-12 col-sm-12'>
+          <div className='card rounded-0 h-auto'>
+            <ul className='list-group list-group-flush'>
+              <li className='list-group-item bg-primary rounded-0 text-white d-flex justify-content-between'>
+                <span className='mb-0 fs-4'>KPI-INVOICE </span>
+                <span className='fs-4'>
+                  Total: {numDifferentiation(invoiceSubtotal)}
+                </span>
+              </li>
+            </ul>
+            <div className='card-body p-0 rounded-0'>
+              <div className='table-responsive'>
+                <table className='table table-bordered'>
+                  <thead style={{ background: "#343A40" }}>
+                    <tr>
+                      <th className='text-light ps-4 fs-5'>Department</th>
+                      <th className='text-light ps-4 fs-5'>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {invoiceTotal?.length > 0 &&
+                      invoiceTotal.map((invoice) => {
+                        return (
+                          <tr key={invoice?.department}>
+                            <td className='ps-4'>{invoice?.department}</td>
+                            <td className='ps-4'>
+                              {numDifferentiation(invoice?.total)}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

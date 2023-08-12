@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useAuth } from "../../../hooks/useAuth";
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
@@ -37,7 +38,7 @@ export default function MetricPO() {
       }
     };
     getOrderList();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   useEffect(() => {
     if (!loading && salesOrders?.length && salesOrders?.length > 0) {

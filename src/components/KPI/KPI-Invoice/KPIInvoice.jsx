@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useAuth } from "../../../hooks/useAuth";
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
@@ -34,7 +35,7 @@ export default function KPIInvoice() {
       }
     };
     kpiPoInvoice();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   // calculate total after mount page
   useEffect(() => {

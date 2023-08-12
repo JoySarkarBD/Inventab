@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useAuth } from "../../../hooks/useAuth";
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
@@ -35,7 +36,7 @@ export default function KPIPO() {
     };
 
     getKpiPo();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   // sub total after mount this page
   useEffect(() => {

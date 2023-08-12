@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import Loader from "../../ui/Loader";
 import {
   kpiEachTotal,
   numDifferentiation,
@@ -9,7 +11,7 @@ import {
 const KpiPo = () => {
   const axios = useAxiosPrivate();
   const { auth } = useAuth();
-  const { orgId } = auth;
+
   const [loading, setLoading] = useState(false);
   const [kpiPoList, setKpiList] = useState([]);
   const [kpiTotal, setKpiTotal] = useState([]);
@@ -17,12 +19,12 @@ const KpiPo = () => {
   // load kpi PO list
   useEffect(() => {
     // get KPI  PO List
+
     const getKpiPo = async () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          // 0a055b26-ae15-40a9-8291-25427b94ebb3
-          `pipo/kpi/list/?org=${orgId}&metric=PO`
+          `pipo/kpi/list/?org=${auth?.orgId}&metric=PO`
         );
         setLoading(false);
         setKpiList(data?.results);
@@ -32,7 +34,7 @@ const KpiPo = () => {
       }
     };
     getKpiPo();
-  }, [orgId]);
+  }, [axios, auth?.orgId]);
 
   //kpi PO each sub total
   useEffect(() => {
@@ -66,7 +68,7 @@ const KpiPo = () => {
   }
   return (
     <>
-      {!loading && (
+      {!loading ? (
         <div className='col-xl-6 col-lg-6 col-xxl-6 col-md-12 col-sm-12'>
           <div className='card rounded-0 h-auto'>
             <ul className='list-group list-group-flush'>
@@ -104,6 +106,8 @@ const KpiPo = () => {
             </div>
           </div>
         </div>
+      ) : (
+        <Loader />
       )}
     </>
   );

@@ -7,6 +7,8 @@ import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import { useAuth } from "../../../hooks/useAuth";
+
+import { Toaster, toast } from "react-hot-toast";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import "./sales.css";
@@ -33,12 +35,13 @@ const SalesOrders = () => {
         setSalesOrders(response?.results);
         setSearchData(response?.results);
       } catch (error) {
-        setLoading(true);
-        console.log(error);
+        setLoading(false);
+        toast.error(error.message);
+        // console.log(error);
       }
     };
     getSalesOrders();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   // columns
   const columns = [
@@ -179,6 +182,7 @@ const SalesOrders = () => {
 
   return (
     <div className='position-relative'>
+      <Toaster />
       <PageTitle title='Sales Orders' />
       <SectionTitle title='Sales Orders' />
       <div className='row'>

@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import { Outlet, useLocation } from "react-router-dom";
 
 const MainLayout = () => {
@@ -8,6 +9,7 @@ const MainLayout = () => {
   return (
     <div>
       {noHeaderFooter || ""}
+      <Toaster />
       <Outlet />
     </div>
   );

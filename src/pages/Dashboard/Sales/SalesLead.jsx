@@ -9,6 +9,7 @@ import SectionTitle from "../../../components/Shared/SectionTitle";
 
 import { Toaster, toast } from "react-hot-toast";
 import { useAuth } from "../../../hooks/useAuth";
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import "./sales.css";
@@ -44,7 +45,7 @@ const SalesLead = () => {
       }
     };
     getLeads();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   // columns for table
   const columns = [

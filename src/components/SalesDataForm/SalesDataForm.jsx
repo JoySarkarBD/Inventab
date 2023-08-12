@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Select from "react-select";
 import { useAuth } from "../../hooks/useAuth";
+
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
 import {
@@ -105,7 +106,7 @@ export default function SalesDataForm(props) {
         setClient(uniqueArr);
       } catch (error) {
         setLoading(false);
-        console.log(error);
+        console.log(error.message);
       }
     })();
 
@@ -132,7 +133,7 @@ export default function SalesDataForm(props) {
         setsubOrg(uniqueArr);
       } catch (error) {
         setLoading(false);
-        console.log(error);
+        console.log(error.message);
       }
     })();
 
@@ -156,10 +157,10 @@ export default function SalesDataForm(props) {
         setParts(uniqueArr);
       } catch (error) {
         setPartsLoading(false);
-        console.log(error);
+        console.log(error.message);
       }
     })();
-  }, [orgId]);
+  }, [orgId, axios]);
 
   // ==============================table stuff start==============
 

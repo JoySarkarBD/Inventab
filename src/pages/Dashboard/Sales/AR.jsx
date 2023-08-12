@@ -7,7 +7,8 @@ import Select, { components } from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import Loader from "../../../ui/Loader";
-import axios from "../../../utils/axios/axios";
+
+import { axiosInstance } from "../../../utils/axios/axios";
 import "./sales.css";
 
 const AR = () => {
@@ -83,7 +84,7 @@ const AR = () => {
     try {
       setLoading(true);
       const response = (
-        await axios.get(
+        await axiosInstance.get(
           "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
         )
       ).data;
@@ -167,7 +168,7 @@ const AR = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach(salesData => {
+    searchData.forEach((salesData) => {
       const csvObj = {
         "Inv No": salesData?.invoice_number || "No data found",
         "Sub Org": salesData?.sub_org || "No data found",
@@ -182,7 +183,7 @@ const AR = () => {
       data.push(csvObj);
     });
 
-    setCsv(prev => [...prev, ...data]);
+    setCsv((prev) => [...prev, ...data]);
   };
 
   return (
@@ -224,9 +225,9 @@ const AR = () => {
                       closeMenuOnSelect={false}
                       hideSelectedOptions={false}
                       isMulti
-                      onChange={options => {
+                      onChange={(options) => {
                         if (Array.isArray(options)) {
-                          setSelectedOptions(options.map(opt => opt.value));
+                          setSelectedOptions(options.map((opt) => opt.value));
                         }
                       }}
                       options={allOptions}

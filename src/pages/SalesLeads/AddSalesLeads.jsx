@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../components/Shared/PageTitle";
 import { useAuth } from "../../hooks/useAuth";
+
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Loader from "../../ui/Loader";
 import {
@@ -62,6 +63,7 @@ const AddSalesDataForm = () => {
         setDept(uniqueArr);
       } catch (error) {
         setLoading(false);
+        toast.error(error.message);
         console.log(error);
       }
     })();
@@ -139,7 +141,7 @@ const AddSalesDataForm = () => {
         console.log(error);
       }
     })();
-  }, [orgId]);
+  }, [axios, orgId]);
 
   // status options
   const statusOptions = [
