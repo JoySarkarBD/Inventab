@@ -433,17 +433,22 @@ const SalesInvoiceDetails = () => {
                     {invoiceDetails?.parts_invoice?.map((part) => {
                       return (
                         <tr key={part?.id}>
-                          <td>
+                          <td
+                            onClick={() => setSerializedNo(part.id)}
+                            className='text-primary'
+                            type='button'
+                            data-bs-toggle='modal'
+                            data-bs-target='#exampleModal'>
                             {part?.short_description}
                             <br />
-                            <button
+                            {/*  <button
                               className='btn btn-primary btn-sm'
                               type='button'
                               data-bs-toggle='modal'
                               data-bs-target='#exampleModal'
                               onClick={() => setSerializedNo(part.id)}>
                               Serial no
-                            </button>
+                            </button> */}
                             {/* mrp in unit value */}
                             {/* Extd Wo Tax this will multipy by unit value and qty */}
                           </td>

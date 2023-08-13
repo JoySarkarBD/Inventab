@@ -60,6 +60,33 @@
 @import url(../public/css/perfect-scrollbar.css);
 @import url(../public/css/metisMenu.min.css);
 
+@media all {
+  .page-break {
+    display: none;
+  }
+}
+
+@media print {
+  html, body {
+    height: initial !important;
+    overflow: initial !important;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+@media print {
+  .page-break {
+    margin-top: 1rem;
+    display: block;
+    page-break-before: auto;
+  }
+}
+
+@page {
+  size: auto;
+  margin: 20mm;
+}
+
 :root {
   --primary: #2e75b5;
   --secondary: #709fba;
