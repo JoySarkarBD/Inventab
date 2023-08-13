@@ -12,20 +12,20 @@ const LogIn = () => {
   const { auth, setAuth } = useAuth();
   useEffect(() => {
     if (auth?.sessionStatus === false) {
-      setExpire(true);
+      // setExpire(true);
       toast.error("Session Expired", { duration: 2000 });
       delete auth?.sessionStatus;
       setAuth(auth);
       localStorage.setItem("userInfo", JSON.stringify(auth));
     }
-  }, [auth, setAuth]);
+  }, []);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (expire) {
       toast.error("Session Expired", { duration: 2000 });
       setExpire(false);
     }
-  }, [expire]);
+  }, [expire]); */
   return (
     <>
       <PageTitle title='Log In' />
