@@ -26265,3 +26265,72 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme-version="dark"] input::placeholder {
   color: white;
 }
+
+
+/*  Custom Sales Dashboard Css */
+[data-theme-version="dark"] .kmHetU {
+  color: #f5f5f5 !important;
+  background-color: #212130 !important;
+}
+
+[data-theme-version="dark"] .ilSIdy{
+  background-color: #212130 !important;
+}
+
+[data-theme-version="dark"] .buKxOJ {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .fqJYFQ {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .fqJYFQ:hover {
+  background-color: #f5f5f5 !important;
+  color: #212130 !important;
+}
+
+[data-theme-version="dark"] .jXETct {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .jXETct:hover {
+  background-color: #f5f5f5 !important;
+  color: #212130 !important;
+}
+
+
+[data-theme-version="dark"] .bEcFGt {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .jNqbJL:disabled {
+  cursor: unset;
+  color: rgba(0, 0, 0, 0.18);
+  fill: #f5f5f5;
+}
+
+
+[data-theme-version="dark"] .gCmqd {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .gCmqd:hover {
+  background-color: #f5f5f5 !important;
+  color: #212130 !important;
+}
+
+.css-1nmdiq5-menu{
+  z-index: 2 !important;
+}
+
+[data-theme-version="dark"] .sc-dIowON {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+/*  Custom Sales Dashboard Css */
