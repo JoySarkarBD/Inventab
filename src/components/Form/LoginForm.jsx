@@ -75,7 +75,7 @@ const LoginForm = () => {
             title='email'
             name='email'
             placeholder='Enter your email'
-            value={values.email}
+            defaultValue={values.email}
             onChange={handleChange}
           />
         </div>
@@ -87,7 +87,7 @@ const LoginForm = () => {
               title='password'
               name='password'
               placeholder='Enter your password'
-              value={values.password}
+              defaultValue={values.password}
               onChange={handleChange}
             />
             <div onClick={togglePasswordVisibility} className='eyeIcon'>
