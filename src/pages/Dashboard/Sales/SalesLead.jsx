@@ -7,7 +7,7 @@ import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useAuth } from "../../../hooks/useAuth";
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
@@ -28,23 +28,29 @@ const SalesLead = () => {
 
   // load leads
   useEffect(() => {
+    let isMount = true;
+    const controller = new AbortController();
     // fetch table
     const getLeads = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get(`pipo/sales/lead/?org=${orgId}`);
+        const { data } = await axios.get(`pipo/sales/lead/?org=${orgId}`, {
+          signal: controller.signal,
+        });
         setLoading(false);
-        setSalesLeads(data?.results);
-        setSearchData(data?.results);
+        isMount && setSalesLeads(data?.results);
+        isMount && setSearchData(data?.results);
       } catch (error) {
         setLoading(false);
-        if (error.response.status === 401) {
-          toast.error(error.response.statusText);
-          console.log(error);
-        }
+
+        console.log(error);
       }
     };
     getLeads();
+
+    return () => {
+      (isMount = false), controller.abort();
+    };
   }, [axios, orgId]);
 
   // columns for table

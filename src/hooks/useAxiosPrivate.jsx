@@ -25,6 +25,7 @@ const useAxiosPrivate = () => {
             const modifiedObj = {
               ...auth,
               isLoggedIn: false,
+              sessionStatus: false,
             };
 
             setAuth(modifiedObj);

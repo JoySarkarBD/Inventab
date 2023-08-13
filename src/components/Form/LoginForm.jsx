@@ -50,6 +50,7 @@ const LoginForm = () => {
             phone: results?.mobile,
             email: results?.email,
             isLoggedIn: true,
+            sessionStatus: true,
           };
           setAuth(userObj);
           localStorage.setItem("userInfo", JSON.stringify(userObj));
