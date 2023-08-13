@@ -230,6 +230,7 @@ const SalesLead = () => {
                         onChange={setSelectedEL}
                         isClearable
                         isSearchable
+                        defaultMenuIsOpen
                         placeholder='Search'
                       />
                       {/* Input Search Area */}
