@@ -6,11 +6,14 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+
+import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import "./sales.css";
 
 const SalesInvoices = () => {
+  const { auth } = useAuth();
   const axios = useAxiosPrivate();
   const [search, setSearch] = useState("");
   const [invoices, setInvoice] = useState([]);
@@ -19,28 +22,33 @@ const SalesInvoices = () => {
   const [csv, setCsv] = useState([]);
   const [selectedEl, setSelectedEL] = useState(null);
 
-  // fetch table
-  const getInvoiceList = async () => {
-    try {
-      setLoading(true);
-      const response = (
-        await axios.get(
-          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-        )
-      ).data;
-      setLoading(false);
-      setInvoice(response?.results);
-      setSearchData(response?.results);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
-
   // load leads
   useEffect(() => {
+    // fetch table
+    let isMount = true;
+    const controller = new AbortController();
+    const getInvoiceList = async () => {
+      try {
+        setLoading(true);
+        const response = (
+          await axios.get(`invoices/fetch/all/invoices/?org=${auth?.orgId}`, {
+            signal: controller.signal,
+          })
+        ).data;
+        setLoading(false);
+        isMount && setInvoice(response?.results);
+        isMount && setSearchData(response?.results);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
     getInvoiceList();
-  }, []);
+
+    return () => {
+      (isMount = false), controller.abort();
+    };
+  }, [auth?.orgId, axios]);
 
   // columns
   const columns = [

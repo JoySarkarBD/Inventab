@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import "./sales.css";
 
@@ -19,21 +20,28 @@ const SalesInvoiceDetails = () => {
   // load leads
   useEffect(() => {
     // fetch invoiceDetails table data
+    let isMount = true;
+    const controller = new AbortController();
     const leads = async () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `invoices/fetch/all/invoices/?id=${invoice_id}`
+          `invoices/fetch/all/invoices/?id=${invoice_id}`,
+          { signal: controller.signal }
         );
         setLoading(false);
-        setInvoiceDetails(data?.results[0]);
+        isMount && setInvoiceDetails(data?.results[0]);
       } catch (error) {
-        setLoading(true);
+        setLoading(false);
         console.log(error);
       }
     };
     leads();
-  }, [invoice_id]);
+
+    return () => {
+      (isMount = false), controller.abort();
+    };
+  }, [invoice_id, axios]);
 
   return (
     <div>
