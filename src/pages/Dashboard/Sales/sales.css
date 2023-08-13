@@ -16,12 +16,12 @@
 .searchBox-salesLead .select {
   flex-basis: 200px;
   border: none;
-  z-index: 1 !important;
+  /* z-index: 1 !important; */
   font-size: 1.25rem;
 }
 
 #react-select-4-listbox {
-  z-index: 99 !important;
+  /* z-index: 99 !important; */
 }
 
 .searchBox-salesLead .select .css-13cymwt-control {
