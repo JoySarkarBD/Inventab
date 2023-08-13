@@ -8,6 +8,7 @@ import {
 } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { signInSchema } from "../../schema/validationSchema";
 import { axiosInstance } from "../../utils/axios/axios";
 import ErrorMsg from "./ErrorMsg";
 import FormButton from "./FormButton";
@@ -27,44 +28,49 @@ const LoginForm = () => {
   };
 
   //login submition
-  const { values, handleChange, handleSubmit } = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    onSubmit: async (values) => {
-      try {
-        const { data } = await axiosInstance.post(
-          "accounts/login",
-          JSON.stringify({ username: values.email, password: values.password })
-        );
+  const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: signInSchema,
+      onSubmit: async (values) => {
+        try {
+          const { data } = await axiosInstance.post(
+            "accounts/login",
+            JSON.stringify({
+              username: values.email,
+              password: values.password,
+            })
+          );
 
-        if (data.success) {
-          const results = data?.data;
-          const userObj = {
-            accessToken: results?.auth_token?.access,
-            userId: results?.user_id,
-            orgId: results?.org.id,
-            firstname: results?.first_name,
-            lastname: results?.last_name,
-            phone: results?.mobile,
-            email: results?.email,
-            isLoggedIn: true,
-            sessionStatus: true,
-          };
-          setAuth(userObj);
-          localStorage.setItem("userInfo", JSON.stringify(userObj));
+          if (data.success) {
+            const results = data?.data;
+            const userObj = {
+              accessToken: results?.auth_token?.access,
+              userId: results?.user_id,
+              orgId: results?.org.id,
+              firstname: results?.first_name,
+              lastname: results?.last_name,
+              phone: results?.mobile,
+              email: results?.email,
+              isLoggedIn: true,
+              sessionStatus: true,
+            };
+            setAuth(userObj);
+            localStorage.setItem("userInfo", JSON.stringify(userObj));
 
-          // set userObj  into localstorage
-          navigate(from, { replace: true });
+            // set userObj  into localstorage
+            navigate(from, { replace: true });
 
-          toast.success("Logged in successfull", { duration: 2000 });
+            toast.success("Logged in successfull", { duration: 2000 });
+          }
+        } catch (error) {
+          toast.error(error?.message, { duration: 2000 });
         }
-      } catch (error) {
-        toast.error(error?.message, { duration: 2000 });
-      }
-    },
-  });
+      },
+    });
 
   return (
     <>
@@ -78,7 +84,11 @@ const LoginForm = () => {
             placeholder='Enter your email'
             value={values.email}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
+          {errors.email && touched.email ? (
+            <ErrorMsg subject={errors.email} />
+          ) : null}
         </div>
         {/* Password */}
         <div className='mb-4 '>
@@ -90,11 +100,16 @@ const LoginForm = () => {
               placeholder='Enter your password'
               value={values.password}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
+
             <div onClick={togglePasswordVisibility} className='eyeIcon'>
               {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
             </div>
           </div>
+          {errors.password && touched.password ? (
+            <ErrorMsg subject={errors.password} />
+          ) : null}
           <div className='mt-2 d-flex justify-content-between gap-4 d-none'>
             <ErrorMsg subject='Password not match' />
             <Link to='forget-password'>

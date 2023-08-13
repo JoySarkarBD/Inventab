@@ -38,7 +38,7 @@ const KpiInvoice = () => {
 
   //kpi PO each sub total
   useEffect(() => {
-    if (invoices.length > 0 && !loading) {
+    if (invoices.length > 0) {
       let kpiInvoiceTotalArr = [];
 
       invoices.forEach((invoice) => {
