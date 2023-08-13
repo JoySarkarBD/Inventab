@@ -26282,5 +26282,15 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #f5f5f5 !important;
 }
 
+[data-theme-version="dark"] .fqJYFQ {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .fqJYFQ:hover {
+  background-color: #f5f5f5;
+  color: #212130 !important;
+}
+
 
 /*  Custom Sales Dashboard Css */
