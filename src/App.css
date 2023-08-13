@@ -26265,3 +26265,36 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme-version="dark"] input::placeholder {
   color: white;
 }
+
+
+/*  Custom Sales Dashboard Css */
+[data-theme-version="dark"] .ibMKni {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .gDLXna {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .kgXNgQ {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .kgXNgQ:hover {
+  background-color: #f5f5f5;
+  color: #212130 !important;
+}
+
+[data-theme-version="dark"] .eQGznd {
+  background-color: #212130;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .eQGznd:hover {
+  background-color: #f5f5f5;
+  color: #212130 !important;
+}
+/*  Custom Sales Dashboard Css */
