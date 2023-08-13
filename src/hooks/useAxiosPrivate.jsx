@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { toast } from "react-hot-toast";
 import { axiosPrivateInstance } from "../utils/axios/axios";
 import { useAuth } from "./useAuth";
 
@@ -23,14 +22,13 @@ const useAxiosPrivate = () => {
         (response) => response,
         async (error) => {
           if (error.response.status === 401) {
-            toast.error("Session expired, Please log in");
             const modifiedObj = {
               ...auth,
               isLoggedIn: false,
             };
 
             setAuth(modifiedObj);
-            localStorage.setItem("userInfo", JSON.parse(modifiedObj));
+            localStorage.setItem("userInfo", JSON.stringify(modifiedObj));
           }
           return Promise.reject(error);
         }
