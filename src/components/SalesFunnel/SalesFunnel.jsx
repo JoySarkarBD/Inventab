@@ -118,7 +118,6 @@ export default function SalesFunnel() {
               placeholder='Select a status...'
               isSearchable
               className='text-start w-25'
-              defaultMenuIsOpen
             />
           }
           customStyles={{
