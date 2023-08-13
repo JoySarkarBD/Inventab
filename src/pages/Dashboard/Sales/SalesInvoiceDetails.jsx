@@ -232,8 +232,6 @@ const SalesInvoiceDetails = () => {
     };
   }, [invoice_id, axios]);
 
-  console.log(serializedNo);
-
   return (
     <div>
       <PageTitle title='Invoices-Details' />
@@ -432,7 +430,7 @@ const SalesInvoiceDetails = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.parts_invoice?.map((part) => {
+                    {invoiceDetails?.parts_invoice?.map((part) => {
                       return (
                         <tr key={part?.id}>
                           <td>
@@ -518,22 +516,34 @@ const SalesInvoiceDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.parts_invoice?.map((part) => {
+                  {invoiceDetails?.parts_invoice?.map((part) => {
                     if (part?.id === serializedNo) {
                       return (
                         <tr key={part?.id}>
-                          <td>
-                            {part?.parts_no?.serialized_parts?.map(
-                              (sn, index) => {
-                                return <p key={sn?.id}>{"Sl-" + ++index}</p>;
-                              }
-                            )}
-                          </td>
-                          <td>
-                            {part?.parts_no?.serialized_parts?.map((sn) => {
-                              return <p key={sn?.id}>{sn?.serial_number}</p>;
-                            })}
-                          </td>
+                          {part?.parts_no?.serialized_parts?.length ? (
+                            <>
+                              <td>
+                                {part?.parts_no?.serialized_parts?.map(
+                                  (sn, index) => {
+                                    return (
+                                      <p key={sn?.id}>{"Sl-" + ++index}</p>
+                                    );
+                                  }
+                                )}
+                              </td>
+                              <td>
+                                {part?.parts_no?.serialized_parts?.map((sn) => {
+                                  return (
+                                    <p key={sn?.id}>{sn?.serial_number}</p>
+                                  );
+                                })}
+                              </td>
+                            </>
+                          ) : (
+                            <td colSpan='2' className='text-center'>
+                              No Data Found
+                            </td>
+                          )}
                         </tr>
                       );
                     }
