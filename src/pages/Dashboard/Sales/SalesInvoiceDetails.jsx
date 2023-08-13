@@ -263,6 +263,36 @@ const SalesInvoiceDetails = () => {
                         </tr>
                       );
                     })}
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td>CGST</td>
+                      <td>20</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td>SGST</td>
+                      <td>20</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td>IGST</td>
+                      <td>0</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td>Shipment Charge</td>
+                      <td>100</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td>Gross Total</td>
+                      <td>120</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
