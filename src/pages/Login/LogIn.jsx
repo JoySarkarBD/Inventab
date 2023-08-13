@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import LoginForm from "../../components/Form/LoginForm";
 import PageTitle from "../../components/Shared/PageTitle";
@@ -7,7 +7,6 @@ import Logo from "./../../assets/images/main-logo.png";
 import "./Login.css";
 
 const LogIn = () => {
-  const [expire, setExpire] = useState(false);
   // session expired message ['it's not necessary , if user don't want to show the S.E. msg then remove useAuth & useEffect hook']
   const { auth, setAuth } = useAuth();
   useEffect(() => {
@@ -20,12 +19,6 @@ const LogIn = () => {
     }
   }, []);
 
-  /*  useEffect(() => {
-    if (expire) {
-      toast.error("Session Expired", { duration: 2000 });
-      setExpire(false);
-    }
-  }, [expire]); */
   return (
     <>
       <PageTitle title='Log In' />
