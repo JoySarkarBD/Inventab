@@ -67,7 +67,8 @@
 }
 
 @media print {
-  html, body {
+  html,
+  body {
     height: initial !important;
     overflow: initial !important;
     -webkit-print-color-adjust: exact;
@@ -26266,14 +26267,13 @@ input[type="number"]::-webkit-outer-spin-button {
   color: white;
 }
 
-
 /*  Custom Sales Dashboard Css */
 [data-theme-version="dark"] .kmHetU {
   color: #f5f5f5 !important;
   background-color: #212130 !important;
 }
 
-[data-theme-version="dark"] .ilSIdy{
+[data-theme-version="dark"] .ilSIdy {
   background-color: #212130 !important;
 }
 
@@ -26302,7 +26302,6 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #212130 !important;
 }
 
-
 [data-theme-version="dark"] .bEcFGt {
   background-color: #212130 !important;
   color: #f5f5f5 !important;
@@ -26314,7 +26313,6 @@ input[type="number"]::-webkit-outer-spin-button {
   fill: #f5f5f5;
 }
 
-
 [data-theme-version="dark"] .gCmqd {
   background-color: #212130 !important;
   color: #f5f5f5 !important;
@@ -26325,7 +26323,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #212130 !important;
 }
 
-.css-1nmdiq5-menu{
+.css-1nmdiq5-menu {
   z-index: 2 !important;
 }
 
@@ -26333,4 +26331,19 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: #212130 !important;
   color: #f5f5f5 !important;
 }
+
+[data-theme-version="dark"] .login-form,
+.authentication_row {
+  background: #212130;
+  border: 1px solid #3d3c3c !important;
+}
+
+[data-theme-version="dark"] .authentication_row {
+  background: #212130 !important;
+  border: none !important;
+}
+[data-theme-version="dark"] .authentication {
+  background: #212130 !important;
+}
+
 /*  Custom Sales Dashboard Css */

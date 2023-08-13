@@ -2,7 +2,7 @@
 const ErrorMsg = ({ subject }) => {
   return (
     <>
-      <p className='error'>
+      <p className='error mt-2'>
         {subject || ""}
       </p>
     </>
