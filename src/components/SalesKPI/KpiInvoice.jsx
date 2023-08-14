@@ -18,22 +18,28 @@ const KpiInvoice = () => {
 
   // load kpi invoices
   useEffect(() => {
+    let isMount = true;
+    const controller = new AbortController();
     // get kpi invoices
     const getKpiInvoice = async () => {
       try {
         setLoading(true);
         // 0a055b26-ae15-40a9-8291-25427b94ebb3
         const { data } = await axios.get(
-          `pipo/kpi/list/?org=${orgId}&metric=INVOICE`
+          `pipo/kpi/list/?org=${orgId}&metric=INVOICE`,
+          { signal: controller.signal }
         );
         setLoading(false);
-        setInvoices(data?.results);
+        isMount && setInvoices(data?.results);
       } catch (error) {
         setLoading(false);
         console.log(error?.message);
       }
     };
     getKpiInvoice();
+    return () => {
+      (isMount = false), controller.abort();
+    };
   }, [axios, orgId]);
 
   //kpi PO each sub total
