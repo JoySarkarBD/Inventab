@@ -1,0 +1,46 @@
+.table-responsive1 {
+  overflow-x: auto;
+}
+.table-responsive111 {
+  overflow-x: auto;
+}
+
+/* @media (max-width: 1199.98px) {
+  .table-responsive111 {
+    overflow-x: scroll;
+  }
+} */
+
+/* [data-theme-version="light"] .css-13cymwt-control {
+  background-color: #f5f5f5;
+} */
+[data-theme-version="dark"] .css-t3ipsp-control {
+  background-color: #212130 !important;
+}
+
+.select-width,
+.dsc-width {
+  min-width: 150px;
+  width: 100%;
+}
+.input-width {
+  min-width: 100px;
+  width: 100%;
+}
+.table-responsive111::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+.table-responsive111::-webkit-scrollbar-track {
+  background: var(--bs-gray-200); /* color of the tracking area */
+  border-radius: 20px;
+}
+
+[data-theme-version="dark"] .table-responsive111::-webkit-scrollbar-track {
+  background: var(--bs-gray); /* color of the tracking area */
+  border-radius: 20px;
+}
+.table-responsive111::-webkit-scrollbar-thumb {
+  background-color: var(--primary); /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 2px solid var(--secondary); /* creates padding around scroll thumb */
+}
