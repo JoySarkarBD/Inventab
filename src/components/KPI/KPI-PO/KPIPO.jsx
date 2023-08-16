@@ -52,6 +52,7 @@ export default function KPIPO() {
     }
   }, [loading, kipPo, kipPo?.length]);
 
+  console.log(kipPo);
   // columns for table
   const columns = [
     {

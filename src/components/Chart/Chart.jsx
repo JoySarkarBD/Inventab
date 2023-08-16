@@ -1,9 +1,8 @@
 import {
   Bar,
+  BarChart,
   CartesianGrid,
-  Cell,
-  ComposedChart,
-  Line,
+  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -61,46 +60,24 @@ const RevenueChart = () => {
       <h2 className='text-center mb-4'>Revenue Chart 2023-2024</h2>
 
       <ResponsiveContainer width='100%' height={400}>
-        <ComposedChart
+        <BarChart
+          width={500}
+          height={300}
           data={data}
           margin={{
-            top: 5,
+            top: 20,
             right: 30,
             left: 20,
             bottom: 5,
           }}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='name' />
-          <YAxis yAxisId='left' />
-          <YAxis yAxisId='right' orientation='right' />
+          <YAxis />
           <Tooltip />
-
-          <Bar dataKey='uv' fill='#8884d8' yAxisId='left'>
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={"#2e75b5"} />
-            ))}
-          </Bar>
-          <Bar dataKey='pv' fill='#f6b26b' yAxisId='left'>
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={"#f6b26b"} />
-            ))}
-          </Bar>
-
-          <Line
-            type='monotone'
-            dataKey='uv'
-            stroke='#809499'
-            strokeWidth={3}
-            yAxisId='right'
-          />
-          <Line
-            type='monotone'
-            dataKey='pv'
-            stroke='#ffd966'
-            strokeWidth={3}
-            yAxisId='right'
-          />
-        </ComposedChart>
+          <Legend />
+          <Bar dataKey='pv' stackId='a' fill='#8884d8' />
+          <Bar dataKey='uv' stackId='a' fill='#82ca9d' />
+        </BarChart>
       </ResponsiveContainer>
     </>
   );
