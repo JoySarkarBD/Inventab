@@ -8,6 +8,7 @@ import SectionTitle from "../../../components/Shared/SectionTitle";
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
+import { inWords } from "../../../utils/utilityFunc/utilityFunc";
 import "./sales.css";
 
 const SalesInvoiceDetails = () => {
@@ -317,11 +318,10 @@ const SalesInvoiceDetails = () => {
                               <td
                                 onClick={() => setSerializedNo(part.id)}
                                 className='text-primary link_txt'
-                                type='button'
                                 data-bs-toggle='modal'
-                                data-bs-target='#exampleModal'>
+                                data-bs-target='#exampleModal'
+                                style={{ cursor: "pointer" }}>
                                 {part?.short_description}
-                                <br />
                               </td>
                               <td>{part?.price}</td>
                               <td>{part?.quantity}</td>
@@ -390,6 +390,18 @@ const SalesInvoiceDetails = () => {
                             </tr>
                           </>
                         )}
+                        <tr>
+                          {isSameAddress.grossTotal &&
+                          !isDiffAddress?.grossTotal ? (
+                            <td colSpan='4'>{`In Words: ${inWords(
+                              parseInt(isSameAddress.grossTotal)
+                            )}`}</td>
+                          ) : (
+                            <td colSpan='4'>{`In Words: ${inWords(
+                              parseInt(isDiffAddress.grossTotal)
+                            )}`}</td>
+                          )}
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -415,7 +427,7 @@ const SalesInvoiceDetails = () => {
                     aria-label='Close'></button>
                 </div>
                 <div className='table-responsive'>
-                  <table className='table table-bordered'>
+                  <table className='table table-bordered text-center'>
                     <thead style={{ background: "#343A40" }}>
                       <tr>
                         <th className='text-light ps-4 fs-5'>No</th>
