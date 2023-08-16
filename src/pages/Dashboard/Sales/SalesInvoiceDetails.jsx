@@ -72,33 +72,41 @@ const SalesInvoiceDetails = () => {
       invoiceDetails?.shipping_address?.id
     ) {
       invoiceDetails?.parts_invoice.forEach((part) => {
-        let res = part?.price * part?.quantity * (15 / 100);
+        let gstPercent = part?.parts_no?.gst_itm?.country_gst[0]?.gst_percent;
+        let res =
+          part?.price *
+          part?.quantity *
+          (parseFloat(gstPercent).toFixed(2) / 100);
         arr.push(res);
       });
 
       for (let i of arr) {
         result += i;
       }
+
+      let shippingCharge = invoiceDetails?.shipment_charges;
       setIsSameAddress({
         CGST: parseFloat(result / 2).toFixed(2),
         SGST: parseFloat(result / 2).toFixed(2),
         IGST: 0,
-        shipping: parseFloat(100).toFixed(2),
+        shipping: parseFloat(shippingCharge).toFixed(2),
         grossTotal: parseFloat(result + 100).toFixed(2),
       });
     } else {
       invoiceDetails?.parts_invoice.forEach((part) => {
-        let res = part?.price * part?.quantity * (15 / 100);
+        let gstPercent = part?.parts_no?.gst_itm?.country_gst[0]?.gst_percent;
+        let res = part?.price * part?.quantity * (gstPercent / 100);
         arr.push(res);
       });
 
       for (let i of arr) {
         result += i;
       }
+      let shippingCharge = invoiceDetails?.shipment_charges;
 
       setIsDiffAddress({
         IGST: parseFloat(result).toFixed(2),
-        shipping: parseFloat(100).toFixed(2),
+        shipping: parseFloat(shippingCharge).toFixed(2),
         grossTotal: parseFloat(result + 100).toFixed(2),
       });
     }
@@ -170,6 +178,14 @@ const SalesInvoiceDetails = () => {
                           {invoiceDetails?.billing_address?.pincode?.pin_code}
                         </span>
                       </p>
+
+                      <p className='text-dark fs-4 my-2'>
+                        GST:
+                        <span className='fs-5'>
+                          {" "}
+                          {invoiceDetails?.billing_address?.gst_no}
+                        </span>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -214,7 +230,7 @@ const SalesInvoiceDetails = () => {
                       GST:
                       <span className='fs-5'>
                         {" "}
-                        {invoiceDetails?.shipping_address?.gst_no}
+                        {invoiceDetails?.shipping_address?.gst_no || `N/A`}
                       </span>
                     </p>
                   </div>

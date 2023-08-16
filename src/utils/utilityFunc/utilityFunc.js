@@ -88,7 +88,6 @@ utils.formatDateToIndianVersion = (date) => {
 };
 
 utils.inWords = (num) => {
-  console.log(num);
   let a = [
     "",
     "One ",

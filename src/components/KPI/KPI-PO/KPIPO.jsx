@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import { useAuth } from "../../../hooks/useAuth";
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { useChart } from "../../../hooks/useChart";
 import Loader from "../../../ui/Loader";
 import {
   kpiEachTotal,
@@ -10,9 +11,12 @@ import {
 } from "../../../utils/utilityFunc/utilityFunc";
 
 export default function KPIPO() {
-  const axios = useAxiosPrivate();
+  const { setKpiPoChart } = useChart();
+
   const { auth } = useAuth();
   const { orgId } = auth;
+
+  const axios = useAxiosPrivate();
   const [kipPo, setKpiPo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
@@ -50,9 +54,9 @@ export default function KPIPO() {
       });
       setTotal(allTotal);
     }
-  }, [loading, kipPo, kipPo?.length]);
+    setKpiPoChart(kipPo);
+  }, [loading, kipPo, kipPo?.length, setKpiPoChart]);
 
-  console.log(kipPo);
   // columns for table
   const columns = [
     {
