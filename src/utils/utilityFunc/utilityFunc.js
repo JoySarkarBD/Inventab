@@ -154,6 +154,30 @@ utils.inWords = (num) => {
   return str;
 };
 
+utils.calculateGST = (invoiceDetails) => {
+  let result = 0;
+  let arr = [];
+  invoiceDetails?.parts_invoice.forEach((part) => {
+    // get specific country
+    let gstPercent = part?.parts_no?.gst_itm?.country_gst.find(
+      (gst) =>
+        gst?.country_code?.id === invoiceDetails?.billing_address?.country?.id
+    );
+
+    let res =
+      part?.price *
+      part?.quantity *
+      (parseFloat(gstPercent?.gst_percent) / 100);
+    arr.push(res);
+  });
+
+  for (let i of arr) {
+    result += i;
+  }
+
+  return result;
+};
+
 export const {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -163,4 +187,5 @@ export const {
   getMonthName,
   formatDateToIndianVersion,
   inWords,
+  calculateGST,
 } = utils;

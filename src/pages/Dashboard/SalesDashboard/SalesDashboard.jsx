@@ -32,6 +32,7 @@ const SalesDashboard = () => {
         <div className='col-12 my-4'>
           <div className='card'>
             <div className='card-body'>
+              <RevenueChart />
               <KPIPO />
             </div>
           </div>

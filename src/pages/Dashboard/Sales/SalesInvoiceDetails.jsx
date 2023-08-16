@@ -8,7 +8,7 @@ import SectionTitle from "../../../components/Shared/SectionTitle";
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
-import { inWords } from "../../../utils/utilityFunc/utilityFunc";
+import { calculateGST, inWords } from "../../../utils/utilityFunc/utilityFunc";
 import "./sales.css";
 
 const SalesInvoiceDetails = () => {
@@ -64,27 +64,17 @@ const SalesInvoiceDetails = () => {
 
   // check shipping or billign address same or not
   useEffect(() => {
-    let result = 0;
-    let arr = [];
-
     if (
       invoiceDetails?.billing_address?.id ===
       invoiceDetails?.shipping_address?.id
     ) {
-      invoiceDetails?.parts_invoice.forEach((part) => {
-        let gstPercent = part?.parts_no?.gst_itm?.country_gst[0]?.gst_percent;
-        let res =
-          part?.price *
-          part?.quantity *
-          (parseFloat(gstPercent).toFixed(2) / 100);
-        arr.push(res);
-      });
+      // calculate gst
+      let result = calculateGST(invoiceDetails);
 
-      for (let i of arr) {
-        result += i;
-      }
-
+      // shipping charge
       let shippingCharge = invoiceDetails?.shipment_charges;
+
+      //set data for same address ['CGST', "SGST"]
       setIsSameAddress({
         CGST: parseFloat(result / 2).toFixed(2),
         SGST: parseFloat(result / 2).toFixed(2),
@@ -93,17 +83,12 @@ const SalesInvoiceDetails = () => {
         grossTotal: parseFloat(result + 100).toFixed(2),
       });
     } else {
-      invoiceDetails?.parts_invoice.forEach((part) => {
-        let gstPercent = part?.parts_no?.gst_itm?.country_gst[0]?.gst_percent;
-        let res = part?.price * part?.quantity * (gstPercent / 100);
-        arr.push(res);
-      });
-
-      for (let i of arr) {
-        result += i;
-      }
+      // calculate gst
+      let result = calculateGST(invoiceDetails);
+      // shipping charge
       let shippingCharge = invoiceDetails?.shipment_charges;
 
+      //set data for diff address ['IGST']
       setIsDiffAddress({
         IGST: parseFloat(result).toFixed(2),
         shipping: parseFloat(shippingCharge).toFixed(2),
@@ -353,32 +338,27 @@ const SalesInvoiceDetails = () => {
                           <>
                             {" "}
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
                               <td>CGST</td>
                               <td>{isSameAddress?.CGST}</td>
                             </tr>
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
                               <td>SGST</td>
                               <td>{isSameAddress?.SGST}</td>
                             </tr>
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
                               <td>IGST</td>
                               <td>{isSameAddress?.IGST}</td>
                             </tr>
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
                               <td>Shipment Charge</td>
                               <td>{isSameAddress?.shipping}</td>
                             </tr>
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
                               <td>Gross Total</td>
                               <td>{isSameAddress?.grossTotal}</td>
                             </tr>
@@ -387,20 +367,19 @@ const SalesInvoiceDetails = () => {
                           <>
                             {" "}
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
+
                               <td>IGST</td>
                               <td>{isDiffAddress?.IGST}</td>
                             </tr>
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
+
                               <td>Shipment Charge</td>
                               <td>{isDiffAddress?.shipping}</td>
                             </tr>
                             <tr>
-                              <td></td>
-                              <td></td>
+                              <td colSpan='2'></td>
                               <td>Gross Total</td>
                               <td>{isDiffAddress?.grossTotal}</td>
                             </tr>
