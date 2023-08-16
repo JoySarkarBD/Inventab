@@ -12,6 +12,7 @@ import "./sales.css";
 
 const SalesInvoiceDetails = () => {
   const [serializedNo, setSerializedNo] = useState("");
+  // same address
   const [isSameAddress, setIsSameAddress] = useState({
     CGST: 0,
     SGST: 0,
@@ -20,11 +21,13 @@ const SalesInvoiceDetails = () => {
     grossTotal: 0,
   });
 
+  //diff address
   const [isDiffAddress, setIsDiffAddress] = useState({
     IGST: 0,
     shipping: 0,
     grossTotal: 0,
   });
+
   const { invoice_id } = useParams();
   const axios = useAxiosPrivate();
 
@@ -330,7 +333,7 @@ const SalesInvoiceDetails = () => {
                             </tr>
                           );
                         })}
-                        {isSameAddress?.CGST ? (
+                        {isSameAddress?.CGST && !isDiffAddress.IGST ? (
                           <>
                             {" "}
                             <tr>
