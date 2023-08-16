@@ -26345,6 +26345,10 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme-version="dark"] .authentication {
   background: #212130 !important;
 }
+[data-theme-version="dark"] .link_txt {
+  color:#00a2ff !important;
+  cursor: pointer;
+}
 
 [data-theme-version="dark"] .sc-ivTnkv{
   background-color: #212130 !important;
