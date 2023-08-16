@@ -12,6 +12,19 @@ import "./sales.css";
 
 const SalesInvoiceDetails = () => {
   const [serializedNo, setSerializedNo] = useState("");
+  const [isSameAddress, setIsSameAddress] = useState({
+    CGST: 0,
+    SGST: 0,
+    IGST: 0,
+    shipping: 0,
+    grossTotal: 0,
+  });
+
+  const [isDiffAddress, setIsDiffAddress] = useState({
+    IGST: 0,
+    shipping: 0,
+    grossTotal: 0,
+  });
   const { invoice_id } = useParams();
   const axios = useAxiosPrivate();
 
@@ -44,6 +57,48 @@ const SalesInvoiceDetails = () => {
       (isMount = false), controller.abort();
     };
   }, [invoice_id, axios]);
+
+  // check shipping or billign address same or not
+  useEffect(() => {
+    let result = 0;
+    let arr = [];
+
+    if (
+      invoiceDetails?.billing_address?.id ===
+      invoiceDetails?.shipping_address?.id
+    ) {
+      invoiceDetails?.parts_invoice.forEach((part) => {
+        let res = part?.price * part?.quantity * (15 / 100);
+        arr.push(res);
+      });
+
+      for (let i of arr) {
+        result += i;
+      }
+      setIsSameAddress({
+        CGST: parseFloat(result / 2).toFixed(2),
+        SGST: parseFloat(result / 2).toFixed(2),
+        IGST: 0,
+        shipping: parseFloat(100).toFixed(2),
+        grossTotal: parseFloat(result + 100).toFixed(2),
+      });
+    } else {
+      invoiceDetails?.parts_invoice.forEach((part) => {
+        let res = part?.price * part?.quantity * (15 / 100);
+        arr.push(res);
+      });
+
+      for (let i of arr) {
+        result += i;
+      }
+
+      setIsDiffAddress({
+        IGST: parseFloat(result).toFixed(2),
+        shipping: parseFloat(100).toFixed(2),
+        grossTotal: parseFloat(result + 100).toFixed(2),
+      });
+    }
+  }, [invoiceDetails]);
 
   return (
     <>
@@ -265,42 +320,73 @@ const SalesInvoiceDetails = () => {
                                 {part?.short_description}
                                 <br />
                               </td>
-                              <td>{part?.parts_no?.mrp}</td>
+                              <td>{part?.price}</td>
                               <td>{part?.quantity}</td>
-                              <td>{part?.parts_no?.mrp * part?.quantity}</td>
+                              <td>
+                                {parseFloat(
+                                  part?.price * part?.quantity
+                                ).toFixed(2)}
+                              </td>
                             </tr>
                           );
                         })}
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td>CGST</td>
-                          <td>20</td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td>SGST</td>
-                          <td>20</td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td>IGST</td>
-                          <td>0</td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td>Shipment Charge</td>
-                          <td>100</td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td>Gross Total</td>
-                          <td>120</td>
-                        </tr>
+                        {isSameAddress?.CGST ? (
+                          <>
+                            {" "}
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>CGST</td>
+                              <td>{isSameAddress?.CGST}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>SGST</td>
+                              <td>{isSameAddress?.SGST}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>IGST</td>
+                              <td>{isSameAddress?.IGST}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>Shipment Charge</td>
+                              <td>{isSameAddress?.shipping}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>Gross Total</td>
+                              <td>{isSameAddress?.grossTotal}</td>
+                            </tr>
+                          </>
+                        ) : (
+                          <>
+                            {" "}
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>IGST</td>
+                              <td>{isDiffAddress?.IGST}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>Shipment Charge</td>
+                              <td>{isDiffAddress?.shipping}</td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>Gross Total</td>
+                              <td>{isDiffAddress?.grossTotal}</td>
+                            </tr>
+                          </>
+                        )}
                       </tbody>
                     </table>
                   </div>
