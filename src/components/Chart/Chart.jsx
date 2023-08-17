@@ -11,40 +11,28 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { getColorForDepartment } from "../../utils/utilityFunc/utilityFunc";
 
 const RevenueChart = ({ chartData }) => {
-  const { data, formattedDataWithTotal } = chartData;
-
-  // Generate a random color code
-  const generateRandomColorCode = () => {
-    const letters = "0123456789ABCDEF";
-    let colorCode = "#";
-
-    for (let i = 0; i < 6; i++) {
-      colorCode += letters[Math.floor(Math.random() * 16)];
-    }
-
-    return colorCode;
-  };
   return (
     <ResponsiveContainer width='100%' height={400}>
       <ComposedChart
         width={800}
         height={400}
-        data={formattedDataWithTotal}
+        data={chartData?.formattedDataWithTotal}
         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis dataKey='month' />
         <YAxis />
         <Tooltip />
         <Legend />
-        {data?.map((department, index) => {
+        {chartData?.data?.map((department, index) => {
           return (
             <Bar
               key={index}
               dataKey={department?.department}
               stackId='a'
-              fill={generateRandomColorCode()}
+              fill={getColorForDepartment(index)}
             />
           );
         })}

@@ -5,9 +5,11 @@ import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
+  formatChartData,
   getMonthName,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import RevenueChart from "../../Chart/Chart";
 
 export default function MetricInvoice() {
   const axios = useAxiosPrivate();
@@ -16,6 +18,7 @@ export default function MetricInvoice() {
   const [actualInvoices, setactualInvoices] = useState([]);
   const [loading, setloading] = useState();
   const [invoices, setInvoices] = useState([]);
+  const [actualInvoiceChart, setActualInvoiceChart] = useState({});
 
   // load actual invoices
   useEffect(() => {
@@ -72,10 +75,21 @@ export default function MetricInvoice() {
 
       let res = result.filter((res) => res?.department !== undefined);
       setInvoices(res);
+
+      // @desc foramt chart data
+      const formatObj = formatChartData(res);
+
+      if (
+        formatObj?.data?.length > 0 &&
+        formatObj?.formattedDataWithTotal?.length > 0
+      ) {
+        setActualInvoiceChart(formatObj);
+      }
     }
   }, [loading, actualInvoices, actualInvoices?.length]);
 
   //
+  // console.log(actualInvoiceChart);
   const columns = [
     {
       name: "Department",
@@ -160,34 +174,37 @@ export default function MetricInvoice() {
       {loading ? (
         <Loader />
       ) : (
-        <DataTable
-          noContextMenu
-          title={<h2 className='text-start'>Actual-Invoice</h2>}
-          columns={columns}
-          data={invoices}
-          pagination
-          customStyles={{
-            rows: {
-              style: {
-                fontSize: "16px",
+        <>
+          <RevenueChart chartData={actualInvoiceChart} />
+          <DataTable
+            noContextMenu
+            title={<h2 className='text-start'>Actual-Invoice</h2>}
+            columns={columns}
+            data={invoices}
+            pagination
+            customStyles={{
+              rows: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-            headCells: {
-              style: {
-                fontSize: "19px",
-                width: "170px",
+              headCells: {
+                style: {
+                  fontSize: "19px",
+                  width: "170px",
+                },
               },
-            },
-          }}
-          // total KPI Invoice amount
-          actions={
-            <>
-              <h3 className='bg-primary text-white rounded-0 p-3'>
-                Total: {numDifferentiation(allTotal)}
-              </h3>
-            </>
-          }
-        />
+            }}
+            // total KPI Invoice amount
+            actions={
+              <>
+                <h3 className='bg-primary text-white rounded-0 p-3'>
+                  Total: {numDifferentiation(allTotal)}
+                </h3>
+              </>
+            }
+          />
+        </>
       )}
     </>
   );

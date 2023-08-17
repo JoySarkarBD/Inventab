@@ -235,6 +235,13 @@ utils.formatChartData = (kipPo) => {
   return { data, formattedDataWithTotal };
 };
 
+utils.getColorForDepartment = (index) => {
+  const predefinedColors = ["#1e3799", "#3c6382", "#38ada9"];
+  if (index < predefinedColors.length) {
+    return predefinedColors[index];
+  }
+};
+
 export const {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -246,4 +253,5 @@ export const {
   inWords,
   calculateGST,
   formatChartData,
+  getColorForDepartment,
 } = utils;

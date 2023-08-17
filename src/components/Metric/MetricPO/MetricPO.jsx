@@ -5,9 +5,11 @@ import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
+  formatChartData,
   getMonthName,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import RevenueChart from "../../Chart/Chart";
 
 export default function MetricPO() {
   const axios = useAxiosPrivate();
@@ -16,6 +18,7 @@ export default function MetricPO() {
   const [loading, setLoading] = useState(false);
   const [salesOrders, setSalesOrders] = useState([]);
   let [salesdata, setSalesData] = useState([]);
+  const [actualPoChart, setActualPoChart] = useState();
 
   let allTotal = 0;
 
@@ -75,6 +78,15 @@ export default function MetricPO() {
 
       let res = result.filter((res) => res.department !== undefined);
       setSalesData(res);
+
+      //@desc [chart data]
+      const formatObj = formatChartData(res);
+      if (
+        formatObj?.data?.length > 0 &&
+        formatObj?.formattedDataWithTotal?.length > 0
+      ) {
+        setActualPoChart(formatObj);
+      }
     }
   }, [salesOrders?.length, salesOrders, loading]);
 
@@ -156,7 +168,7 @@ export default function MetricPO() {
         <Loader />
       ) : (
         <>
-          {/* <RevenueChart data={salesdata} /> */}
+          <RevenueChart chartData={actualPoChart} />
           <DataTable
             noContextMenu
             title={<h2 className='text-start'>Actual-PO</h2>}
