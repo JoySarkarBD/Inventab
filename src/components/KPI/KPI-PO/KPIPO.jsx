@@ -9,6 +9,7 @@ import {
   kpiEachTotal,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import StackedBarChartExample from "../../Chart/Chart";
 
 export default function KPIPO() {
   const { setKpiPoChart } = useChart();
@@ -136,39 +137,42 @@ export default function KPIPO() {
       {loading ? (
         <Loader />
       ) : (
-        <DataTable
-          title={<h2 className='text-start'>KPI PO</h2>}
-          data={kipPo}
-          columns={columns}
-          customStyles={{
-            rows: {
-              style: {
-                fontSize: "16px",
+        <>
+          <StackedBarChartExample data={kipPo} />
+          <DataTable
+            title={<h2 className='text-start'>KPI PO</h2>}
+            data={kipPo}
+            columns={columns}
+            customStyles={{
+              rows: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-            headCells: {
-              style: {
-                fontSize: "19px",
-                width: "170px",
+              headCells: {
+                style: {
+                  fontSize: "19px",
+                  width: "170px",
+                },
               },
-            },
-          }}
-          noContextMenu
-          fixedHeader
-          fixedHeaderScrollHeight='550px'
-          pagination
-          striped
-          highlightOnHover
-          subHeader
-          // total KPI PO amount
-          actions={
-            <>
-              <h3 className='bg-primary text-white rounded-0 p-3'>
-                Total: {numDifferentiation(total)}
-              </h3>
-            </>
-          }
-        />
+            }}
+            noContextMenu
+            fixedHeader
+            fixedHeaderScrollHeight='550px'
+            pagination
+            striped
+            highlightOnHover
+            subHeader
+            // total KPI PO amount
+            actions={
+              <>
+                <h3 className='bg-primary text-white rounded-0 p-3'>
+                  Total: {numDifferentiation(total)}
+                </h3>
+              </>
+            }
+          />
+        </>
       )}
     </>
   );

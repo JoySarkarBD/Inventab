@@ -1,4 +1,3 @@
-import RevenueChart from "../../../components/Chart/Chart";
 import KPIInvoice from "../../../components/KPI/KPI-Invoice/KPIInvoice";
 import KPIPO from "../../../components/KPI/KPI-PO/KPIPO";
 import MetricInvoice from "../../../components/Metric/MetricInvoice/MetricInvoice";
@@ -19,20 +18,10 @@ const SalesDashboard = () => {
           <SalesKPI />
         </div>
 
-        {/* Chart section */}
-        <div className='col-12 my-4'>
-          <div className='card'>
-            <div className='card-body'>
-              <RevenueChart />
-            </div>
-          </div>
-        </div>
-
         {/* KPI PO section */}
         <div className='col-12 my-4'>
           <div className='card'>
             <div className='card-body'>
-              <RevenueChart />
               <KPIPO />
             </div>
           </div>
