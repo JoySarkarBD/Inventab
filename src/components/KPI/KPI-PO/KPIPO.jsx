@@ -9,7 +9,7 @@ import {
   kpiEachTotal,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
-import StackedBarChartExample from "../../Chart/Chart";
+import RevenueChart from "../../Chart/Chart";
 
 export default function KPIPO() {
   const { setKpiPoChart } = useChart();
@@ -138,7 +138,8 @@ export default function KPIPO() {
         <Loader />
       ) : (
         <>
-          <StackedBarChartExample data={kipPo} />
+          {/* <StackedBarChartExample data={kipPo} /> */}
+          <RevenueChart data={kipPo} />
           <DataTable
             title={<h2 className='text-start'>KPI PO</h2>}
             data={kipPo}

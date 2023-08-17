@@ -1,9 +1,10 @@
 import React from "react";
 import {
   Bar,
-  BarChart,
   CartesianGrid,
+  ComposedChart,
   Legend,
+  Line,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -26,14 +27,6 @@ const StackedBarChartExample = ({ data }) => {
     "mar",
   ];
 
-  const formattedData = months.map((month) => {
-    const entry = { month };
-    data?.forEach((department) => {
-      entry[department.department] = department[month];
-    });
-    return entry;
-  });
-
   // Generate a random color code
   const generateRandomColor = () => {
     const letters = "0123456789ABCDEF";
@@ -44,27 +37,56 @@ const StackedBarChartExample = ({ data }) => {
     return color;
   };
 
+  const calculateTotal = (data, month) => {
+    let total = 0;
+    data?.forEach((department) => {
+      if (department[month] !== null) {
+        total += department[month];
+      }
+    });
+    return total;
+  };
+
+  const formattedDataWithTotal = months.map((month) => {
+    const entry = { month };
+    data?.forEach((department) => {
+      entry[department.department] = department[month];
+    });
+    entry.total = calculateTotal(data, month); // Add the total for the month
+    return entry;
+  });
+
+  console.log(formattedDataWithTotal);
+
   return (
     <ResponsiveContainer width='100%' height={400}>
-      <BarChart
+      <ComposedChart
         width={800}
         height={400}
-        data={formattedData}
+        data={formattedDataWithTotal}
         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis dataKey='month' />
         <YAxis />
         <Tooltip />
         <Legend />
-        {data.map((department, index) => (
-          <Bar
-            key={index}
-            dataKey={department.department}
-            stackId='a'
-            fill={generateRandomColor()}
-          />
+        {data?.map((department, index) => (
+          <>
+            <Bar
+              key={index}
+              dataKey={department.department}
+              stackId='a'
+              fill={generateRandomColor()}
+            />
+          </>
         ))}
-      </BarChart>
+        <Line
+          type='monotone'
+          dataKey='total'
+          stroke='#8884d8'
+          strokeWidth={2}
+        />
+      </ComposedChart>
     </ResponsiveContainer>
   );
 };
