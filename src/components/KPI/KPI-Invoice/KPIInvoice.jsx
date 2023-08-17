@@ -143,9 +143,9 @@ export default function KPIInvoice() {
         <Loader />
       ) : (
         <>
+          <h1 className='text-center'>KPI Invoice</h1>
           <RevenueChart chartData={kpiInvoiceChart} />
           <DataTable
-            title={<h2 className='text-start'>KPI Invoice</h2>}
             data={kipInvoice}
             columns={columns}
             customStyles={{

@@ -175,6 +175,7 @@ export default function MetricInvoice() {
         <Loader />
       ) : (
         <>
+          <h1 className='text-center'>Actual-Invoice</h1>
           <RevenueChart chartData={actualInvoiceChart} />
           <DataTable
             noContextMenu

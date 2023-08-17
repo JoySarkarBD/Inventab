@@ -168,10 +168,10 @@ export default function MetricPO() {
         <Loader />
       ) : (
         <>
+          <h1 className='text-center'>Actual-PO</h1>
           <RevenueChart chartData={actualPoChart} />
           <DataTable
             noContextMenu
-            title={<h2 className='text-start'>Actual-PO</h2>}
             columns={columns}
             data={salesdata}
             pagination
