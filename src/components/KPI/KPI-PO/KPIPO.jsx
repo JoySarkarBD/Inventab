@@ -138,10 +138,9 @@ export default function KPIPO() {
         <Loader />
       ) : (
         <>
-          {/* <StackedBarChartExample data={kipPo} /> */}
+          <h1 className='text-center'>KPI PO</h1>
           <RevenueChart data={kipPo} />
           <DataTable
-            title={<h2 className='text-start'>KPI PO</h2>}
             data={kipPo}
             columns={columns}
             customStyles={{
