@@ -3,17 +3,15 @@ import DataTable from "react-data-table-component";
 import { useAuth } from "../../../hooks/useAuth";
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { useChart } from "../../../hooks/useChart";
 import Loader from "../../../ui/Loader";
 import {
+  formatChartData,
   kpiEachTotal,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
 import RevenueChart from "../../Chart/Chart";
 
 export default function KPIPO() {
-  const { setKpiPoChart } = useChart();
-
   const { auth } = useAuth();
   const { orgId } = auth;
 
@@ -21,6 +19,7 @@ export default function KPIPO() {
   const [kipPo, setKpiPo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
+  const [kpiPoChart, setKpiPoChart] = useState({});
 
   // load leads
   useEffect(() => {
@@ -55,8 +54,16 @@ export default function KPIPO() {
       });
       setTotal(allTotal);
     }
-    setKpiPoChart(kipPo);
-  }, [loading, kipPo, kipPo?.length, setKpiPoChart]);
+
+    const formatObj = formatChartData(kipPo);
+
+    if (
+      formatObj?.data?.length > 0 &&
+      formatObj?.formattedDataWithTotal?.length > 0
+    ) {
+      setKpiPoChart(formatObj);
+    }
+  }, [loading, kipPo, kipPo?.length]);
 
   // columns for table
   const columns = [
@@ -139,7 +146,7 @@ export default function KPIPO() {
       ) : (
         <>
           <h1 className='text-center'>KPI PO</h1>
-          <RevenueChart data={kipPo} />
+          <RevenueChart chartData={kpiPoChart} />
           <DataTable
             data={kipPo}
             columns={columns}

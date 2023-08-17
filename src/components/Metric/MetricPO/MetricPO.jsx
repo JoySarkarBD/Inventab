@@ -8,7 +8,6 @@ import {
   getMonthName,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
-import RevenueChart from "../../Chart/Chart";
 
 export default function MetricPO() {
   const axios = useAxiosPrivate();
@@ -157,7 +156,7 @@ export default function MetricPO() {
         <Loader />
       ) : (
         <>
-          <RevenueChart data={salesdata} />
+          {/* <RevenueChart data={salesdata} /> */}
           <DataTable
             noContextMenu
             title={<h2 className='text-start'>Actual-PO</h2>}

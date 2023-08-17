@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+
 import {
   Bar,
   CartesianGrid,
@@ -11,21 +12,8 @@ import {
   YAxis,
 } from "recharts";
 
-const StackedBarChartExample = ({ data }) => {
-  const months = [
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
-    "jan",
-    "feb",
-    "mar",
-  ];
+const RevenueChart = ({ chartData }) => {
+  const { data, formattedDataWithTotal } = chartData;
 
   // Generate a random color code
   const generateRandomColor = () => {
@@ -33,27 +21,6 @@ const StackedBarChartExample = ({ data }) => {
     const randomIndex = Math.floor(Math.random() * colorOptions.length);
     return colorOptions[randomIndex];
   };
-
-  const calculateTotal = (data, month) => {
-    let total = 0;
-    data?.forEach((department) => {
-      if (department[month] !== null) {
-        total += department[month];
-      }
-    });
-    return total;
-  };
-
-  const formattedDataWithTotal = months.map((month) => {
-    const entry = { month };
-    data?.forEach((department) => {
-      entry[department.department] = department[month];
-    });
-    entry.total = calculateTotal(data, month) || 0; // Add the total for the month
-    return entry;
-  });
-
-  console.log(formattedDataWithTotal);
 
   return (
     <ResponsiveContainer width='100%' height={400}>
@@ -67,16 +34,16 @@ const StackedBarChartExample = ({ data }) => {
         <YAxis />
         <Tooltip />
         <Legend />
-        {data?.map((department, index) => (
-          <>
+        {data?.map((department, index) => {
+          return (
             <Bar
               key={index}
               dataKey={department?.department}
               stackId='a'
               fill={generateRandomColor()}
             />
-          </>
-        ))}
+          );
+        })}
         <Line
           type='monotone'
           dataKey='total'
@@ -88,4 +55,4 @@ const StackedBarChartExample = ({ data }) => {
   );
 };
 
-export default StackedBarChartExample;
+export default RevenueChart;

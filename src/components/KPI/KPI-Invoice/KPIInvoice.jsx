@@ -9,8 +9,6 @@ import {
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
 
-import RevenueChart from "../../Chart/Chart";
-
 export default function KPIInvoice() {
   const axios = useAxiosPrivate();
   const { auth } = useAuth();
@@ -134,7 +132,7 @@ export default function KPIInvoice() {
         <Loader />
       ) : (
         <>
-          <RevenueChart data={kipInvoice} />
+          {/* <RevenueChart data={kipInvoice} /> */}
           <DataTable
             title={<h2 className='text-start'>KPI Invoice</h2>}
             data={kipInvoice}

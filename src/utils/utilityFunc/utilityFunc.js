@@ -178,6 +178,63 @@ utils.calculateGST = (invoiceDetails) => {
   return result;
 };
 
+utils.formatChartData = (kipPo) => {
+  let data = kipPo.map((item) => {
+    return {
+      department: item.department,
+      jan: item.jan || 0,
+      feb: item.feb || 0,
+      mar: item.mar || 0,
+      apr: item.apr || 0,
+      may: item.may || 0,
+      jun: item.jun || 0,
+      jul: item.jul || 0,
+      aug: item.aug || 0,
+      sep: item.sep || 0,
+      oct: item.oct || 0,
+      nov: item.nov || 0,
+      dec: item.dec || 0,
+      total: item.total,
+    };
+  });
+
+  const months = [
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+    "jan",
+    "feb",
+    "mar",
+  ];
+
+  const calculateTotal = (data, month) => {
+    let total = 0;
+    data?.forEach((department) => {
+      if (department[month] !== null) {
+        total += department[month] || 0;
+      }
+    });
+    return total;
+  };
+
+  const formattedDataWithTotal = months.map((month) => {
+    const entry = { month };
+    data?.forEach((department) => {
+      entry[department.department] = department[month];
+    });
+    entry.total = calculateTotal(data, month); // Add the total for the month
+    return entry;
+  });
+
+  return { data, formattedDataWithTotal };
+};
+
 export const {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -188,4 +245,5 @@ export const {
   formatDateToIndianVersion,
   inWords,
   calculateGST,
+  formatChartData,
 } = utils;
