@@ -9,6 +9,8 @@ import {
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
 
+import RevenueChart from "../../Chart/Chart";
+
 export default function KPIInvoice() {
   const axios = useAxiosPrivate();
   const { auth } = useAuth();
@@ -131,39 +133,42 @@ export default function KPIInvoice() {
       {loading ? (
         <Loader />
       ) : (
-        <DataTable
-          title={<h2 className='text-start'>KPI Invoice</h2>}
-          data={kipInvoice}
-          columns={columns}
-          customStyles={{
-            rows: {
-              style: {
-                fontSize: "16px",
+        <>
+          <RevenueChart data={kipInvoice} />
+          <DataTable
+            title={<h2 className='text-start'>KPI Invoice</h2>}
+            data={kipInvoice}
+            columns={columns}
+            customStyles={{
+              rows: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-            headCells: {
-              style: {
-                fontSize: "19px",
-                width: "170px",
+              headCells: {
+                style: {
+                  fontSize: "19px",
+                  width: "170px",
+                },
               },
-            },
-          }}
-          noContextMenu
-          fixedHeader
-          fixedHeaderScrollHeight='550px'
-          pagination
-          striped
-          highlightOnHover
-          subHeader
-          // total KPI Invoice amount
-          actions={
-            <>
-              <h3 className='bg-primary text-white rounded-0 p-3'>
-                Total:{numDifferentiation(total)}
-              </h3>
-            </>
-          }
-        />
+            }}
+            noContextMenu
+            fixedHeader
+            fixedHeaderScrollHeight='550px'
+            pagination
+            striped
+            highlightOnHover
+            subHeader
+            // total KPI Invoice amount
+            actions={
+              <>
+                <h3 className='bg-primary text-white rounded-0 p-3'>
+                  Total:{numDifferentiation(total)}
+                </h3>
+              </>
+            }
+          />
+        </>
       )}
     </>
   );

@@ -8,6 +8,7 @@ import {
   getMonthName,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import RevenueChart from "../../Chart/Chart";
 
 export default function MetricPO() {
   const axios = useAxiosPrivate();
@@ -155,34 +156,37 @@ export default function MetricPO() {
       {loading ? (
         <Loader />
       ) : (
-        <DataTable
-          noContextMenu
-          title={<h2 className='text-start'>Actual-PO</h2>}
-          columns={columns}
-          data={salesdata}
-          pagination
-          customStyles={{
-            rows: {
-              style: {
-                fontSize: "16px",
+        <>
+          <RevenueChart data={salesdata} />
+          <DataTable
+            noContextMenu
+            title={<h2 className='text-start'>Actual-PO</h2>}
+            columns={columns}
+            data={salesdata}
+            pagination
+            customStyles={{
+              rows: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-            headCells: {
-              style: {
-                fontSize: "19px",
-                width: "170px",
+              headCells: {
+                style: {
+                  fontSize: "19px",
+                  width: "170px",
+                },
               },
-            },
-          }}
-          // total KPI Invoice amount
-          actions={
-            <>
-              <h3 className='bg-primary text-white rounded-0 p-3'>
-                Total: {numDifferentiation(allTotal)}
-              </h3>
-            </>
-          }
-        />
+            }}
+            // total KPI Invoice amount
+            actions={
+              <>
+                <h3 className='bg-primary text-white rounded-0 p-3'>
+                  Total: {numDifferentiation(allTotal)}
+                </h3>
+              </>
+            }
+          />
+        </>
       )}
     </>
   );

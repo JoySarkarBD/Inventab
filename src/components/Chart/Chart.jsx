@@ -49,9 +49,11 @@ const StackedBarChartExample = ({ data }) => {
     data?.forEach((department) => {
       entry[department.department] = department[month];
     });
-    entry.total = calculateTotal(data, month); // Add the total for the month
+    entry.total = calculateTotal(data, month) || 0; // Add the total for the month
     return entry;
   });
+
+  console.log(formattedDataWithTotal);
 
   return (
     <ResponsiveContainer width='100%' height={400}>
