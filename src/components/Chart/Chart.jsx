@@ -16,12 +16,16 @@ const RevenueChart = ({ chartData }) => {
   const { data, formattedDataWithTotal } = chartData;
 
   // Generate a random color code
-  const generateRandomColor = () => {
-    const colorOptions = ["#2e75b5", "#333333", "#87CEEB"]; // Dark blue, dark gray, sky blue
-    const randomIndex = Math.floor(Math.random() * colorOptions.length);
-    return colorOptions[randomIndex];
-  };
+  const generateRandomColorCode = () => {
+    const letters = "0123456789ABCDEF";
+    let colorCode = "#";
 
+    for (let i = 0; i < 6; i++) {
+      colorCode += letters[Math.floor(Math.random() * 16)];
+    }
+
+    return colorCode;
+  };
   return (
     <ResponsiveContainer width='100%' height={400}>
       <ComposedChart
@@ -40,7 +44,7 @@ const RevenueChart = ({ chartData }) => {
               key={index}
               dataKey={department?.department}
               stackId='a'
-              fill={generateRandomColor()}
+              fill={generateRandomColorCode()}
             />
           );
         })}

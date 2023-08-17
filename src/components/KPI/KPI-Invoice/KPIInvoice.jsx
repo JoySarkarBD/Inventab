@@ -5,15 +5,18 @@ import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
+  formatChartData,
   kpiEachTotal,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import RevenueChart from "../../Chart/Chart";
 
 export default function KPIInvoice() {
   const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
   const [kipInvoice, setKpiInvoice] = useState([]);
+  const [kpiInvoiceChart, setKpiInvoiceChart] = useState({});
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
@@ -49,6 +52,14 @@ export default function KPIInvoice() {
         total += res;
       });
       setTotal(total);
+    }
+    const formatObj = formatChartData(kipInvoice);
+
+    if (
+      formatObj?.data?.length > 0 &&
+      formatObj?.formattedDataWithTotal?.length > 0
+    ) {
+      setKpiInvoiceChart(formatObj);
     }
   }, [kipInvoice?.length, kipInvoice, loading]);
 
@@ -132,7 +143,7 @@ export default function KPIInvoice() {
         <Loader />
       ) : (
         <>
-          {/* <RevenueChart data={kipInvoice} /> */}
+          <RevenueChart chartData={kpiInvoiceChart} />
           <DataTable
             title={<h2 className='text-start'>KPI Invoice</h2>}
             data={kipInvoice}
