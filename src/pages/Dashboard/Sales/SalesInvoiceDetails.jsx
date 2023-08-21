@@ -386,14 +386,14 @@ const SalesInvoiceDetails = () => {
                           </>
                         )}
                         <tr>
-                          {parseFloat(isSameAddress?.grossTotal) &&
+                          {isSameAddress?.grossTotal &&
                           !isDiffAddress?.grossTotal ? (
                             <td colSpan='4'>{`In words: ${inWords(
-                              parseInt(isSameAddress?.grossTotal)
+                              parseFloat(isSameAddress?.grossTotal)
                             )}`}</td>
                           ) : (
                             <td colSpan='4'>{`In Words: ${inWords(
-                              parseInt(isDiffAddress?.grossTotal)
+                              parseFloat(isDiffAddress?.grossTotal)
                             )}`}</td>
                           )}
                         </tr>

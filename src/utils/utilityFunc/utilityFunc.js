@@ -123,7 +123,16 @@ utils.inWords = (num) => {
     "Ninety",
   ];
 
-  if ((num = num.toString()).length > 9) return "overflow";
+  if (num === 0) return "Zero";
+
+  if ((num = num.toString()).includes(".")) {
+    const [wholePart, decimalPart] = num.split(".");
+    return (
+      inWords(parseInt(wholePart)) + " point " + inWords(parseInt(decimalPart))
+    );
+  }
+
+  if (num.length > 9) return "overflow";
   let n = ("000000000" + num)
     .substr(-9)
     .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
@@ -150,8 +159,8 @@ utils.inWords = (num) => {
       ? (str != "" ? "and " : "") +
         (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]]) +
         "only "
-      : "";
-  return str;
+      : "only ";
+  return str.trim();
 };
 
 utils.calculateGST = (invoiceDetails) => {
