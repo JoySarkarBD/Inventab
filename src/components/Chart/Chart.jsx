@@ -36,12 +36,7 @@ const RevenueChart = ({ chartData }) => {
             />
           );
         })}
-        <Line
-          type='monotone'
-          dataKey='total'
-          stroke='#f39c12'
-          strokeWidth={4}
-        />
+        <Line type='linear' dataKey='total' stroke='#f39c12' strokeWidth={4} />
       </ComposedChart>
     </ResponsiveContainer>
   );
