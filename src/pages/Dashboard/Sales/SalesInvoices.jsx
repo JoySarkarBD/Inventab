@@ -162,14 +162,21 @@ const SalesInvoices = () => {
   const exportAsCsv = () => {
     let data = [];
     searchData.forEach((salesData) => {
+      // @desc total value calculation
+      let total = 0;
+      salesData?.parts_invoice.forEach((part) => {
+        return (total += part.price * part?.quantity);
+      });
+
+      // @desc sales invoice csv object
       const csvObj = {
         "Inv No": salesData?.invoice_number || "",
         "Sub Org": salesData?.sub_org || "",
         Client: salesData?.org?.company_name || "",
         "Sales Order": salesData?.sale_order || "",
         "Ref PO No": salesData?.po_no || "", // Ref PO No - which field is this in API?
-        Value: salesData?.value || "", // Value - which field is this in API?
-        Dept: salesData?.dept || "",
+        Value: total || "", // Value - which field is this in API?
+        Dept: salesData?.dept?.name || "",
         Status: salesData?.status || "",
       };
 

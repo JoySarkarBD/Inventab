@@ -85,7 +85,14 @@ const SalesLead = () => {
     },
     {
       name: "Value",
-      selector: () => 0,
+      selector: (row) => {
+        let total = 0;
+        row?.parts?.forEach((part) => {
+          total += part?.quantity * part?.unit_cost;
+        });
+
+        return total;
+      },
       sortable: true,
     },
     {
@@ -153,12 +160,19 @@ const SalesLead = () => {
   const exportAsCsv = () => {
     let data = [];
     searchData.forEach((salesData) => {
+      // @desc total value calculation
+      let total = 0;
+      salesData?.parts?.forEach((part) => {
+        return (total += part?.quantity * part?.unit_cost);
+      });
+
+      // @desc sales leads csv object
       const csvObj = {
         Sl: salesData?.lead_id || "",
         "Sub Org": salesData?.sub_org?.sub_company_name || "",
         Client: salesData?.client?.company_name || "",
         "Expected PO date": salesData?.expected_date || "",
-        Value: salesData?.value || 0,
+        Value: total || 0,
         "Probabilities value": salesData?.probability || 0,
         Description: salesData?.description || "",
         Dept: salesData?.department?.name || "",

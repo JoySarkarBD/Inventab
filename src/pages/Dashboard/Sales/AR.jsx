@@ -10,6 +10,7 @@ import Loader from "../../../ui/Loader";
 
 import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { daysLeft } from "../../../utils/utilityFunc/utilityFunc";
 import "./sales.css";
 
 const AR = () => {
@@ -114,7 +115,6 @@ const AR = () => {
 
   // console.log(reports);
 
-  console.log(reports);
   // columns
   const columns = [
     {
@@ -131,7 +131,8 @@ const AR = () => {
 
     {
       name: "Invoice Date",
-      selector: (row) => row?.invoice_date || "",
+      selector: (row) =>
+        new Date(row?.invoice_date).toLocaleDateString("en-IN") || "",
       sortable: true,
     },
 
@@ -143,26 +144,82 @@ const AR = () => {
 
     {
       name: "Paid",
-      selector: (row) => "",
+      selector: (row) => row?.amount_paid || 0,
       sortable: true,
     },
 
     // Value - which field is this in API?
     {
       name: "Unpaid",
-      selector: () => "",
+      selector: (row) => parseInt(row?.total - row?.amount_paid),
       sortable: true,
     },
 
     {
       name: "Due Date",
-      selector: () => "",
+      selector: (row) => {
+        let date = new Date(row?.invoice_date);
+        if (row?.payment_term?.id === 1) {
+          return date.toLocaleDateString("en-IN");
+        }
+        if (row?.payment_term?.id === 2) {
+          return date.toLocaleDateString("en-IN");
+        }
+        if (row?.payment_term?.id === 3) {
+          return new Date(
+            date.getTime() + 15 * (24 * 60 * 60 * 1000)
+          ).toLocaleDateString("en-In");
+        }
+        if (row?.payment_term?.id === 4) {
+          return new Date(
+            date.getTime() + 30 * (24 * 60 * 60 * 1000)
+          ).toLocaleDateString("en-In");
+        }
+        if (row?.payment_term?.id === 5) {
+          return new Date(
+            date.getTime() + 45 * (24 * 60 * 60 * 1000)
+          ).toLocaleDateString("en-In");
+        }
+        if (row?.payment_term?.id === 6) {
+          return new Date(
+            date.getTime() + 60 * (24 * 60 * 60 * 1000)
+          ).toLocaleDateString("en-In");
+        }
+      },
       sortable: true,
     },
 
     {
       name: "Age",
-      selector: () => "",
+      selector: (row) => {
+        let date = row?.invoice_date;
+        if (row?.payment_term?.id === 1) {
+          return daysLeft(date) + ` days`;
+        }
+        if (row?.payment_term?.id === 2) {
+          return daysLeft(date) + ` days`;
+        }
+        if (row?.payment_term?.id === 3) {
+          const futureDate =
+            new Date(date).getTime() + 15 * (24 * 60 * 60 * 1000);
+          return daysLeft(futureDate) + ` days`;
+        }
+        if (row?.payment_term?.id === 4) {
+          const futureDate =
+            new Date(date).getTime() + 30 * (24 * 60 * 60 * 1000);
+          return daysLeft(futureDate) + ` days`;
+        }
+        if (row?.payment_term?.id === 5) {
+          const futureDate =
+            new Date(date).getTime() + 45 * (24 * 60 * 60 * 1000);
+          return daysLeft(futureDate) + ` days`;
+        }
+        if (row?.payment_term?.id === 6) {
+          const futureDate =
+            new Date(date).getTime() + 60 * (24 * 60 * 60 * 1000);
+          return daysLeft(futureDate) + ` days`;
+        }
+      },
       sortable: true,
     },
   ];
