@@ -10,7 +10,7 @@ import Loader from "../../../ui/Loader";
 
 import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { daysLeft } from "../../../utils/utilityFunc/utilityFunc";
+import { daysLeft, dueDate } from "../../../utils/utilityFunc/utilityFunc";
 import "./sales.css";
 
 const AR = () => {
@@ -138,7 +138,13 @@ const AR = () => {
 
     {
       name: "Total Value",
-      selector: (row) => row?.total || 0,
+      selector: (row) => {
+        let total = 0;
+        row?.parts_invoice.forEach((part) => {
+          total += part?.price * part?.quantity;
+        });
+        return total;
+      },
       sortable: true,
     },
 
@@ -148,43 +154,22 @@ const AR = () => {
       sortable: true,
     },
 
-    // Value - which field is this in API?
     {
       name: "Unpaid",
-      selector: (row) => parseInt(row?.total - row?.amount_paid),
+      selector: (row) => {
+        let total = 0;
+        row?.parts_invoice.forEach((part) => {
+          total += part?.price * part?.quantity;
+        });
+        return total - row?.amount_paid;
+      },
       sortable: true,
     },
 
     {
       name: "Due Date",
       selector: (row) => {
-        let date = new Date(row?.invoice_date);
-        if (row?.payment_term?.id === 1) {
-          return date.toLocaleDateString("en-IN");
-        }
-        if (row?.payment_term?.id === 2) {
-          return date.toLocaleDateString("en-IN");
-        }
-        if (row?.payment_term?.id === 3) {
-          return new Date(
-            date.getTime() + 15 * (24 * 60 * 60 * 1000)
-          ).toLocaleDateString("en-In");
-        }
-        if (row?.payment_term?.id === 4) {
-          return new Date(
-            date.getTime() + 30 * (24 * 60 * 60 * 1000)
-          ).toLocaleDateString("en-In");
-        }
-        if (row?.payment_term?.id === 5) {
-          return new Date(
-            date.getTime() + 45 * (24 * 60 * 60 * 1000)
-          ).toLocaleDateString("en-In");
-        }
-        if (row?.payment_term?.id === 6) {
-          return new Date(
-            date.getTime() + 60 * (24 * 60 * 60 * 1000)
-          ).toLocaleDateString("en-In");
-        }
+        return dueDate(row).toLocaleDateString("en-In");
       },
       sortable: true,
     },
@@ -192,33 +177,8 @@ const AR = () => {
     {
       name: "Age",
       selector: (row) => {
-        let date = row?.invoice_date;
-        if (row?.payment_term?.id === 1) {
-          return daysLeft(date) + ` days`;
-        }
-        if (row?.payment_term?.id === 2) {
-          return daysLeft(date) + ` days`;
-        }
-        if (row?.payment_term?.id === 3) {
-          const futureDate =
-            new Date(date).getTime() + 15 * (24 * 60 * 60 * 1000);
-          return daysLeft(futureDate) + ` days`;
-        }
-        if (row?.payment_term?.id === 4) {
-          const futureDate =
-            new Date(date).getTime() + 30 * (24 * 60 * 60 * 1000);
-          return daysLeft(futureDate) + ` days`;
-        }
-        if (row?.payment_term?.id === 5) {
-          const futureDate =
-            new Date(date).getTime() + 45 * (24 * 60 * 60 * 1000);
-          return daysLeft(futureDate) + ` days`;
-        }
-        if (row?.payment_term?.id === 6) {
-          const futureDate =
-            new Date(date).getTime() + 60 * (24 * 60 * 60 * 1000);
-          return daysLeft(futureDate) + ` days`;
-        }
+        const date = dueDate(row);
+        return daysLeft(date) + ` days`;
       },
       sortable: true,
     },
@@ -236,16 +196,29 @@ const AR = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach((salesData) => {
+    searchData.forEach((invoiceData) => {
+      //@desc total value
+      let total = 0;
+      invoiceData?.parts_invoice?.forEach((part) => {
+        return (total += part?.price * part?.quantity);
+      });
+
+      //@desc  due date
+      let due_date = dueDate(invoiceData).toLocaleDateString("en-IN");
+
+      // @desc age
+      let new_due_date = dueDate(invoiceData);
+      let age = daysLeft(new_due_date) + ` days`;
+
       const csvObj = {
-        "Inv No": salesData?.invoice_number || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.org?.company_name || "No data found",
-        "Sales Order": salesData?.sale_order || "No data found",
-        "Ref PO No": salesData?.ref_po || "No data found", // Ref PO No - which field is this in API?
-        Value: salesData?.value || "No data found", // Value - which field is this in API?
-        Dept: salesData?.dept || "no data found",
-        Status: salesData?.status || "No data found",
+        Client: invoiceData?.org?.company_name,
+        "Invoice-no": invoiceData?.invoice_number,
+        "Invoice-date": invoiceData?.invoice_date,
+        "Total Value": total,
+        Paid: invoiceData?.amount_paid,
+        Unpaid: total - invoiceData?.amount_paid,
+        "Due-date": due_date,
+        Age: age,
       };
 
       data.push(csvObj);

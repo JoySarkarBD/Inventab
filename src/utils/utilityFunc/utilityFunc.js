@@ -1,6 +1,6 @@
 const utils = {};
 
-// remove undefined data from arr
+//@desc remove undefined data from arr
 utils.removeUndefinedObj = (arr) => {
   return arr.filter((a) => {
     if ((a.label && a.value) !== undefined) {
@@ -9,21 +9,19 @@ utils.removeUndefinedObj = (arr) => {
   });
 };
 
-// remove duplicate object from arr
+//@desc remove duplicate object from arr
 utils.removeDuplicateObjects = (arr) => {
   const uniqueObjects = new Set(arr.map(JSON.stringify));
   return Array.from(uniqueObjects).map(JSON.parse);
 };
 
-// number Differentiation
+// @desc number Differentiation [only core]
 utils.numDifferentiation = (value) => {
   const val = Math.abs(value);
-  if (val >= 10000000) return `${(value / 10000000).toFixed(2)} Cr`;
-  if (val >= 100000) return `${(value / 100000).toFixed(2)} Lac`;
-  return value;
+  if (val) return `${(value / 10000000).toFixed(2)} Cr`;
 };
 
-// kpi Each total
+// @desc kpi Each total
 utils.kpiEachTotal = (kpi) => {
   return (
     (parseFloat(kpi?.jan) || 0) +
@@ -40,6 +38,8 @@ utils.kpiEachTotal = (kpi) => {
     (parseFloat(kpi?.dec) || 0)
   );
 };
+
+// @desc get month name by date ["01-01-2022" = "jan"]
 
 utils.getMonthName = (dateString) => {
   const months = [
@@ -69,7 +69,7 @@ utils.getMonthName = (dateString) => {
   return months[monthIndex];
 };
 
-// month total value
+//@ each month total value
 utils.monthTotalValue = (arr) => {
   let t = 0;
   for (let i of arr) {
@@ -78,7 +78,7 @@ utils.monthTotalValue = (arr) => {
   return t;
 };
 
-// indian date format
+//@ indian date format
 utils.formatDateToIndianVersion = (date) => {
   if (!(date instanceof Date) || isNaN(date))
     throw new Error("Invalid date object.");
@@ -86,6 +86,8 @@ utils.formatDateToIndianVersion = (date) => {
     .toString()
     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 };
+
+// @desc number to words
 
 utils.inWords = (num) => {
   let a = [
@@ -163,6 +165,8 @@ utils.inWords = (num) => {
   return str.trim();
 };
 
+// @desc calculate GST
+
 utils.calculateGST = (invoiceDetails) => {
   let result = 0;
   let arr = [];
@@ -186,6 +190,8 @@ utils.calculateGST = (invoiceDetails) => {
 
   return result;
 };
+
+// @desc format chart data structure for react-recharts
 
 utils.formatChartData = (kipPo) => {
   let data = kipPo.map((item) => {
@@ -244,6 +250,8 @@ utils.formatChartData = (kipPo) => {
   return { data, formattedDataWithTotal };
 };
 
+//  @desc color for each department in sales dashboard charts
+
 utils.getColorForDepartment = (index) => {
   const predefinedColors = ["#1e3799", "#3c6382", "#38ada9"];
   if (index < predefinedColors.length) {
@@ -251,6 +259,7 @@ utils.getColorForDepartment = (index) => {
   }
 };
 
+// @desc how many days left
 utils.daysLeft = (targetDate) => {
   const currentDate = new Date();
   const targetDateTime = new Date(targetDate);
@@ -269,6 +278,29 @@ utils.daysLeft = (targetDate) => {
   return res;
 };
 
+// @desc due date
+utils.dueDate = (row) => {
+  let date = new Date(row?.invoice_date);
+  if (row?.payment_term?.id === 1) {
+    return date;
+  }
+  if (row?.payment_term?.id === 2) {
+    return date;
+  }
+  if (row?.payment_term?.id === 3) {
+    return new Date(date.getTime() + 15 * (24 * 60 * 60 * 1000));
+  }
+  if (row?.payment_term?.id === 4) {
+    return new Date(date.getTime() + 30 * (24 * 60 * 60 * 1000));
+  }
+  if (row?.payment_term?.id === 5) {
+    return new Date(date.getTime() + 45 * (24 * 60 * 60 * 1000));
+  }
+  if (row?.payment_term?.id === 6) {
+    return new Date(date.getTime() + 60 * (24 * 60 * 60 * 1000));
+  }
+};
+
 export const {
   removeDuplicateObjects,
   removeUndefinedObj,
@@ -282,4 +314,5 @@ export const {
   formatChartData,
   getColorForDepartment,
   daysLeft,
+  dueDate,
 } = utils;

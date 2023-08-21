@@ -22,7 +22,7 @@ const SalesInvoices = () => {
   const [csv, setCsv] = useState([]);
   const [selectedEl, setSelectedEL] = useState(null);
 
-  // load leads
+  // load invoices
   useEffect(() => {
     // fetch table
     let isMount = true;
@@ -50,7 +50,7 @@ const SalesInvoices = () => {
     };
   }, [auth?.orgId, axios]);
 
-  // columns
+  //@desc  columns for react data table component
   const columns = [
     {
       name: "Inv No",
@@ -83,14 +83,12 @@ const SalesInvoices = () => {
       sortable: true,
     },
 
-    // Ref PO No - which field is this in API?
     {
       name: "Ref PO No",
       selector: (row) => row?.po_no || "",
       sortable: true,
     },
 
-    // Value - which field is this in API?
     {
       name: "Value",
       selector: (row) => {
