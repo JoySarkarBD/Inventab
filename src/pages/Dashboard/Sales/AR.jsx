@@ -213,7 +213,9 @@ const AR = () => {
       const csvObj = {
         Client: invoiceData?.org?.company_name,
         "Invoice-no": invoiceData?.invoice_number,
-        "Invoice-date": invoiceData?.invoice_date,
+        "Invoice-date": new Date(invoiceData?.invoice_date).toLocaleDateString(
+          "en-IN"
+        ),
         "Total Value": total,
         Paid: invoiceData?.amount_paid,
         Unpaid: total - invoiceData?.amount_paid,
