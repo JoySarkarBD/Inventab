@@ -80,7 +80,7 @@ const SalesInvoiceDetails = () => {
         SGST: parseFloat(result / 2).toFixed(2),
         IGST: 0,
         shipping: parseFloat(shippingCharge).toFixed(2),
-        grossTotal: parseFloat(result + 100).toFixed(2),
+        grossTotal: parseFloat(result + shippingCharge).toFixed(2),
       });
     } else {
       // calculate gst
@@ -92,7 +92,7 @@ const SalesInvoiceDetails = () => {
       setIsDiffAddress({
         IGST: parseFloat(result).toFixed(2),
         shipping: parseFloat(shippingCharge).toFixed(2),
-        grossTotal: parseFloat(result + 100).toFixed(2),
+        grossTotal: parseFloat(result + shippingCharge).toFixed(2),
       });
     }
   }, [invoiceDetails]);
@@ -386,14 +386,14 @@ const SalesInvoiceDetails = () => {
                           </>
                         )}
                         <tr>
-                          {isSameAddress.grossTotal &&
+                          {parseFloat(isSameAddress?.grossTotal) &&
                           !isDiffAddress?.grossTotal ? (
-                            <td colSpan='4'>{`In Words: ${inWords(
-                              parseInt(isSameAddress.grossTotal)
+                            <td colSpan='4'>{`In words: ${inWords(
+                              parseInt(isSameAddress?.grossTotal)
                             )}`}</td>
                           ) : (
                             <td colSpan='4'>{`In Words: ${inWords(
-                              parseInt(isDiffAddress.grossTotal)
+                              parseInt(isDiffAddress?.grossTotal)
                             )}`}</td>
                           )}
                         </tr>

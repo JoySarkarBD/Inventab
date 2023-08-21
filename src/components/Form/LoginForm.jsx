@@ -47,10 +47,12 @@ const LoginForm = () => {
 
           if (data.success) {
             const results = data?.data;
+
             const userObj = {
               accessToken: results?.auth_token?.access,
               userId: results?.user_id,
               orgId: results?.org.id,
+              orgName: results?.org?.company_name,
               firstname: results?.first_name,
               lastname: results?.last_name,
               phone: results?.mobile,

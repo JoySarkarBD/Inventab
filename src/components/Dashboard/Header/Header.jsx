@@ -33,7 +33,7 @@ const Header = () => {
             <div className='collapse navbar-collapse justify-content-between'>
               <div className='header-left'>
                 <div className='dashboard_bar'>
-                  Welcome {`${firstname} ${lastname}`}
+                  Welcome {`${firstname} ${lastname} (${auth?.orgName})`}
                 </div>
               </div>
               <ul className='navbar-nav header-right'>

@@ -67,45 +67,51 @@ const SalesInvoices = () => {
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org || "",
       sortable: true,
     },
 
     {
       name: "Client",
-      selector: (row) => row?.org?.company_name || "No data found",
+      selector: (row) => row?.org?.company_name || "",
       sortable: true,
     },
 
     {
       name: "Sales Order",
-      selector: (row) => row?.sale_order || "No data found",
+      selector: (row) => row?.sale_order || "",
       sortable: true,
     },
 
     // Ref PO No - which field is this in API?
     {
       name: "Ref PO No",
-      selector: (row) => row?.po_no || "No data found",
+      selector: (row) => row?.po_no || "",
       sortable: true,
     },
 
     // Value - which field is this in API?
     {
       name: "Value",
-      selector: () => "No data found",
+      selector: (row) => {
+        let total = 0;
+        row?.parts_invoice.forEach((part) => {
+          total += part.price * part?.quantity;
+        });
+        return total;
+      },
       sortable: true,
     },
 
     {
       name: "Dept",
-      selector: (row) => row?.dept?.name || "No data found",
+      selector: (row) => row?.dept?.name || "",
       sortable: true,
     },
 
     {
       name: "Status",
-      selector: (row) => row?.status || "No data found",
+      selector: (row) => row?.status || "",
       sortable: true,
     },
   ];
@@ -157,14 +163,14 @@ const SalesInvoices = () => {
     let data = [];
     searchData.forEach((salesData) => {
       const csvObj = {
-        "Inv No": salesData?.invoice_number || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.org?.company_name || "No data found",
-        "Sales Order": salesData?.sale_order || "No data found",
-        "Ref PO No": salesData?.po_no || "No data found", // Ref PO No - which field is this in API?
-        Value: salesData?.value || "No data found", // Value - which field is this in API?
-        Dept: salesData?.dept || "no data found",
-        Status: salesData?.status || "No data found",
+        "Inv No": salesData?.invoice_number || "",
+        "Sub Org": salesData?.sub_org || "",
+        Client: salesData?.org?.company_name || "",
+        "Sales Order": salesData?.sale_order || "",
+        "Ref PO No": salesData?.po_no || "", // Ref PO No - which field is this in API?
+        Value: salesData?.value || "", // Value - which field is this in API?
+        Dept: salesData?.dept || "",
+        Status: salesData?.status || "",
       };
 
       data.push(csvObj);

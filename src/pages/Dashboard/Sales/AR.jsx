@@ -8,10 +8,13 @@ import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import Loader from "../../../ui/Loader";
 
-import { axiosInstance } from "../../../utils/axios/axios";
+import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import "./sales.css";
 
 const AR = () => {
+  const axios = useAxiosPrivate();
+  const { auth } = useAuth();
   const [reports, setReports] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -80,78 +83,86 @@ const AR = () => {
   /* React Select with checkbox */
 
   // fetch table
-  const fetchReports = async () => {
-    try {
-      setLoading(true);
-      const response = (
-        await axiosInstance.get(
-          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-        )
-      ).data;
-      setLoading(false);
-      setReports(response?.results);
-      setSearchData(response?.results);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
 
-  // load leads
+  // load reports
   useEffect(() => {
-    fetchReports();
-  }, []);
+    // fetch table
+    let isMount = true;
+    const controller = new AbortController();
+    const getInvoiceList = async () => {
+      try {
+        setLoading(true);
+        const response = (
+          await axios.get(`invoices/fetch/all/invoices/?org=${auth?.orgId}`, {
+            signal: controller.signal,
+          })
+        ).data;
+        setLoading(false);
+        isMount && setReports(response?.results);
+        isMount && setSearchData(response?.results);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
+    getInvoiceList();
+
+    return () => {
+      (isMount = false), controller.abort();
+    };
+  }, [auth?.orgId, axios]);
+
+  // console.log(reports);
 
   console.log(reports);
-
   // columns
   const columns = [
     {
       name: "Client",
-      cell: () => "No data found",
+      cell: (row) => row?.org?.company_name || "",
       sortable: true,
     },
 
     {
       name: "Invoice No",
-      selector: () => "No data found",
+      selector: (row) => row?.invoice_number || "",
       sortable: true,
     },
 
     {
       name: "Invoice Date",
-      selector: () => "No data found",
+      selector: (row) => row?.invoice_date || "",
       sortable: true,
     },
 
     {
       name: "Total Value",
-      selector: () => "No data found",
+      selector: (row) => row?.total || 0,
       sortable: true,
     },
 
     {
       name: "Paid",
-      selector: () => "No data found",
+      selector: (row) => "",
       sortable: true,
     },
 
     // Value - which field is this in API?
     {
       name: "Unpaid",
-      selector: () => "No data found",
+      selector: () => "",
       sortable: true,
     },
 
     {
       name: "Due Date",
-      selector: () => "No data found",
+      selector: () => "",
       sortable: true,
     },
 
     {
       name: "Age",
-      selector: () => "No data found",
+      selector: () => "",
       sortable: true,
     },
   ];
