@@ -7,6 +7,7 @@ import Loader from "../../../ui/Loader";
 import {
   formatChartData,
   getMonthName,
+  kpiEachTotal,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
 import RevenueChart from "../../Chart/Chart";
@@ -49,6 +50,11 @@ export default function MetricInvoice() {
       actualInvoices?.forEach((item) => {
         // Get the month name from the expected_date property
         const month = getMonthName(item?.invoice_date);
+        // parts total for each invoice
+        let parts_invoice = 0;
+        item?.parts_invoice?.forEach((part) => {
+          return (parts_invoice += part?.price * part?.quantity);
+        });
 
         // Find the department in the result array or add it if not found
         let departmentEntry = result?.find(
@@ -64,13 +70,15 @@ export default function MetricInvoice() {
 
         // Check if the departmentEntry already has data for the specific month
         if (departmentEntry[month.toLowerCase()]) {
+          // console.log(parts_invoice);
           // If data exists for the month, add the new total to it
-          departmentEntry[month.toLowerCase()] += parseFloat(item?.total);
+          departmentEntry[month.toLowerCase()] += parseFloat(parts_invoice);
         } else {
           // If data doesn't exist for the month, create a new entry
-          departmentEntry[month.toLowerCase()] = parseFloat(item?.total);
+          departmentEntry[month.toLowerCase()] = parseFloat(parts_invoice);
         }
-        departmentEntry.total += parseFloat(item?.total);
+
+        departmentEntry.total = kpiEachTotal(departmentEntry);
       });
 
       let res = result.filter((res) => res?.department !== undefined);
@@ -88,8 +96,10 @@ export default function MetricInvoice() {
     }
   }, [loading, actualInvoices, actualInvoices?.length]);
 
+  // console.log(invoices);
+
   //
-  // console.log(actualInvoiceChart);
+  console.log(actualInvoiceChart);
   const columns = [
     {
       name: "Department",
