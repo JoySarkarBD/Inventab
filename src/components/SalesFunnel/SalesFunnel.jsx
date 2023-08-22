@@ -41,7 +41,9 @@ export default function SalesFunnel() {
         const finalData = Object.keys(statusData).map((status) => ({
           status,
           count: statusData[status].count,
-          value: numDifferentiation(statusData[status].value),
+          value: statusData[status].value
+            ? numDifferentiation(statusData[status].value)
+            : `${0} Cr`,
         }));
 
         setLoading(false);
