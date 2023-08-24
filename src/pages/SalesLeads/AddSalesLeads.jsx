@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Select from "react-select";
@@ -41,29 +41,34 @@ const AddSalesDataForm = () => {
 
   // load department, Client, sub-organization
   useEffect(() => {
+    let isMount = true;
+    const controller = new AbortController();
     // organization || department
     (async function () {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`,
+          {
+            signal: controller.signal,
+          }
         );
         setLoading(false);
         const deptArr = [];
-        data?.results?.forEach((dept) => {
-          const deptObj = {
-            label: dept?.name,
-            value: dept?.id,
-          };
-          deptArr.push(deptObj);
-        });
+        isMount &&
+          data?.results?.forEach((dept) => {
+            const deptObj = {
+              label: dept?.name,
+              value: dept?.id,
+            };
+            deptArr.push(deptObj);
+          });
 
         const removeUndefinedData = removeUndefinedObj(deptArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
         setDept(uniqueArr);
       } catch (error) {
         setLoading(false);
-        toast.error(error.message);
         console.log(error);
       }
     })();
@@ -72,16 +77,19 @@ const AddSalesDataForm = () => {
     (async function () {
       try {
         setLoading(true);
-        const { data } = await axios.get(`organizations/fetch/org/`);
+        const { data } = await axios.get(`organizations/fetch/org/`, {
+          signal: controller.signal,
+        });
         setLoading(false);
         const clientArr = [];
-        data?.results?.forEach((client) => {
-          const clientObj = {
-            label: client?.company_name,
-            value: client?.id,
-          };
-          clientArr.push(clientObj);
-        });
+        isMount &&
+          data?.results?.forEach((client) => {
+            const clientObj = {
+              label: client?.company_name,
+              value: client?.id,
+            };
+            clientArr.push(clientObj);
+          });
 
         const removeUndefinedData = removeUndefinedObj(clientArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
@@ -97,17 +105,21 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://inventab.io/api/v1/organizations/get/suborg/?org=${orgId}`
+          `http://inventab.io/api/v1/organizations/get/suborg/?org=${orgId}`,
+          {
+            signal: controller.signal,
+          }
         );
         setLoading(false);
         const subOrgArr = [];
-        data?.results?.forEach((sub) => {
-          const clientObj = {
-            label: sub?.sub_company_name,
-            value: sub?.id,
-          };
-          subOrgArr.push(clientObj);
-        });
+        isMount &&
+          data?.results?.forEach((sub) => {
+            const clientObj = {
+              label: sub?.sub_company_name,
+              value: sub?.id,
+            };
+            subOrgArr.push(clientObj);
+          });
 
         const removeUndefinedData = removeUndefinedObj(subOrgArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
@@ -122,7 +134,9 @@ const AddSalesDataForm = () => {
     (async function () {
       try {
         setPartsLoading(true);
-        const { data } = await axios.get("parts/parts");
+        const { data } = await axios.get("parts/parts", {
+          signal: controller.signal,
+        });
         setPartsLoading(false);
         setPartFullObj(data?.results);
         const partArr = [];
@@ -141,6 +155,10 @@ const AddSalesDataForm = () => {
         console.log(error);
       }
     })();
+
+    return () => {
+      (isMount = false), controller.abort();
+    };
   }, [axios, orgId]);
 
   // status options
@@ -288,7 +306,6 @@ const AddSalesDataForm = () => {
 
   return (
     <>
-      <Toaster />
       <PageTitle title='Add Sales Leads' />
       {/* back button */}
       <div className='d-flex justify-content-end me-5 mb-4 '>

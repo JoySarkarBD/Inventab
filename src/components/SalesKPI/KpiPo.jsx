@@ -19,21 +19,28 @@ const KpiPo = () => {
   // load kpi PO list
   useEffect(() => {
     // get KPI  PO List
+    let isMount = true;
+    const controller = new AbortController();
 
     const getKpiPo = async () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `pipo/kpi/list/?org=${auth?.orgId}&metric=PO`
+          `pipo/kpi/list/?org=${auth?.orgId}&metric=PO`,
+          { signal: controller.signal }
         );
         setLoading(false);
-        setKpiList(data?.results);
+        isMount && setKpiList(data?.results);
       } catch (error) {
         setLoading(false);
         console.log(error);
       }
     };
     getKpiPo();
+
+    return () => {
+      (isMount = false), controller.abort();
+    };
   }, [axios, auth?.orgId]);
 
   //kpi PO each sub total

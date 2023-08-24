@@ -6,11 +6,14 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
+
+import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import "./sales.css";
 
 const SalesInvoices = () => {
+  const { auth } = useAuth();
   const axios = useAxiosPrivate();
   const [search, setSearch] = useState("");
   const [invoices, setInvoice] = useState([]);
@@ -19,30 +22,35 @@ const SalesInvoices = () => {
   const [csv, setCsv] = useState([]);
   const [selectedEl, setSelectedEL] = useState(null);
 
-  // fetch table
-  const getInvoiceList = async () => {
-    try {
-      setLoading(true);
-      const response = (
-        await axios.get(
-          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-        )
-      ).data;
-      setLoading(false);
-      setInvoice(response?.results);
-      setSearchData(response?.results);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
-
-  // load leads
+  // load invoices
   useEffect(() => {
+    // fetch table
+    let isMount = true;
+    const controller = new AbortController();
+    const getInvoiceList = async () => {
+      try {
+        setLoading(true);
+        const response = (
+          await axios.get(`invoices/fetch/all/invoices/?org=${auth?.orgId}`, {
+            signal: controller.signal,
+          })
+        ).data;
+        setLoading(false);
+        isMount && setInvoice(response?.results);
+        isMount && setSearchData(response?.results);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
     getInvoiceList();
-  }, []);
 
-  // columns
+    return () => {
+      (isMount = false), controller.abort();
+    };
+  }, [auth?.orgId, axios]);
+
+  //@desc  columns for react data table component
   const columns = [
     {
       name: "Inv No",
@@ -59,45 +67,49 @@ const SalesInvoices = () => {
 
     {
       name: "Sub Org",
-      selector: (row) => row?.sub_org || "No data found",
+      selector: (row) => row?.sub_org || "",
       sortable: true,
     },
 
     {
       name: "Client",
-      selector: (row) => row?.org?.company_name || "No data found",
+      selector: (row) => row?.org?.company_name || "",
       sortable: true,
     },
 
     {
       name: "Sales Order",
-      selector: (row) => row?.sale_order || "No data found",
+      selector: (row) => row?.sale_order || "",
       sortable: true,
     },
 
-    // Ref PO No - which field is this in API?
     {
       name: "Ref PO No",
-      selector: (row) => row?.po_no || "No data found",
+      selector: (row) => row?.po_no || "",
       sortable: true,
     },
 
-    // Value - which field is this in API?
     {
       name: "Value",
-      selector: () => "No data found",
+      selector: (row) => {
+        let total = 0;
+        row?.parts_invoice.forEach((part) => {
+          total += part.price * part?.quantity;
+        });
+        return total;
+      },
       sortable: true,
     },
 
     {
       name: "Dept",
-      selector: (row) => row?.dept?.name || "No data found",
+      selector: (row) => row?.dept?.name || "",
       sortable: true,
     },
 
     {
       name: "Status",
-      selector: (row) => row?.status || "No data found",
+      selector: (row) => row?.status || "",
       sortable: true,
     },
   ];
@@ -148,15 +160,22 @@ const SalesInvoices = () => {
   const exportAsCsv = () => {
     let data = [];
     searchData.forEach((salesData) => {
+      // @desc total value calculation
+      let total = 0;
+      salesData?.parts_invoice.forEach((part) => {
+        return (total += part.price * part?.quantity);
+      });
+
+      // @desc sales invoice csv object
       const csvObj = {
-        "Inv No": salesData?.invoice_number || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.org?.company_name || "No data found",
-        "Sales Order": salesData?.sale_order || "No data found",
-        "Ref PO No": salesData?.po_no || "No data found", // Ref PO No - which field is this in API?
-        Value: salesData?.value || "No data found", // Value - which field is this in API?
-        Dept: salesData?.dept || "no data found",
-        Status: salesData?.status || "No data found",
+        "Inv No": salesData?.invoice_number || "",
+        "Sub Org": salesData?.sub_org || "",
+        Client: salesData?.org?.company_name || "",
+        "Sales Order": salesData?.sale_order || "",
+        "Ref PO No": salesData?.po_no || "", // Ref PO No - which field is this in API?
+        Value: total || "", // Value - which field is this in API?
+        Dept: salesData?.dept?.name || "",
+        Status: salesData?.status || "",
       };
 
       data.push(csvObj);

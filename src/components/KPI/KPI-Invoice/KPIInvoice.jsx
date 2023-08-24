@@ -5,15 +5,18 @@ import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
+  formatChartData,
   kpiEachTotal,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import RevenueChart from "../../Chart/Chart";
 
 export default function KPIInvoice() {
   const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
   const [kipInvoice, setKpiInvoice] = useState([]);
+  const [kpiInvoiceChart, setKpiInvoiceChart] = useState({});
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
@@ -49,6 +52,14 @@ export default function KPIInvoice() {
         total += res;
       });
       setTotal(total);
+    }
+    const formatObj = formatChartData(kipInvoice);
+
+    if (
+      formatObj?.data?.length > 0 &&
+      formatObj?.formattedDataWithTotal?.length > 0
+    ) {
+      setKpiInvoiceChart(formatObj);
     }
   }, [kipInvoice?.length, kipInvoice, loading]);
 
@@ -131,39 +142,42 @@ export default function KPIInvoice() {
       {loading ? (
         <Loader />
       ) : (
-        <DataTable
-          title={<h2 className='text-start'>KPI Invoice</h2>}
-          data={kipInvoice}
-          columns={columns}
-          customStyles={{
-            rows: {
-              style: {
-                fontSize: "16px",
+        <>
+          <h1 className='text-center'>KPI Invoice</h1>
+          <RevenueChart chartData={kpiInvoiceChart} />
+          <DataTable
+            data={kipInvoice}
+            columns={columns}
+            customStyles={{
+              rows: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-            headCells: {
-              style: {
-                fontSize: "19px",
-                width: "170px",
+              headCells: {
+                style: {
+                  fontSize: "19px",
+                  width: "170px",
+                },
               },
-            },
-          }}
-          noContextMenu
-          fixedHeader
-          fixedHeaderScrollHeight='550px'
-          pagination
-          striped
-          highlightOnHover
-          subHeader
-          // total KPI Invoice amount
-          actions={
-            <>
-              <h3 className='bg-primary text-white rounded-0 p-3'>
-                Total:{numDifferentiation(total)}
-              </h3>
-            </>
-          }
-        />
+            }}
+            noContextMenu
+            fixedHeader
+            fixedHeaderScrollHeight='550px'
+            pagination
+            striped
+            highlightOnHover
+            subHeader
+            // total KPI Invoice amount
+            actions={
+              <>
+                <h3 className='bg-primary text-white rounded-0 p-3'>
+                  Total:{numDifferentiation(total)}
+                </h3>
+              </>
+            }
+          />
+        </>
       )}
     </>
   );

@@ -5,17 +5,21 @@ import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
+  formatChartData,
   kpiEachTotal,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import RevenueChart from "../../Chart/Chart";
 
 export default function KPIPO() {
-  const axios = useAxiosPrivate();
   const { auth } = useAuth();
   const { orgId } = auth;
+
+  const axios = useAxiosPrivate();
   const [kipPo, setKpiPo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
+  const [kpiPoChart, setKpiPoChart] = useState({});
 
   // load leads
   useEffect(() => {
@@ -49,6 +53,15 @@ export default function KPIPO() {
         allTotal += res;
       });
       setTotal(allTotal);
+    }
+
+    const formatObj = formatChartData(kipPo);
+
+    if (
+      formatObj?.data?.length > 0 &&
+      formatObj?.formattedDataWithTotal?.length > 0
+    ) {
+      setKpiPoChart(formatObj);
     }
   }, [loading, kipPo, kipPo?.length]);
 
@@ -131,39 +144,42 @@ export default function KPIPO() {
       {loading ? (
         <Loader />
       ) : (
-        <DataTable
-          title={<h2 className='text-start'>KPI PO</h2>}
-          data={kipPo}
-          columns={columns}
-          customStyles={{
-            rows: {
-              style: {
-                fontSize: "16px",
+        <>
+          <h1 className='text-center'>KPI PO</h1>
+          <RevenueChart chartData={kpiPoChart} />
+          <DataTable
+            data={kipPo}
+            columns={columns}
+            customStyles={{
+              rows: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-            headCells: {
-              style: {
-                fontSize: "19px",
-                width: "170px",
+              headCells: {
+                style: {
+                  fontSize: "19px",
+                  width: "170px",
+                },
               },
-            },
-          }}
-          noContextMenu
-          fixedHeader
-          fixedHeaderScrollHeight='550px'
-          pagination
-          striped
-          highlightOnHover
-          subHeader
-          // total KPI PO amount
-          actions={
-            <>
-              <h3 className='bg-primary text-white rounded-0 p-3'>
-                Total: {numDifferentiation(total)}
-              </h3>
-            </>
-          }
-        />
+            }}
+            noContextMenu
+            fixedHeader
+            fixedHeaderScrollHeight='550px'
+            pagination
+            striped
+            highlightOnHover
+            subHeader
+            // total KPI PO amount
+            actions={
+              <>
+                <h3 className='bg-primary text-white rounded-0 p-3'>
+                  Total: {numDifferentiation(total)}
+                </h3>
+              </>
+            }
+          />
+        </>
       )}
     </>
   );

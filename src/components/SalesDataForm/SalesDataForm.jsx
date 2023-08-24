@@ -61,22 +61,28 @@ export default function SalesDataForm(props) {
 
   // load dept, sub org, client, status all
   useEffect(() => {
+    let isMount = true;
+    const controller = new AbortController();
     // organization || department
     (async function () {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`,
+          {
+            signal: controller.signal,
+          }
         );
         setLoading(false);
         const deptArr = [];
-        data?.results?.forEach((dept) => {
-          const deptObj = {
-            label: dept?.name,
-            value: dept?.id,
-          };
-          deptArr.push(deptObj);
-        });
+        isMount &&
+          data?.results?.forEach((dept) => {
+            const deptObj = {
+              label: dept?.name,
+              value: dept?.id,
+            };
+            deptArr.push(deptObj);
+          });
         const removeUndefinedData = removeUndefinedObj(deptArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
         setDept(uniqueArr);
@@ -90,16 +96,19 @@ export default function SalesDataForm(props) {
     (async function () {
       try {
         setLoading(true);
-        const { data } = await axios.get(`organizations/fetch/org/`);
+        const { data } = await axios.get(`organizations/fetch/org/`, {
+          signal: controller.signal,
+        });
         setLoading(false);
         const clientArr = [];
-        data?.results?.forEach((client) => {
-          const clientObj = {
-            label: client?.company_name,
-            value: client?.id,
-          };
-          clientArr.push(clientObj);
-        });
+        isMount &&
+          data?.results?.forEach((client) => {
+            const clientObj = {
+              label: client?.company_name,
+              value: client?.id,
+            };
+            clientArr.push(clientObj);
+          });
 
         const removeUndefinedData = removeUndefinedObj(clientArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
@@ -115,17 +124,21 @@ export default function SalesDataForm(props) {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://inventab.io/api/v1/organizations/get/suborg/?org=${orgId}` /*  0a055b26-ae15-40a9-8291-25427b94ebb3 ==> prev org id*/
+          `http://inventab.io/api/v1/organizations/get/suborg/?org=${orgId}` /*  0a055b26-ae15-40a9-8291-25427b94ebb3 ==> prev org id*/,
+          {
+            signal: controller.signal,
+          }
         );
         setLoading(false);
         const subOrgArr = [];
-        data?.results?.forEach((sub) => {
-          const subObj = {
-            label: sub?.sub_company_name,
-            value: sub?.id,
-          };
-          subOrgArr.push(subObj);
-        });
+        isMount &&
+          data?.results?.forEach((sub) => {
+            const subObj = {
+              label: sub?.sub_company_name,
+              value: sub?.id,
+            };
+            subOrgArr.push(subObj);
+          });
 
         const removeUndefinedData = removeUndefinedObj(subOrgArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
@@ -141,17 +154,20 @@ export default function SalesDataForm(props) {
     (async function () {
       try {
         setPartsLoading(true);
-        const { data } = await axios.get("parts/parts");
+        const { data } = await axios.get("parts/parts", {
+          signal: controller.signal,
+        });
         setPartsLoading(false);
         setPartFullObj(data?.results);
         const partArr = [];
-        data?.results?.forEach((data) => {
-          const partObj = {
-            label: data?.part_number,
-            value: data?.id,
-          };
-          partArr.push(partObj);
-        });
+        isMount &&
+          data?.results?.forEach((data) => {
+            const partObj = {
+              label: data?.part_number,
+              value: data?.id,
+            };
+            partArr.push(partObj);
+          });
         const removeUndefinedData = removeUndefinedObj(partArr);
         const uniqueArr = removeDuplicateObjects(removeUndefinedData);
         setParts(uniqueArr);
@@ -160,6 +176,10 @@ export default function SalesDataForm(props) {
         console.log(error.message);
       }
     })();
+
+    return () => {
+      (isMount = false), controller.abort();
+    };
   }, [orgId, axios]);
 
   // ==============================table stuff start==============
@@ -643,7 +663,6 @@ export default function SalesDataForm(props) {
                   </thead>
                   <tbody>
                     {values?.parts?.map((part, index) => {
-                      console.log(part);
                       return (
                         <tr key={index + 1}>
                           <td>

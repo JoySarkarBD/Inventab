@@ -5,9 +5,11 @@ import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import {
+  formatChartData,
   getMonthName,
   numDifferentiation,
 } from "../../../utils/utilityFunc/utilityFunc";
+import RevenueChart from "../../Chart/Chart";
 
 export default function MetricPO() {
   const axios = useAxiosPrivate();
@@ -16,6 +18,7 @@ export default function MetricPO() {
   const [loading, setLoading] = useState(false);
   const [salesOrders, setSalesOrders] = useState([]);
   let [salesdata, setSalesData] = useState([]);
+  const [actualPoChart, setActualPoChart] = useState();
 
   let allTotal = 0;
 
@@ -75,6 +78,15 @@ export default function MetricPO() {
 
       let res = result.filter((res) => res.department !== undefined);
       setSalesData(res);
+
+      //@desc [chart data]
+      const formatObj = formatChartData(res);
+      if (
+        formatObj?.data?.length > 0 &&
+        formatObj?.formattedDataWithTotal?.length > 0
+      ) {
+        setActualPoChart(formatObj);
+      }
     }
   }, [salesOrders?.length, salesOrders, loading]);
 
@@ -155,34 +167,37 @@ export default function MetricPO() {
       {loading ? (
         <Loader />
       ) : (
-        <DataTable
-          noContextMenu
-          title={<h2 className='text-start'>Actual-PO</h2>}
-          columns={columns}
-          data={salesdata}
-          pagination
-          customStyles={{
-            rows: {
-              style: {
-                fontSize: "16px",
+        <>
+          <h1 className='text-center'>Actual-PO</h1>
+          <RevenueChart chartData={actualPoChart} />
+          <DataTable
+            noContextMenu
+            columns={columns}
+            data={salesdata}
+            pagination
+            customStyles={{
+              rows: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-            headCells: {
-              style: {
-                fontSize: "19px",
-                width: "170px",
+              headCells: {
+                style: {
+                  fontSize: "19px",
+                  width: "170px",
+                },
               },
-            },
-          }}
-          // total KPI Invoice amount
-          actions={
-            <>
-              <h3 className='bg-primary text-white rounded-0 p-3'>
-                Total: {numDifferentiation(allTotal)}
-              </h3>
-            </>
-          }
-        />
+            }}
+            // total KPI Invoice amount
+            actions={
+              <>
+                <h3 className='bg-primary text-white rounded-0 p-3'>
+                  Total: {numDifferentiation(allTotal)}
+                </h3>
+              </>
+            }
+          />
+        </>
       )}
     </>
   );

@@ -60,6 +60,33 @@
 @import url(../public/css/perfect-scrollbar.css);
 @import url(../public/css/metisMenu.min.css);
 
+@media all {
+  .page-break {
+    display: none;
+  }
+}
+
+@media print {
+  html,
+  body {
+    height: initial !important;
+    overflow: initial !important;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+@media print {
+  .page-break {
+    margin-top: 1rem;
+    display: block;
+    page-break-before: auto;
+  }
+}
+
+@page {
+  size: auto;
+  margin: 20mm;
+}
 
 :root {
   --primary: #2e75b5;
@@ -26239,3 +26266,93 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme-version="dark"] input::placeholder {
   color: white;
 }
+
+/*  Custom Sales Dashboard Css */
+[data-theme-version="dark"] .kmHetU {
+  color: #f5f5f5 !important;
+  background-color: #212130 !important;
+}
+
+[data-theme-version="dark"] .ilSIdy {
+  background-color: #212130 !important;
+}
+
+[data-theme-version="dark"] .buKxOJ {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .fqJYFQ {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .fqJYFQ:hover {
+  background-color: #f5f5f5 !important;
+  color: #212130 !important;
+}
+
+[data-theme-version="dark"] .jXETct {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .jXETct:hover {
+  background-color: #f5f5f5 !important;
+  color: #212130 !important;
+}
+
+[data-theme-version="dark"] .bEcFGt {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .jNqbJL:disabled {
+  cursor: unset;
+  color: rgba(0, 0, 0, 0.18);
+  fill: #f5f5f5;
+}
+
+[data-theme-version="dark"] .gCmqd {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .gCmqd:hover {
+  background-color: #f5f5f5 !important;
+  color: #212130 !important;
+}
+
+.css-1nmdiq5-menu {
+  z-index: 2 !important;
+}
+
+[data-theme-version="dark"] .sc-dIowON {
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+[data-theme-version="dark"] .login-form,
+.authentication_row {
+  background: #212130;
+  border: 1px solid #3d3c3c !important;
+}
+
+[data-theme-version="dark"] .authentication_row {
+  background: #212130 !important;
+  border: none !important;
+}
+[data-theme-version="dark"] .authentication {
+  background: #212130 !important;
+}
+[data-theme-version="dark"] .link_txt {
+  color:#00a2ff !important;
+  cursor: pointer;
+}
+
+[data-theme-version="dark"] .sc-ivTnkv{
+  background-color: #212130 !important;
+  color: #f5f5f5 !important;
+}
+
+/*  Custom Sales Dashboard Css */

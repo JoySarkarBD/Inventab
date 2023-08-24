@@ -2,17 +2,28 @@ import { AiOutlineLogout } from "react-icons/ai";
 // import { BsSun, BsMoon } from "react-icons/bs";
 import avatar from "../../../assets/images/avatar.png";
 import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 
 const Header = () => {
+  const axios = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
-  const handleLogout = () => {
-    const modifiedUserObj = {
-      ...auth,
-      isLoggedIn: false,
-    };
-    setAuth(modifiedUserObj);
-    localStorage.setItem("userInfo", JSON.stringify(modifiedUserObj));
+  const { firstname, lastname } = auth;
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(`accounts/logout`);
+      console.log(res);
+      if (res.status === 200) {
+        const modifiedUserObj = {
+          ...auth,
+          isLoggedIn: false,
+        };
+        setAuth(modifiedUserObj);
+        localStorage.setItem("userInfo", JSON.stringify(modifiedUserObj));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -21,7 +32,9 @@ const Header = () => {
           <nav className='navbar navbar-expand'>
             <div className='collapse navbar-collapse justify-content-between'>
               <div className='header-left'>
-                <div className='dashboard_bar'>Welcome Mukund Sutrave</div>
+                <div className='dashboard_bar'>
+                  Welcome {`${firstname} ${lastname} (${auth?.orgName})`}
+                </div>
               </div>
               <ul className='navbar-nav header-right'>
                 <li className='nav-item dropdown notification_dropdown'>

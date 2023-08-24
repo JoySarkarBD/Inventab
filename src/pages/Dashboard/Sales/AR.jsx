@@ -8,10 +8,14 @@ import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import Loader from "../../../ui/Loader";
 
-import { axiosInstance } from "../../../utils/axios/axios";
+import { useAuth } from "../../../hooks/useAuth";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { daysLeft, dueDate } from "../../../utils/utilityFunc/utilityFunc";
 import "./sales.css";
 
 const AR = () => {
+  const axios = useAxiosPrivate();
+  const { auth } = useAuth();
   const [reports, setReports] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -80,78 +84,102 @@ const AR = () => {
   /* React Select with checkbox */
 
   // fetch table
-  const fetchReports = async () => {
-    try {
-      setLoading(true);
-      const response = (
-        await axiosInstance.get(
-          "invoices/fetch/all/invoices/?org=0a055b26-ae15-40a9-8291-25427b94ebb3"
-        )
-      ).data;
-      setLoading(false);
-      setReports(response?.results);
-      setSearchData(response?.results);
-    } catch (error) {
-      setLoading(true);
-      console.log(error);
-    }
-  };
 
-  // load leads
+  // load reports
   useEffect(() => {
-    fetchReports();
-  }, []);
+    // fetch table
+    let isMount = true;
+    const controller = new AbortController();
+    const getInvoiceList = async () => {
+      try {
+        setLoading(true);
+        const response = (
+          await axios.get(`invoices/fetch/all/invoices/?org=${auth?.orgId}`, {
+            signal: controller.signal,
+          })
+        ).data;
+        setLoading(false);
+        isMount && setReports(response?.results);
+        isMount && setSearchData(response?.results);
+      } catch (error) {
+        setLoading(true);
+        console.log(error);
+      }
+    };
+    getInvoiceList();
 
-  console.log(reports);
+    return () => {
+      (isMount = false), controller.abort();
+    };
+  }, [auth?.orgId, axios]);
+
+  // console.log(reports);
 
   // columns
   const columns = [
     {
       name: "Client",
-      cell: () => "No data found",
+      cell: (row) => row?.org?.company_name || "",
       sortable: true,
     },
 
     {
       name: "Invoice No",
-      selector: () => "No data found",
+      selector: (row) => row?.invoice_number || "",
       sortable: true,
     },
 
     {
       name: "Invoice Date",
-      selector: () => "No data found",
+      selector: (row) =>
+        new Date(row?.invoice_date).toLocaleDateString("en-IN") || "",
       sortable: true,
     },
 
     {
       name: "Total Value",
-      selector: () => "No data found",
+      selector: (row) => {
+        let total = 0;
+        row?.parts_invoice.forEach((part) => {
+          total += part?.price * part?.quantity;
+        });
+        return total;
+      },
       sortable: true,
     },
 
     {
       name: "Paid",
-      selector: () => "No data found",
+      selector: (row) => row?.amount_paid || 0,
       sortable: true,
     },
 
-    // Value - which field is this in API?
     {
       name: "Unpaid",
-      selector: () => "No data found",
+      selector: (row) => {
+        let total = 0;
+        row?.parts_invoice.forEach((part) => {
+          total += part?.price * part?.quantity;
+        });
+        return total - row?.amount_paid;
+      },
       sortable: true,
     },
 
     {
       name: "Due Date",
-      selector: () => "No data found",
+      selector: (row) => {
+        return dueDate(row).toLocaleDateString("en-In");
+      },
       sortable: true,
     },
 
     {
       name: "Age",
-      selector: () => "No data found",
+      selector: (row) => {
+        const date = dueDate(row);
+        return daysLeft(date) + ` days`;
+      },
       sortable: true,
     },
   ];
@@ -168,16 +196,31 @@ const AR = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
-    searchData.forEach((salesData) => {
+    searchData.forEach((invoiceData) => {
+      //@desc total value
+      let total = 0;
+      invoiceData?.parts_invoice?.forEach((part) => {
+        return (total += part?.price * part?.quantity);
+      });
+
+      //@desc  due date
+      let due_date = dueDate(invoiceData).toLocaleDateString("en-IN");
+
+      // @desc age
+      let new_due_date = dueDate(invoiceData);
+      let age = daysLeft(new_due_date) + ` days`;
+
       const csvObj = {
-        "Inv No": salesData?.invoice_number || "No data found",
-        "Sub Org": salesData?.sub_org || "No data found",
-        Client: salesData?.org?.company_name || "No data found",
-        "Sales Order": salesData?.sale_order || "No data found",
-        "Ref PO No": salesData?.ref_po || "No data found", // Ref PO No - which field is this in API?
-        Value: salesData?.value || "No data found", // Value - which field is this in API?
-        Dept: salesData?.dept || "no data found",
-        Status: salesData?.status || "No data found",
+        Client: invoiceData?.org?.company_name,
+        "Invoice-no": invoiceData?.invoice_number,
+        "Invoice-date": new Date(invoiceData?.invoice_date).toLocaleDateString(
+          "en-IN"
+        ),
+        "Total Value": total,
+        Paid: invoiceData?.amount_paid,
+        Unpaid: total - invoiceData?.amount_paid,
+        "Due-date": due_date,
+        Age: age,
       };
 
       data.push(csvObj);

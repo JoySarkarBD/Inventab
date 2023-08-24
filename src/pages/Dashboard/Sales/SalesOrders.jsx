@@ -90,7 +90,14 @@ const SalesOrders = () => {
     },
     {
       name: "Value",
-      selector: () => 0,
+      selector: (row) => {
+        let total = 0;
+        row?.parts?.forEach((part) => {
+          total += part?.quantity * part?.price;
+        });
+
+        return total;
+      },
       sortable: true,
     },
 
@@ -111,16 +118,24 @@ const SalesOrders = () => {
   // export as csv
   const exportAsCsv = () => {
     let data = [];
+
     searchData.forEach((salesData) => {
+      // @desc total value calculation
+      let total = 0;
+      salesData?.parts?.forEach((part) => {
+        return (total += part?.price * part?.quantity);
+      });
+
+      // @desc sales order csv object
       const csvObj = {
         SO: salesData?.so_id || "",
         "Sub Org": salesData?.sub_org?.sub_company_name || "",
         Client: salesData?.client?.company_name || "",
-        Description: salesData?.description || "",
+        Description: `${salesData?.description?.slice(0, 30)}...` || "",
         "Ref PO No": salesData?.ref_po || "",
         "PO Date": salesData?.po_date || "",
         "Expected Inv Date": salesData?.expected_inv_date || "",
-        Value: salesData?.value || 0,
+        Value: total,
         Dept: salesData?.department?.name || "",
         Status: salesData?.so_status || "",
       };
