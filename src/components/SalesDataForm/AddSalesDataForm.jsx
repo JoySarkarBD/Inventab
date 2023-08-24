@@ -1,15 +1,25 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import axios from "../../utils/axios/axios";
 import {
   removeDuplicateObjects,
   removeUndefinedObj,
 } from "../../utils/utilityFunc/utilityFunc";
 import InputText from "../Form/InputText";
 import TextArea from "../Form/TextArea";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useAuth } from "../../hooks/useAuth";
 
 const AddSalesDataForm = () => {
+
+  const axios = useAxiosPrivate();
+  const { auth } = useAuth();
+  const { orgId } = auth;
+
+
+
+
+
   const [loading, setLoading] = useState(false);
   const [dept, setDept] = useState([]);
   const [client, setClient] = useState([]);
@@ -34,7 +44,7 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `organizations/fetch/department/?org=0a055b26-ae15-40a9-8291-25427b94ebb3&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
+          `organizations/fetch/department/?org=${orgId}&role_id=4d5e5124-f4fd-4c91-981a-cc0074fb1356`
         );
         setLoading(false);
         const deptArr = [];
@@ -82,7 +92,7 @@ const AddSalesDataForm = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://inventab.io/api/v1/organizations/get/suborg/?org=0a055b26-ae15-40a9-8291-25427b94ebb3`
+          `http://inventab.io/api/v1/organizations/get/suborg/?org=${orgId}`
         );
         setLoading(false);
         const subOrgArr = [];
@@ -145,7 +155,7 @@ const AddSalesDataForm = () => {
       sub_org: null,
       probability: 0,
       total: 0,
-      status: null,
+      status: "active",
       client: null,
       expected_date: "",
       expected_invoice_date: "",
@@ -182,7 +192,7 @@ const AddSalesDataForm = () => {
 
         const createLeadObj = {
           ...values,
-          org: "0a055b26-ae15-40a9-8291-25427b94ebb3",
+          org: orgId,
           department: department?.value,
           sub_org: sub_org?.value,
           status: status?.value,
@@ -241,6 +251,11 @@ const AddSalesDataForm = () => {
     updatedParts[index].part_id.part_number = selectedOption.label;
     setFieldValue("parts", updatedParts);
   };
+
+
+
+console.log(totalQuantity);
+
 
   return (
     <div className='card-body'>
@@ -477,8 +492,8 @@ const AddSalesDataForm = () => {
                           type='number'
                           placeholder='Net Price'
                           name='net_price'
-                          value={net_price || ""}
-                          onChange={(e) => setNet_price(e.target.value)}
+                          value={totalQuantity * unitCost}
+                          // onChange={() => setNet_price(totalQuantity * unitCost)}
                         />
                       </td>
                       <td>

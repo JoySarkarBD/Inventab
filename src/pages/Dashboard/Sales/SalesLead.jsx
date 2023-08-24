@@ -68,11 +68,11 @@ const SalesLead = () => {
       },
     },
 
-    {
-      name: "Sub Org",
-      selector: (row) => row?.sub_org?.sub_company_name || "",
-      sortable: true,
-    },
+    // {
+    //   name: "Sub Org",
+    //   selector: (row) => row?.sub_org?.sub_company_name || "",
+    //   sortable: true,
+    // },
     {
       name: "Client",
       selector: (row) => row?.client?.company_name,

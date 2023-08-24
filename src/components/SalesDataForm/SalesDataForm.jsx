@@ -411,6 +411,7 @@ export default function SalesDataForm(props) {
           <div className='mb-3 col-md-6'>
             <label className='mb-2 text-dark text-capitalize'>Total</label>
             <InputText
+              readOnly
               type='number'
               name='total'
               value={values?.total}
