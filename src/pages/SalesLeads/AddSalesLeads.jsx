@@ -36,8 +36,28 @@ const AddSalesDataForm = () => {
   const [unitCost, setUnitCost] = useState(0);
   const [status, setstatus] = useState("");
   const [gst, setgst] = useState();
-  // const [net_price, setNet_price] = useState();
-  // const [extd_gross_price, setExtd_gross_price] = useState(0);
+  const [net_price, setNet_price] = useState();
+  const [extd_gross_price, setExtd_gross_price] = useState(0);
+
+  const [totalNetPrice, setTotalNetPrice] = useState(0);
+const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
+
+  
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
   const netPrice = totalQuantity * unitCost
@@ -208,7 +228,7 @@ const AddSalesDataForm = () => {
             unit_cost: parseFloat(p?.unit_cost),
             status: "Active",
             gst: parseFloat(p?.gst),
-            // net_price: parseFloat(p?.net_price),
+            net_price: parseFloat(p?.net_price),
             extd_gross_price: parseFloat(p?.extd_gross_price),
           };
 
@@ -259,8 +279,8 @@ const AddSalesDataForm = () => {
       unit_cost: unitCost,
       status: status?.value,
       gst,
-      // net_price,
-      // extd_gross_price,
+      net_price,
+      extd_gross_price,
     };
 
     setFieldValue("parts", [...values.parts, newPart]);
@@ -308,6 +328,37 @@ const AddSalesDataForm = () => {
       setshort_description("");
     }
   };
+
+
+
+
+  useEffect(() => {
+    // Calculate the total net_price and total extd_gross_price
+    let netPriceTotal = 0;
+    let extdGrossPriceTotal = 0;
+  
+    values.parts.forEach((part) => {
+      const netPrice = part.quantity * part.unit_cost;
+      const extdGrossPrice = netPrice * (1 + part.gst / 100);
+  
+      netPriceTotal += netPrice;
+      extdGrossPriceTotal += extdGrossPrice;
+    });
+  
+    setTotalNetPrice(netPriceTotal);
+    setTotalExtdGrossPrice(extdGrossPriceTotal);
+  }, [values.parts]);
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <>
@@ -739,7 +790,7 @@ const AddSalesDataForm = () => {
                           <td colSpan="6" className="">
                             total
                           </td>
-                          <td colSpan="2">45</td>
+                          <td colSpan="2">{totalNetPrice + totalExtdGrossPrice}</td>
                         </tr>
                       </tbody>
                     </table>
