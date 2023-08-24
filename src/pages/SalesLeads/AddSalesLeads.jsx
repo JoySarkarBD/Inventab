@@ -36,11 +36,16 @@ const AddSalesDataForm = () => {
   const [unitCost, setUnitCost] = useState(0);
   const [status, setstatus] = useState("");
   const [gst, setgst] = useState();
-  // const [net_price, setNet_price] = useState(0);
-  const [extd_gross_price, setExtd_gross_price] = useState(0);
+  // const [net_price, setNet_price] = useState();
+  // const [extd_gross_price, setExtd_gross_price] = useState(0);
 
+
+  const netPrice = totalQuantity * unitCost
+ 
+  
   // load department, Client, sub-organization
   useEffect(() => {
+    
     let isMount = true;
     const controller = new AbortController();
     // organization || department
@@ -203,7 +208,7 @@ const AddSalesDataForm = () => {
             unit_cost: parseFloat(p?.unit_cost),
             status: "Active",
             gst: parseFloat(p?.gst),
-            net_price: parseFloat(p?.net_price),
+            // net_price: parseFloat(p?.net_price),
             extd_gross_price: parseFloat(p?.extd_gross_price),
           };
 
@@ -255,7 +260,7 @@ const AddSalesDataForm = () => {
       status: status?.value,
       gst,
       // net_price,
-      extd_gross_price,
+      // extd_gross_price,
     };
 
     setFieldValue("parts", [...values.parts, newPart]);
@@ -267,7 +272,7 @@ const AddSalesDataForm = () => {
     setstatus(null);
     setgst(0);
     // setNet_price();
-    setExtd_gross_price(0);
+    // setExtd_gross_price(0);
   };
 
   // remove row
@@ -559,7 +564,7 @@ const AddSalesDataForm = () => {
                               className="new_input_class"
                               type="number"
                               name="net_price"
-                              value={totalQuantity * unitCost}
+                              value={netPrice}
                               readOnly
                             />
                           </td>
@@ -567,12 +572,12 @@ const AddSalesDataForm = () => {
                             <input
                               className="new_input_class"
                               type="number"
-                              // placeholder='Extd Gross Price'
                               name="extd_gross_price"
-                              value={extd_gross_price || ""}
-                              onChange={(e) =>
-                                setExtd_gross_price(e.target.value)
-                              }
+                              value={(netPrice * (1 + gst / 100)).toFixed(2)}
+                              readOnly
+                              // onChange={(e) =>
+                              //   setExtd_gross_price(e.target.value)
+                              // }
                             />
                           </td>
                           <td>
@@ -584,9 +589,9 @@ const AddSalesDataForm = () => {
                                   totalQuantity ||
                                   unitCost ||
                                   status ||
-                                  gst ||
+                                  gst 
                                   // net_price ||
-                                  extd_gross_price
+                                  // extd_gross_price
                                 )
                               }
                               onClick={handleTable}
@@ -703,6 +708,7 @@ const AddSalesDataForm = () => {
                                   // value={part?.net_price}
                                   name="net_price"
                                   value={part.quantity * part?.unit_cost}
+                                 
                                   readOnly
                                 />
                               </td>
@@ -712,8 +718,8 @@ const AddSalesDataForm = () => {
                                   type="number"
                                   placeholder="Extd Gross Cost"
                                   name={`parts[${index}].extd_gross_price`}
-                                  value={part?.extd_gross_price}
-                                  onChange={handleChange}
+                                  value={(part.quantity * part?.unit_cost * (1 + part?.gst/100)).toFixed(2)}
+                                 readOnly
                                 />
                               </td>
                               <td>
@@ -728,6 +734,13 @@ const AddSalesDataForm = () => {
                             </tr>
                           );
                         })}
+
+                        <tr>
+                          <td colSpan="6" className="">
+                            total
+                          </td>
+                          <td colSpan="2">45</td>
+                        </tr>
                       </tbody>
                     </table>
                   ) : (
