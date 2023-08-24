@@ -6,6 +6,7 @@ import ReactToPrint from "react-to-print";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 
+
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import { calculateGST, inWords } from "../../../utils/utilityFunc/utilityFunc";
@@ -36,6 +37,9 @@ const SalesInvoiceDetails = () => {
   const [loading, setLoading] = useState(false);
 
   const printRef = useRef();
+  
+
+
   // load leads
   useEffect(() => {
     // fetch invoiceDetails table data
@@ -120,10 +124,17 @@ const SalesInvoiceDetails = () => {
                   Print
                 </button>
               )}
-              content={() => printRef.current}
+              content={() => printRef.current }
             />
-          </div>
-          <div ref={printRef} className='mx-2'>
+            </div>
+            
+
+           
+
+
+
+
+            <div ref={printRef} className='mx-2'>
             <div className='d-flex justify-content-center align-items-center'>
               <SectionTitle heading='Sales Invoice Details' />
             </div>

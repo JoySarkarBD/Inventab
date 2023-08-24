@@ -254,7 +254,18 @@ const AddSalesDataForm = () => {
 
 
 
-console.log(totalQuantity);
+
+
+
+
+  
+
+
+  
+  
+  
+  
+  
 
 
   return (
@@ -488,12 +499,13 @@ console.log(totalQuantity);
                       </td>
                       <td>
                         <input
+                        
                           className='new_input_class'
                           type='number'
                           placeholder='Net Price'
                           name='net_price'
-                          value={totalQuantity * unitCost}
-                          // onChange={() => setNet_price(totalQuantity * unitCost)}
+                          value={net_price}
+                          onChange={(e) => setNet_price(e.target.value)}
                         />
                       </td>
                       <td>
@@ -589,7 +601,7 @@ console.log(totalQuantity);
                         type='number'
                         placeholder='Total Quantity'
                         name={`parts[${index}].quantity`}
-                        value={part.quantity}
+                        value={part.quantity || ''}
                         onChange={handleChange}
                       />
                     </td>
@@ -600,7 +612,7 @@ console.log(totalQuantity);
                         type='number'
                         placeholder='Unit Cost'
                         name={`parts[${index}].unit_cost`}
-                        value={part?.unit_cost}
+                        value={part?.unit_cost || ''}
                         onChange={handleChange}
                       />
                     </td>
@@ -629,11 +641,12 @@ console.log(totalQuantity);
 
                     <td>
                       <input
+                           
                         className='new_input_class'
                         type='number'
                         placeholder='Extd Net Cost'
                         name={`parts[${index}].net_price`}
-                        value={part?.net_price}
+                        value={part?.net_price || ''}
                         onChange={handleChange}
                       />
                     </td>
