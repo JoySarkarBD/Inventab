@@ -40,32 +40,12 @@ const AddSalesDataForm = () => {
   const [extd_gross_price, setExtd_gross_price] = useState(0);
 
   const [totalNetPrice, setTotalNetPrice] = useState(0);
-const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
+  const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
 
-  
-  
+  const netPrice = totalQuantity * unitCost;
 
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-
-  const netPrice = totalQuantity * unitCost
- 
-  
   // load department, Client, sub-organization
   useEffect(() => {
-    
     let isMount = true;
     const controller = new AbortController();
     // organization || department
@@ -228,9 +208,11 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
             unit_cost: parseFloat(p?.unit_cost),
             status: "Active",
             gst: parseFloat(p?.gst),
-            net_price: parseFloat(p?.net_price),
-            extd_gross_price: parseFloat(p?.extd_gross_price),
+            net_price: parseFloat(net_price),
+            extd_gross_price: parseFloat(extd_gross_price),
           };
+
+          console.log(partObj);
 
           if (p?.lead_part_id == undefined) {
             delete partObj.lead_part_id;
@@ -269,6 +251,12 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
   const handleTable = () => {
     event.preventDefault();
 
+    const netPrice = totalQuantity * unitCost;
+    const extdGrossPrice = netPrice * (1 + gst / 100);
+
+    setNet_price(netPrice);
+    setExtd_gross_price(extdGrossPrice);
+
     const newPart = {
       part_id: {
         id: selectPart?.value,
@@ -279,8 +267,9 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
       unit_cost: unitCost,
       status: status?.value,
       gst,
-      net_price,
-      extd_gross_price,
+      net_price: net_price,
+
+      extd_gross_price: extd_gross_price,
     };
 
     setFieldValue("parts", [...values.parts, newPart]);
@@ -291,8 +280,8 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
     setUnitCost(0);
     setstatus(null);
     setgst(0);
-    // setNet_price();
-    // setExtd_gross_price(0);
+    setNet_price();
+    setExtd_gross_price(0);
   };
 
   // remove row
@@ -329,36 +318,26 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
     }
   };
 
-
-
-
   useEffect(() => {
     // Calculate the total net_price and total extd_gross_price
     let netPriceTotal = 0;
     let extdGrossPriceTotal = 0;
-  
+
     values.parts.forEach((part) => {
       const netPrice = part.quantity * part.unit_cost;
       const extdGrossPrice = netPrice * (1 + part.gst / 100);
-  
+
+      setNet_price(netPrice);
+
+      setExtd_gross_price(extdGrossPrice);
+
       netPriceTotal += netPrice;
       extdGrossPriceTotal += extdGrossPrice;
     });
-  
+
     setTotalNetPrice(netPriceTotal);
     setTotalExtdGrossPrice(extdGrossPriceTotal);
   }, [values.parts]);
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <>
@@ -636,11 +615,13 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
                               className="btn btn-primary rounded-1 py-2 px-4 d-flex justify-content-center align-items-center"
                               disabled={
                                 !(
-                                  short_description ||
-                                  totalQuantity ||
-                                  unitCost ||
-                                  status ||
-                                  gst 
+                                  (
+                                    short_description ||
+                                    totalQuantity ||
+                                    unitCost ||
+                                    status ||
+                                    gst
+                                  )
                                   // net_price ||
                                   // extd_gross_price
                                 )
@@ -759,7 +740,6 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
                                   // value={part?.net_price}
                                   name="net_price"
                                   value={part.quantity * part?.unit_cost}
-                                 
                                   readOnly
                                 />
                               </td>
@@ -769,8 +749,12 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
                                   type="number"
                                   placeholder="Extd Gross Cost"
                                   name={`parts[${index}].extd_gross_price`}
-                                  value={(part.quantity * part?.unit_cost * (1 + part?.gst/100)).toFixed(2)}
-                                 readOnly
+                                  value={(
+                                    part.quantity *
+                                    part?.unit_cost *
+                                    (1 + part?.gst / 100)
+                                  ).toFixed(2)}
+                                  readOnly
                                 />
                               </td>
                               <td>
@@ -790,7 +774,9 @@ const [totalExtdGrossPrice, setTotalExtdGrossPrice] = useState(0);
                           <td colSpan="6" className="">
                             total
                           </td>
-                          <td colSpan="2">{totalNetPrice + totalExtdGrossPrice}</td>
+                          <td colSpan="2">
+                            {totalNetPrice + totalExtdGrossPrice}
+                          </td>
                         </tr>
                       </tbody>
                     </table>
