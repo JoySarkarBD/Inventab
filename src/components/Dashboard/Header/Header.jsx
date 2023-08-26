@@ -12,7 +12,6 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(`accounts/logout`);
-      console.log(res);
       if (res.status === 200) {
         const modifiedUserObj = {
           ...auth,

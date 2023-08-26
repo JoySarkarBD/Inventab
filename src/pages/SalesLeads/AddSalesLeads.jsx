@@ -39,6 +39,26 @@ const AddSalesDataForm = () => {
   const [net_price, setNet_price] = useState(0);
   const [extd_gross_price, setExtd_gross_price] = useState(0);
 
+  // set net price
+  useEffect(() => {
+    if (totalQuantity && totalQuantity > 0 && unitCost && unitCost > 0) {
+      setNet_price(parseInt(totalQuantity * unitCost));
+    } else {
+      setNet_price(0);
+    }
+  }, [totalQuantity, unitCost]);
+
+  // set extd gross price
+  useEffect(() => {
+    if (net_price && net_price > 0 && gst && gst > 0) {
+      let modifiedGst = parseInt(gst) + 1;
+      let gross_price = modifiedGst * parseInt(net_price);
+      setExtd_gross_price(gross_price);
+    } else {
+      setExtd_gross_price(0);
+    }
+  }, [gst, net_price]);
+
   // load department, Client, sub-organization
   useEffect(() => {
     let isMount = true;
@@ -559,8 +579,8 @@ const AddSalesDataForm = () => {
                               type='number'
                               // placeholder='Net Price'
                               name='net_price'
-                              value={net_price || ""}
-                              onChange={(e) => setNet_price(e.target.value)}
+                              defaultValue={net_price || ""}
+                              readOnly
                             />
                           </td>
                           <td>
@@ -569,10 +589,8 @@ const AddSalesDataForm = () => {
                               type='number'
                               // placeholder='Extd Gross Price'
                               name='extd_gross_price'
-                              value={extd_gross_price || ""}
-                              onChange={(e) =>
-                                setExtd_gross_price(e.target.value)
-                              }
+                              defaultValue={extd_gross_price || ""}
+                              readOnly
                             />
                           </td>
                           <td>
