@@ -171,8 +171,7 @@ const AR = () => {
   // search result
   useEffect(() => {
     let results;
-    let s;
-
+    // push age property in every report object
     results = reports?.map((report) => {
       let date = dueDate(report);
       let age = daysLeftForSearchFunc(date);
