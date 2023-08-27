@@ -273,8 +273,24 @@ utils.daysLeft = (targetDate) => {
   // Round the number of days and return it
   let res = Math.ceil(differenceInDays);
   if (res > 0) {
-    return `+${res}`;
+    return `+${parseInt(res)}`;
   }
+  return res;
+};
+// @desc how many days left for search function
+utils.daysLeftForSearchFunc = (targetDate) => {
+  const currentDate = new Date();
+  const targetDateTime = new Date(targetDate);
+
+  // Calculate the difference in milliseconds between the two dates
+  const differenceInMilliseconds = targetDateTime - currentDate;
+
+  // Convert the difference to days
+  const differenceInDays = differenceInMilliseconds / (24 * 60 * 60 * 1000);
+
+  // Round the number of days and return it
+  let res = Math.ceil(differenceInDays);
+
   return res;
 };
 
@@ -314,5 +330,6 @@ export const {
   formatChartData,
   getColorForDepartment,
   daysLeft,
+  daysLeftForSearchFunc,
   dueDate,
 } = utils;

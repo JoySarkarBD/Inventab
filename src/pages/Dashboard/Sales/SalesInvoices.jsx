@@ -66,12 +66,6 @@ const SalesInvoices = () => {
     },
 
     {
-      name: "Sub Org",
-      selector: (row) => row?.sub_org || "",
-      sortable: true,
-    },
-
-    {
       name: "Client",
       selector: (row) => row?.org?.company_name || "",
       sortable: true,
@@ -169,7 +163,6 @@ const SalesInvoices = () => {
       // @desc sales invoice csv object
       const csvObj = {
         "Inv No": salesData?.invoice_number || "",
-        "Sub Org": salesData?.sub_org || "",
         Client: salesData?.org?.company_name || "",
         "Sales Order": salesData?.sale_order || "",
         "Ref PO No": salesData?.po_no || "", // Ref PO No - which field is this in API?

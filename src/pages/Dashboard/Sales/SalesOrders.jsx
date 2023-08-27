@@ -59,11 +59,6 @@ const SalesOrders = () => {
     },
 
     {
-      name: "Sub Org",
-      selector: (row) => row?.sub_org?.sub_company_name || "",
-      sortable: true,
-    },
-    {
       name: "Client",
       selector: (row) => row?.client?.company_name || "",
       sortable: true,
@@ -129,7 +124,6 @@ const SalesOrders = () => {
       // @desc sales order csv object
       const csvObj = {
         SO: salesData?.so_id || "",
-        "Sub Org": salesData?.sub_org?.sub_company_name || "",
         Client: salesData?.client?.company_name || "",
         Description: `${salesData?.description?.slice(0, 30)}...` || "",
         "Ref PO No": salesData?.ref_po || "",

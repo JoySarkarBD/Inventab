@@ -1,16 +1,21 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import DataTable from "react-data-table-component";
 import { FiDownload } from "react-icons/fi";
-import Select, { components } from "react-select";
+import Select from "react-select";
 import PageTitle from "../../../components/Shared/PageTitle";
 import SectionTitle from "../../../components/Shared/SectionTitle";
 import Loader from "../../../ui/Loader";
 
 import { useAuth } from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { daysLeft, dueDate } from "../../../utils/utilityFunc/utilityFunc";
+import {
+  daysLeft,
+  daysLeftForSearchFunc,
+  dueDate,
+} from "../../../utils/utilityFunc/utilityFunc";
 import "./sales.css";
 
 const AR = () => {
@@ -21,69 +26,6 @@ const AR = () => {
   const [loading, setLoading] = useState(false);
   const [csv, setCsv] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-
-  /* React Select with checkbox */
-  const InputOption = ({
-    getStyles,
-    Icon,
-    isDisabled,
-    isFocused,
-    isSelected,
-    children,
-    innerProps,
-    ...rest
-  }) => {
-    const [isActive, setIsActive] = useState(false);
-    const onMouseDown = () => setIsActive(true);
-    const onMouseUp = () => setIsActive(false);
-    const onMouseLeave = () => setIsActive(false);
-
-    // styles
-    let bg = "transparent";
-    // if (isFocused) bg = "#eee";
-    if (isActive) bg = "#B2D4FF";
-
-    const style = {
-      alignItems: "center",
-      backgroundColor: bg,
-      color: "black",
-      display: "flex ",
-    };
-
-    // prop assignment
-    const props = {
-      ...innerProps,
-      onMouseDown,
-      onMouseUp,
-      onMouseLeave,
-      style,
-    };
-
-    return (
-      <components.Option
-        {...rest}
-        isDisabled={isDisabled}
-        isFocused={isFocused}
-        isSelected={isSelected}
-        getStyles={getStyles}
-        innerProps={props}>
-        <input type='checkbox' checked={isSelected} className='me-2' />
-        {children}
-      </components.Option>
-    );
-  };
-
-  const allOptions = [
-    { value: "Overdue (>30 days)", label: "Overdue (>30 days)" },
-    { value: "Overdue (>15 days)", label: "Overdue (>15 days)" },
-    { value: "Overdue (<15days)", label: "Overdue (<15days)" },
-    { value: "Due in 15 Days", label: "Due in 15 Days" },
-    { value: "Due in 30 Days", label: "Due in 30 Days" },
-    { value: "Due in > 30 Days", label: "Due in > 30 Days" },
-  ];
-  /* React Select with checkbox */
-
-  // fetch table
 
   // load reports
   useEffect(() => {
@@ -113,19 +55,16 @@ const AR = () => {
     };
   }, [auth?.orgId, axios]);
 
-  // console.log(reports);
-
   // columns
   const columns = [
     {
-      name: "Client",
-      cell: (row) => row?.org?.company_name || "",
-      sortable: true,
-    },
-
-    {
       name: "Invoice No",
       selector: (row) => row?.invoice_number || "",
+      sortable: true,
+    },
+    {
+      name: "Client",
+      cell: (row) => row?.org?.company_name || "",
       sortable: true,
     },
 
@@ -229,6 +168,57 @@ const AR = () => {
     setCsv((prev) => [...prev, ...data]);
   };
 
+  // search result
+  useEffect(() => {
+    let results;
+    let s;
+
+    results = reports?.map((report) => {
+      let date = dueDate(report);
+      let age = daysLeftForSearchFunc(date);
+      return { ...report, age };
+    });
+
+    if (selectedOptions.length > 0) {
+      selectedOptions.filter((option) => {
+        if (option === "Overdue (>30 days)") {
+          s = results.filter((result) => {
+            return result.age >= 30;
+          });
+        }
+        if (option === "Overdue (>15 days)") {
+          s = results.filter((result) => {
+            return result.age > 15 && result.age < 30;
+          });
+        }
+        if (option === "Overdue (<15days)") {
+          s = results.filter((result) => {
+            return result.age > 0 && result.age < 15;
+          });
+        }
+        if (option === "Due in 15 Days") {
+          s = results.filter((result) => {
+            return result.age < 0 && result.age > -15;
+          });
+        }
+        if (option === "Due in 30 Days") {
+          s = results.filter((result) => {
+            return result.age < -30;
+          });
+        }
+        if (option === "Due in > 30 Days") {
+          console.log(option);
+        }
+      });
+      setSearchData(s);
+    } else {
+      setSearchData(reports);
+    }
+
+    // console.log(s);
+  }, [selectedOptions, reports]);
+
+  // console.log(selectedOptions);
   return (
     <div>
       <PageTitle title='AR' />
@@ -264,18 +254,17 @@ const AR = () => {
                   subHeaderComponent={
                     <Select
                       className='text-start w-75 select-ar'
-                      defaultValue={[]}
                       closeMenuOnSelect={false}
-                      hideSelectedOptions={false}
+                      hideSelectedOptions={true}
                       isMulti
-                      onChange={(options) => {
-                        if (Array.isArray(options)) {
-                          setSelectedOptions(options.map((opt) => opt.value));
-                        }
-                      }}
-                      options={allOptions}
-                      components={{
-                        Option: InputOption,
+                      value={options.filter((option) =>
+                        selectedOptions.includes(option.value)
+                      )}
+                      options={options}
+                      onChange={(option) => {
+                        setSelectedOptions(
+                          option.map((option) => option.value)
+                        );
                       }}
                     />
                   }
