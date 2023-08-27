@@ -185,26 +185,31 @@ const AR = () => {
           s = results.filter((result) => {
             return result.age >= 30;
           });
+          console.log(s);
         }
         if (option === "Overdue (>15 days)") {
           s = results.filter((result) => {
             return result.age > 15 && result.age < 30;
           });
+          console.log(s);
         }
         if (option === "Overdue (<15days)") {
           s = results.filter((result) => {
             return result.age > 0 && result.age < 15;
           });
+          console.log(s);
         }
         if (option === "Due in 15 Days") {
           s = results.filter((result) => {
             return result.age < 0 && result.age > -15;
           });
+          console.log(s);
         }
         if (option === "Due in 30 Days") {
           s = results.filter((result) => {
             return result.age < -30;
           });
+          console.log(s);
         }
         if (option === "Due in > 30 Days") {
           console.log(option);
@@ -217,6 +222,16 @@ const AR = () => {
 
     // console.log(s);
   }, [selectedOptions, reports]);
+
+  // Define the priority order for selected options
+  const optionPriorityOrder = [
+    "Overdue (>30 days)",
+    "Overdue (>15 days)",
+    "Overdue (<15days)",
+    "Due in 15 Days",
+    "Due in 30 Days",
+    "Due in > 30 Days",
+  ];
 
   // console.log(selectedOptions);
   return (
@@ -261,9 +276,16 @@ const AR = () => {
                         selectedOptions.includes(option.value)
                       )}
                       options={options}
-                      onChange={(option) => {
+                      onChange={(selected) => {
+                        // Sort the selected options based on the priority order
+                        const sortedSelectedOptions = selected.sort((a, b) => {
+                          return (
+                            optionPriorityOrder.indexOf(a.value) -
+                            optionPriorityOrder.indexOf(b.value)
+                          );
+                        });
                         setSelectedOptions(
-                          option.map((option) => option.value)
+                          sortedSelectedOptions.map((option) => option.value)
                         );
                       }}
                     />
