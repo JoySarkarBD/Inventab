@@ -180,44 +180,35 @@ const AR = () => {
     });
 
     if (selectedOptions.length > 0) {
-      selectedOptions.filter((option) => {
+      const searchData = selectedOptions.reduce((acc, option) => {
+        let filteredResults = [];
+
         if (option === "Overdue (>30 days)") {
-          s = results.filter((result) => {
-            return result.age >= 30;
-          });
-          // console.log(s);
+          filteredResults = results.filter((result) => result.age >= 30);
+        } else if (option === "Overdue (>15 days)") {
+          filteredResults = results.filter(
+            (result) => result.age < 30 && result.age >= 15
+          );
+        } else if (option === "Overdue (<15days)") {
+          filteredResults = results.filter(
+            (result) => result.age > 0 && result.age < 15
+          );
+        } else if (option === "Due in 15 Days") {
+          filteredResults = results.filter(
+            (result) => result.age < 0 && result.age >= -15
+          );
+        } else if (option === "Due in 30 Days") {
+          filteredResults = results.filter(
+            (result) => result.age < -15 && result.age >= -30
+          );
+        } else if (option === "Due in > 30 Days") {
+          filteredResults = results.filter((result) => result.age < -30);
         }
-        if (option === "Overdue (>15 days)") {
-          s = results.filter((result) => {
-            return result.age > 15 && result.age < 30;
-          });
-          // console.log(s);
-        }
-        if (option === "Overdue (<15days)") {
-          s = results.filter((result) => {
-            return result.age > 0 && result.age < 15;
-          });
-          // console.log(s);
-        }
-        if (option === "Due in 15 Days") {
-          s = results.filter((result) => {
-            return result.age < 0 && result.age >= -15;
-          });
-          // console.log(s);
-        }
-        if (option === "Due in 30 Days") {
-          s = results.filter((result) => {
-            return result.age < -15 && result.age >= -30;
-          });
-          // console.log(s);
-        }
-        if (option === "Due in > 30 Days") {
-          s = results.filter((result) => {
-            return result.age < -30;
-          });
-        }
-      });
-      setSearchData(s);
+
+        return acc.concat(filteredResults);
+      }, []);
+
+      setSearchData(searchData);
     } else {
       setSearchData(reports);
     }
@@ -307,3 +298,13 @@ const AR = () => {
 };
 
 export default AR;
+
+[
+  { name: "Mehedi", age: 30 },
+  { name: "Kafi", age: 35 },
+  { name: "Joy", age: 26 },
+  { name: "Roni", age: 18 },
+  { name: "Dipto", age: -10 },
+  { name: "XXX", age: -190 },
+  { name: "XYZ", age: -26 },
+];
