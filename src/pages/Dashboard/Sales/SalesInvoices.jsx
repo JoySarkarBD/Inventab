@@ -96,6 +96,12 @@ const SalesInvoices = () => {
     },
 
     {
+      name: "Invoice Date",
+      selector: (row) =>
+        new Date(row?.invoice_date).toLocaleDateString("en-IN") || "",
+      sortable: true,
+    },
+    {
       name: "Dept",
       selector: (row) => row?.dept?.name || "",
       sortable: true,
@@ -165,8 +171,11 @@ const SalesInvoices = () => {
         "Inv No": salesData?.invoice_number || "",
         Client: salesData?.org?.company_name || "",
         "Sales Order": salesData?.sale_order || "",
-        "Ref PO No": salesData?.po_no || "", // Ref PO No - which field is this in API?
-        Value: total || "", // Value - which field is this in API?
+        "Ref PO No": salesData?.po_no || "",
+        "Invoice Date": new Date(salesData?.invoice_date).toLocaleDateString(
+          "en-IN"
+        ),
+        Value: total || "",
         Dept: salesData?.dept?.name || "",
         Status: salesData?.status || "",
       };
