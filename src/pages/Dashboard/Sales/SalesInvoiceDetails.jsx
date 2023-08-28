@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import { AiOutlinePrinter } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
@@ -33,6 +34,7 @@ const SalesInvoiceDetails = () => {
   const axios = useAxiosPrivate();
 
   const [invoiceDetails, setInvoiceDetails] = useState();
+
   const [loading, setLoading] = useState(false);
 
   const printRef = useRef();
@@ -438,48 +440,28 @@ const SalesInvoiceDetails = () => {
                         if (part?.id === serializedNo) {
                           return (
                             <tr key={part?.id}>
-                              {part?.parts_no?.serialized_parts?.length ? (
-                                <>
-                                  <td>
-                                    {part?.parts_no?.serialized_parts?.map(
-                                      (sn, index) => {
-                                        return (
-                                          <p key={sn?.id}>{"Sl-" + ++index}</p>
-                                        );
-                                      }
-                                    )}
-                                  </td>
-                                  <td>
-                                    {part?.parts_no?.serialized_parts?.map(
-                                      (sn) => {
-                                        return (
-                                          <p key={sn?.id}>
-                                            {sn?.serial_number}
-                                          </p>
-                                        );
-                                      }
-                                    )}
-                                  </td>
-                                </>
-                              ) : (
-                                <td colSpan='2' className='text-center'>
-                                  No Data Found
-                                </td>
-                              )}
+                              <td>
+                                {part?.parts_no?.serialized_parts?.map(
+                                  (sn, index) => {
+                                    return (
+                                      <p key={sn?.id}>{"Sl-" + ++index}</p>
+                                    );
+                                  }
+                                )}
+                              </td>
+                              <td>
+                                {part?.parts_no?.serialized_parts?.map((sn) => {
+                                  return (
+                                    <p key={sn?.id}>{sn?.serial_number}</p>
+                                  );
+                                })}
+                              </td>
                             </tr>
                           );
                         }
                       })}
                     </tbody>
                   </table>
-                </div>
-                <div className='modal-footer'>
-                  <button
-                    type='button'
-                    className='btn btn-secondary'
-                    data-bs-dismiss='modal'>
-                    Close
-                  </button>
                 </div>
               </div>
             </div>
