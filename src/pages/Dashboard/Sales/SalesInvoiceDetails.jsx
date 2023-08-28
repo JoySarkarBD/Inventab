@@ -314,29 +314,25 @@ const SalesInvoiceDetails = () => {
                       </thead>
                       <tbody>
                         {invoiceDetails?.parts_invoice?.map((part) => {
-                          console.log(part);
                           return (
                             <tr key={part?.id}>
-                              <td
-                                onClick={() => setSerializedNo(part.id)}
-                                className={
-                                  part?.parts_no?.serialized_parts?.length > 0
-                                    ? "text-primary link_txt"
-                                    : "text-white"
-                                }
-                                data-bs-toggle={
-                                  part?.parts_no?.serialized_parts?.length > 0
-                                    ? "modal"
-                                    : ""
-                                }
-                                data-bs-target={
-                                  part?.parts_no?.serialized_parts?.length > 0
-                                    ? "#exampleModal"
-                                    : ""
-                                }
-                                style={{ cursor: "pointer" }}>
-                                {part?.short_description}
-                              </td>
+                              {part?.parts_no?.serialized_parts?.length > 0 ? (
+                                <>
+                                  {" "}
+                                  <td
+                                    onClick={() => setSerializedNo(part.id)}
+                                    className='text-primary link_txt'
+                                    data-bs-toggle='modal'
+                                    data-bs-target='#exampleModal'
+                                    style={{ cursor: "pointer" }}>
+                                    {part?.short_description}
+                                  </td>
+                                </>
+                              ) : (
+                                <td className='text-white'>
+                                  {part?.short_description}
+                                </td>
+                              )}
                               <td>{part?.price}</td>
                               <td>{part?.quantity}</td>
                               <td>
