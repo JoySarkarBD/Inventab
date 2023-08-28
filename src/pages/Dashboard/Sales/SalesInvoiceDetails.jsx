@@ -10,6 +10,7 @@ import SectionTitle from "../../../components/Shared/SectionTitle";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
 import { calculateGST, inWords } from "../../../utils/utilityFunc/utilityFunc";
+import logo from "./../../../assets/images/favicon.ico";
 import "./sales.css";
 
 const SalesInvoiceDetails = () => {
@@ -125,10 +126,14 @@ const SalesInvoiceDetails = () => {
               content={() => printRef.current}
             />
           </div>
-          <div ref={printRef} className='mx-2'>
-            <div className='d-flex justify-content-center align-items-center'>
-              <SectionTitle heading='Sales Invoice Details' />
+          <div ref={printRef} className='mx-2 print-area'>
+            <img src={logo} alt='' className='logo-position' />
+            <div className='d-flex justify-content-center align-items-center '>
+              <SectionTitle heading='Tax Invoice' />
             </div>
+            <h4 className='text-center fw-bold'>
+              {invoiceDetails?.invoice_number}
+            </h4>
             {/* Billing Address Detail & Shipping address Detail including GST*/}
             <div className='row my-5 row-gap-2'>
               {/* Billing Address Detail */}
@@ -137,32 +142,32 @@ const SalesInvoiceDetails = () => {
                   <div className='card-body d-flex'>
                     <div className='me-auto'>
                       <h4 className='card-title'>Billing Address Detail</h4>
+
                       <p className='text-dark fs-4 my-2'>
-                        Address:
-                        <span className='fs-5'>
-                          {" "}
-                          {invoiceDetails?.billing_address?.address}
-                        </span>
-                      </p>
-                      <p className='text-dark fs-4 my-2'>
-                        Country:
-                        <span className='fs-5'>
-                          {" "}
-                          {invoiceDetails?.billing_address?.country?.name}
-                        </span>
-                      </p>
-                      <p className='text-dark fs-4 my-2'>
-                        Company:
                         <span className='fs-5'>
                           {" "}
                           {invoiceDetails?.billing_address?.org?.company_name}
                         </span>
                       </p>
+
                       <p className='text-dark fs-4 my-2'>
-                        Pin-Code:
+                        <span className='fs-5'>
+                          {" "}
+                          {invoiceDetails?.billing_address?.address}
+                        </span>
+                      </p>
+
+                      <p className='text-dark fs-4 my-2'>
                         <span className='fs-5'>
                           {" "}
                           {invoiceDetails?.billing_address?.pincode?.pin_code}
+                        </span>
+                      </p>
+
+                      <p className='text-dark fs-4 my-2'>
+                        <span className='fs-5'>
+                          {" "}
+                          {invoiceDetails?.billing_address?.country?.name}
                         </span>
                       </p>
 
@@ -186,34 +191,34 @@ const SalesInvoiceDetails = () => {
                       Shipping address Detail including GST
                     </h4>
                     <p className='text-dark fs-4 my-2'>
-                      Address:
-                      <span className='fs-5'>
-                        {" "}
-                        {invoiceDetails?.shipping_address?.address}
-                      </span>
-                    </p>
-                    <p className='text-dark fs-4 my-2'>
-                      Country:
-                      <span className='fs-5'>
-                        {" "}
-                        {invoiceDetails?.shipping_address?.country?.name}
-                      </span>
-                    </p>
-                    <p className='text-dark fs-4 my-2'>
-                      Company:
                       <span className='fs-5'>
                         {" "}
                         {invoiceDetails?.shipping_address?.org?.company_name}
                       </span>
                     </p>
+
                     <p className='text-dark fs-4 my-2'>
-                      Pin-Code:
+                      <span className='fs-5'>
+                        {" "}
+                        {invoiceDetails?.shipping_address?.address}
+                      </span>
+                    </p>
+
+                    <p className='text-dark fs-4 my-2'>
                       <span className='fs-5'>
                         {" "}
                         {invoiceDetails?.shipping_address?.pincode?.pin_code}
                       </span>
                     </p>
+
                     <p className='text-dark fs-4 my-2'>
+                      <span className='fs-5'>
+                        {" "}
+                        {invoiceDetails?.shipping_address?.country?.name}
+                      </span>
+                    </p>
+
+                    <p className='text-dark fs-4 my-2 opacity-0'>
                       GST:
                       <span className='fs-5'>
                         {" "}
@@ -293,6 +298,14 @@ const SalesInvoiceDetails = () => {
                         {invoiceDetails?.created_by?.mobile}
                       </span>
                     </p>
+
+                    <p className='text-dark fs-4 my-2 opacity-0'>
+                      Mobile:
+                      <span className='fs-5'>
+                        {" "}
+                        {invoiceDetails?.created_by?.mobile}
+                      </span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -331,7 +344,7 @@ const SalesInvoiceDetails = () => {
                                   </td>
                                 </>
                               ) : (
-                                <td className='text-white'>
+                                <td className='text-black'>
                                   {part?.short_description}
                                 </td>
                               )}
