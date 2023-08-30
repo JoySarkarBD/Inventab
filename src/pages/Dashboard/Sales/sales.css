@@ -228,5 +228,24 @@
 .logo-position {
   position: absolute !important;
   top: 0 !important;
-  left: 0 !important;
+  left: 40px !important;
+}
+
+.invo_card_title {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.invo_card_txt {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.table td,
+.table th {
+  padding: 10px !important;
+}
+
+.tb_dt {
+  font-size: 13px !important;
 }

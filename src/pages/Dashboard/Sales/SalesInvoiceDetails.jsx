@@ -5,7 +5,6 @@ import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import PageTitle from "../../../components/Shared/PageTitle";
-import SectionTitle from "../../../components/Shared/SectionTitle";
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Loader from "../../../ui/Loader";
@@ -107,7 +106,7 @@ const SalesInvoiceDetails = () => {
       ) : (
         <div>
           <PageTitle title='Invoices-Details' />
-          <div className='d-flex justify-content-end mb-4'>
+          <div className='d-flex justify-content-end mb-0'>
             {/* back btn */}
             <Link
               to='/dashboard/sales-invoices'
@@ -126,54 +125,55 @@ const SalesInvoiceDetails = () => {
               content={() => printRef.current}
             />
           </div>
-          <div ref={printRef} className='mx-2 print-area'>
+          <div ref={printRef} className='container-fluid print-area m-0 p-0'>
             <img src={logo} alt='' className='logo-position' />
+            {/* section title start */}
             <div className='d-flex justify-content-center align-items-center '>
-              <SectionTitle heading='Tax Invoice' />
+              <h1 className='fs-3 fw-bold'>Tax Invoice</h1>
             </div>
-            <h4 className='text-center fw-bold'>
+            <h4 className='text-center fs-5 fw-semibold'>
               {invoiceDetails?.invoice_number}
             </h4>
+            {/* section title end */}
             {/* Billing Address Detail & Shipping address Detail including GST*/}
-            <div className='row my-5 row-gap-2'>
+            <div className='row mt-4 mb-2 row-gap-2'>
               {/* Billing Address Detail */}
-              <div className='col-12 col-md-6 col-lg-6'>
+              <div className='col-12 col-md-6 col-lg-6 '>
                 <div className='invoice-details-card'>
-                  <div className='card-body d-flex'>
+                  <div className='card-body d-flex p-3'>
                     <div className='me-auto'>
-                      <h4 className='card-title'>Billing Address Detail</h4>
+                      <h4 className='card-title invo_card_title'>
+                        Billing Address Detail
+                      </h4>
 
-                      <p className='text-dark fs-4 my-2'>
-                        <span className='fs-5'>
+                      <p className='text-dark invo_card_txt my-1'>
+                        <span className='invo_card_txt text-black'>
                           {" "}
                           {invoiceDetails?.billing_address?.org?.company_name}
                         </span>
                       </p>
 
-                      <p className='text-dark fs-4 my-2'>
-                        <span className='fs-5'>
+                      <p className='text-dark invo_card_txt my-1'>
+                        <span className='invo_card_txt text-black'>
                           {" "}
                           {invoiceDetails?.billing_address?.address}
                         </span>
                       </p>
 
-                      <p className='text-dark fs-4 my-2'>
-                        <span className='fs-5'>
+                      <p className='text-dark invo_card_txt my-1'>
+                        <span className='invo_card_txt text-black'>
                           {" "}
                           {invoiceDetails?.billing_address?.pincode?.pin_code}
+                          {", "}
                         </span>
-                      </p>
 
-                      <p className='text-dark fs-4 my-2'>
-                        <span className='fs-5'>
-                          {" "}
+                        <span className='invo_card_txt text-black'>
                           {invoiceDetails?.billing_address?.country?.name}
                         </span>
                       </p>
-
-                      <p className='text-dark fs-4 my-2'>
+                      <p className='text-dark invo_card_txt my-1'>
                         GST:
-                        <span className='fs-5'>
+                        <span className='invo_card_txt text-black'>
                           {" "}
                           {invoiceDetails?.billing_address?.gst_no}
                         </span>
@@ -185,42 +185,40 @@ const SalesInvoiceDetails = () => {
 
               {/* Shipping address Detail including GST */}
               <div className='col-12 col-md-6 col-lg-6'>
-                <div className='invoice-details-card'>
-                  <div className='card-body'>
-                    <h4 className='card-title'>
-                      Shipping address Detail including GST
+                <div className='invoice-details-card '>
+                  <div className='card-body p-3'>
+                    <h4 className='card-title invo_card_title'>
+                      Shipping address including GST
                     </h4>
-                    <p className='text-dark fs-4 my-2'>
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.shipping_address?.org?.company_name}
                       </span>
                     </p>
 
-                    <p className='text-dark fs-4 my-2'>
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.shipping_address?.address}
                       </span>
                     </p>
 
-                    <p className='text-dark fs-4 my-2'>
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.shipping_address?.pincode?.pin_code}
+                        {", "}
                       </span>
-                    </p>
 
-                    <p className='text-dark fs-4 my-2'>
-                      <span className='fs-5'>
-                        {" "}
+                      <span className='invo_card_txt text-black'>
                         {invoiceDetails?.shipping_address?.country?.name}
                       </span>
                     </p>
 
-                    <p className='text-dark fs-4 my-2 opacity-0'>
+                    <p className='text-dark invo_card_txt my-1 opacity-0'>
                       GST:
-                      <span className='fs-5'>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.shipping_address?.gst_no || `N/A`}
                       </span>
@@ -232,32 +230,34 @@ const SalesInvoiceDetails = () => {
               {/* Payment & Delivery Terms  */}
               <div className='col-12 col-md-6 col-lg-6'>
                 <div className='invoice-details-card'>
-                  <div className='card-body'>
-                    <h4 className='card-title'>Payment & Delivery</h4>
-                    <p className='text-dark fs-4 my-2'>
-                      Payment Terms:
-                      <span className='fs-5'>
+                  <div className='card-body p-3'>
+                    <h4 className='card-title invo_card_title'>
+                      Payment & Delivery
+                    </h4>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='fw-bold'>Payment Terms: </span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.payment_term?.term}
                       </span>
                     </p>
-                    <p className='text-dark fs-4 my-2'>
-                      Payment Date:
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='fw-bold'> Payment Date:</span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.payment_date}
                       </span>
                     </p>
-                    <p className='text-dark fs-4 my-2'>
-                      Delivery Terms:
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='fw-bold'>Delivery Terms:</span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.delivery_term}
                       </span>
                     </p>
-                    <p className='text-dark fs-4 my-2'>
-                      Status:
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='fw-bold'> Status:</span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.status === null
                           ? "------------"
@@ -271,11 +271,13 @@ const SalesInvoiceDetails = () => {
               {/* Created By Details  */}
               <div className='col-12 col-md-6 col-lg-6'>
                 <div className='invoice-details-card'>
-                  <div className='card-body'>
-                    <h4 className='card-title'>Contact Details</h4>
-                    <p className='text-dark fs-4 my-2'>
-                      Created By:
-                      <span className='fs-5'>
+                  <div className='card-body p-3'>
+                    <h4 className='card-title invo_card_title '>
+                      Contact Details
+                    </h4>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='fw-bold'>Created By:</span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.created_by?.first_name +
                           " " +
@@ -283,25 +285,25 @@ const SalesInvoiceDetails = () => {
                       </span>
                     </p>
 
-                    <p className='text-dark fs-4 my-2'>
-                      Email:
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='fw-bold'> Email:</span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.created_by?.email}
                       </span>
                     </p>
 
-                    <p className='text-dark fs-4 my-2'>
-                      Mobile:
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1'>
+                      <span className='fw-bold'>Mobile:</span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.created_by?.mobile}
                       </span>
                     </p>
 
-                    <p className='text-dark fs-4 my-2 opacity-0'>
-                      Mobile:
-                      <span className='fs-5'>
+                    <p className='text-dark invo_card_txt my-1 opacity-0'>
+                      <span className='fw-bold'> Mobile:</span>
+                      <span className='invo_card_txt text-black'>
                         {" "}
                         {invoiceDetails?.created_by?.mobile}
                       </span>
@@ -315,20 +317,24 @@ const SalesInvoiceDetails = () => {
             <div className='row'>
               <div className='col-12'>
                 <div className='card'>
-                  <div className='card-body table-responsive'>
+                  <div className='card-body table-responsive p-3'>
                     <table className='table table-bordered'>
                       <thead style={{ background: "#343A40" }}>
                         <tr>
-                          <th className='text-light ps-4 fs-5'>
+                          <th className='text-light ps-4 fs-6 fw-bold'>
                             Part No with Desc
                           </th>
-                          <th className='text-light ps-4 fs-5'>Unit Value</th>
-                          <th className='text-light ps-4 fs-5'>Qty</th>
-                          <th className='text-light ps-4 fs-5'>Extd wo Tax</th>
+                          <th className='text-light ps-4 fs-6 fw-bold'>
+                            Unit Value
+                          </th>
+                          <th className='text-light ps-4 fs-6 fw-bold'>Qty</th>
+                          <th className='text-light ps-4 fs-6 fw-bold'>
+                            Extd wo Tax
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {invoiceDetails?.parts_invoice?.map((part) => {
+                        {invoiceDetails?.parts_invoice?.map(part => {
                           return (
                             <tr key={part?.id}>
                               {part?.parts_no?.serialized_parts?.length > 0 ? (
@@ -344,13 +350,17 @@ const SalesInvoiceDetails = () => {
                                   </td>
                                 </>
                               ) : (
-                                <td className='text-black'>
+                                <td className='text-black tb_dt'>
                                   {part?.short_description}
                                 </td>
                               )}
-                              <td>{part?.price}</td>
-                              <td>{part?.quantity}</td>
-                              <td>
+                              <td className='tb_dt text-black'>
+                                {part?.price}
+                              </td>
+                              <td className='tb_dt text-black'>
+                                {part?.quantity}
+                              </td>
+                              <td className='tb_dt text-black'>
                                 {parseFloat(
                                   part?.price * part?.quantity
                                 ).toFixed(2)}
@@ -363,23 +373,33 @@ const SalesInvoiceDetails = () => {
                             {" "}
                             <tr>
                               <td colSpan='2'></td>
-                              <td>CGST</td>
-                              <td>{isSameAddress?.CGST}</td>
+                              <td className='tb_dt text-black'>CGST</td>
+                              <td className='tb_dt text-black'>
+                                {isSameAddress?.CGST}
+                              </td>
                             </tr>
                             <tr>
                               <td colSpan='2'></td>
-                              <td>SGST</td>
-                              <td>{isSameAddress?.SGST}</td>
+                              <td className='tb_dt text-black'>SGST</td>
+                              <td className='tb_dt text-black'>
+                                {isSameAddress?.SGST}
+                              </td>
                             </tr>
                             <tr>
                               <td colSpan='2'></td>
-                              <td>Shipment Charge</td>
-                              <td>{isSameAddress?.shipping}</td>
+                              <td className='tb_dt text-black'>
+                                Shipment Charge
+                              </td>
+                              <td className='tb_dt text-black'>
+                                {isSameAddress?.shipping}
+                              </td>
                             </tr>
                             <tr>
                               <td colSpan='2'></td>
-                              <td>Gross Total</td>
-                              <td>{isSameAddress?.grossTotal}</td>
+                              <td className='tb_dt text-black'>Gross Total</td>
+                              <td className='tb_dt text-black'>
+                                {isSameAddress?.grossTotal}
+                              </td>
                             </tr>
                           </>
                         ) : (
@@ -388,30 +408,42 @@ const SalesInvoiceDetails = () => {
                             <tr>
                               <td colSpan='2'></td>
 
-                              <td>IGST</td>
-                              <td>{isDiffAddress?.IGST}</td>
+                              <td className='tb_dt text-black'>IGST</td>
+                              <td className='tb_dt text-black'>
+                                {isDiffAddress?.IGST}
+                              </td>
                             </tr>
                             <tr>
                               <td colSpan='2'></td>
 
-                              <td>Shipment Charge</td>
-                              <td>{isDiffAddress?.shipping}</td>
+                              <td className='tb_dt text-black'>
+                                Shipment Charge
+                              </td>
+                              <td className='tb_dt text-black'>
+                                {isDiffAddress?.shipping}
+                              </td>
                             </tr>
                             <tr>
                               <td colSpan='2'></td>
-                              <td>Gross Total</td>
-                              <td>{isDiffAddress?.grossTotal}</td>
+                              <td className='tb_dt text-black'>Gross Total</td>
+                              <td className='tb_dt text-black'>
+                                {isDiffAddress?.grossTotal}
+                              </td>
                             </tr>
                           </>
                         )}
                         <tr>
                           {isSameAddress?.grossTotal &&
                           !isDiffAddress?.grossTotal ? (
-                            <td colSpan='4'>{`In words: ${inWords(
+                            <td
+                              className='tb_dt fw-bold text-black'
+                              colSpan='4'>{`In words: ${inWords(
                               parseFloat(isSameAddress?.grossTotal)
                             )}`}</td>
                           ) : (
-                            <td colSpan='4'>{`In Words: ${inWords(
+                            <td
+                              className='tb_dt fw-bold text-black'
+                              colSpan='4'>{`In Words: ${inWords(
                               parseFloat(isDiffAddress?.grossTotal)
                             )}`}</td>
                           )}
@@ -449,7 +481,7 @@ const SalesInvoiceDetails = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {invoiceDetails?.parts_invoice?.map((part) => {
+                      {invoiceDetails?.parts_invoice?.map(part => {
                         if (part?.id === serializedNo) {
                           return (
                             <tr key={part?.id}>
@@ -463,7 +495,7 @@ const SalesInvoiceDetails = () => {
                                 )}
                               </td>
                               <td>
-                                {part?.parts_no?.serialized_parts?.map((sn) => {
+                                {part?.parts_no?.serialized_parts?.map(sn => {
                                   return (
                                     <p key={sn?.id}>{sn?.serial_number}</p>
                                   );
